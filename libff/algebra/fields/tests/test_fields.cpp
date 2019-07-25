@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <iostream>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
@@ -12,6 +13,7 @@
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+#include <libff/algebra/curves/bls12-377/bls12-377_pp.hpp>
 #include <libff/algebra/fields/fp12_2over3over2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
 
@@ -218,28 +220,35 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
-    edwards_pp::init_public_params();
-    test_all_fields<edwards_pp>();
-    test_cyclotomic_squaring<Fqk<edwards_pp> >();
+    // edwards_pp::init_public_params();
+    // test_all_fields<edwards_pp>();
+    // test_cyclotomic_squaring<Fqk<edwards_pp> >();
 
-    mnt4_pp::init_public_params();
-    test_all_fields<mnt4_pp>();
-    test_Fp4_tom_cook<mnt4_Fq4>();
-    test_two_squarings<Fqe<mnt4_pp> >();
-    test_cyclotomic_squaring<Fqk<mnt4_pp> >();
+    // mnt4_pp::init_public_params();
+    // test_all_fields<mnt4_pp>();
+    // test_Fp4_tom_cook<mnt4_Fq4>();
+    // test_two_squarings<Fqe<mnt4_pp> >();
+    // test_cyclotomic_squaring<Fqk<mnt4_pp> >();
 
-    mnt6_pp::init_public_params();
-    test_all_fields<mnt6_pp>();
-    test_cyclotomic_squaring<Fqk<mnt6_pp> >();
+    // mnt6_pp::init_public_params();
+    // test_all_fields<mnt6_pp>();
+    // test_cyclotomic_squaring<Fqk<mnt6_pp> >();
 
-    alt_bn128_pp::init_public_params();
-    test_field<alt_bn128_Fq6>();
-    test_Frobenius<alt_bn128_Fq6>();
-    test_all_fields<alt_bn128_pp>();
+    // alt_bn128_pp::init_public_params();
+    // test_field<alt_bn128_Fq6>();
+    // test_Frobenius<alt_bn128_Fq6>();
+    // test_all_fields<alt_bn128_pp>();
+
+    // new curve
+    bls12_377_pp::init_public_params();
+    test_field<bls12_377_Fq6>();
+    test_Frobenius<bls12_377_Fq6>();
+    test_all_fields<bls12_377_pp>();
+
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
-    bn128_pp::init_public_params();
-    test_field<Fr<bn128_pp> >();
-    test_field<Fq<bn128_pp> >();
+    // bn128_pp::init_public_params();
+    // test_field<Fr<bn128_pp> >();
+    // test_field<Fq<bn128_pp> >();
 #endif
 }

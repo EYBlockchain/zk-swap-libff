@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <iostream>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
@@ -14,6 +15,7 @@
 #include <sstream>
 
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+#include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 
 using namespace libff;
 
@@ -74,7 +76,11 @@ void test_group()
     assert(two+five == three+four);
 
     GroupT a = GroupT::random_element();
+    // std::cout << "random point 1:\n";
+    // a.print_coordinates();
     GroupT b = GroupT::random_element();
+    // std::cout << "random point:\n";
+    // b.print_coordinates();
 
     assert(one != zero);
     assert(a != zero);
@@ -116,15 +122,18 @@ template<typename GroupT>
 void test_mul_by_q()
 {
     GroupT a = GroupT::random_element();
+    // GroupT tmp = a.mul_by_q();
+    // std::cout << "get X.Frobenius_map(1) and Y.Frobenius_map(1)\n";
+    // tmp.print();
     assert((GroupT::base_field_char()*a) == a.mul_by_q());
 }
 
 template<typename GroupT>
 void test_output()
 {
-    GroupT g = GroupT::zero();
+    GroupT g = GroupT::one();
 
-    for (size_t i = 0; i < 1000; ++i)
+    for (size_t i = 0; i < 100; ++i)
     {
         std::stringstream ss;
         ss << g;
@@ -138,39 +147,47 @@ void test_output()
 
 int main(void)
 {
-    edwards_pp::init_public_params();
-    test_group<G1<edwards_pp> >();
-    test_output<G1<edwards_pp> >();
-    test_group<G2<edwards_pp> >();
-    test_output<G2<edwards_pp> >();
-    test_mul_by_q<G2<edwards_pp> >();
+    // edwards_pp::init_public_params();
+    // test_group<G1<edwards_pp> >();
+    // test_output<G1<edwards_pp> >();
+    // test_group<G2<edwards_pp> >();
+    // test_output<G2<edwards_pp> >();
+    // test_mul_by_q<G2<edwards_pp> >();
 
-    mnt4_pp::init_public_params();
-    test_group<G1<mnt4_pp> >();
-    test_output<G1<mnt4_pp> >();
-    test_group<G2<mnt4_pp> >();
-    test_output<G2<mnt4_pp> >();
-    test_mul_by_q<G2<mnt4_pp> >();
+    // mnt4_pp::init_public_params();
+    // test_group<G1<mnt4_pp> >();
+    // test_output<G1<mnt4_pp> >();
+    // test_group<G2<mnt4_pp> >();
+    // test_output<G2<mnt4_pp> >();
+    // test_mul_by_q<G2<mnt4_pp> >();
 
-    mnt6_pp::init_public_params();
-    test_group<G1<mnt6_pp> >();
-    test_output<G1<mnt6_pp> >();
-    test_group<G2<mnt6_pp> >();
-    test_output<G2<mnt6_pp> >();
-    test_mul_by_q<G2<mnt6_pp> >();
+    // mnt6_pp::init_public_params();
+    // test_group<G1<mnt6_pp> >();
+    // test_output<G1<mnt6_pp> >();
+    // test_group<G2<mnt6_pp> >();
+    // test_output<G2<mnt6_pp> >();
+    // test_mul_by_q<G2<mnt6_pp> >();
 
-    alt_bn128_pp::init_public_params();
-    test_group<G1<alt_bn128_pp> >();
-    test_output<G1<alt_bn128_pp> >();
-    test_group<G2<alt_bn128_pp> >();
-    test_output<G2<alt_bn128_pp> >();
-    test_mul_by_q<G2<alt_bn128_pp> >();
+    // alt_bn128_pp::init_public_params();
+    // test_group<G1<alt_bn128_pp> >();
+    // test_output<G1<alt_bn128_pp> >();
+    // test_group<G2<alt_bn128_pp> >();
+    // test_output<G2<alt_bn128_pp> >();
+    // test_mul_by_q<G2<alt_bn128_pp> >();
+
+    // new curve
+    bls12_377_pp::init_public_params();
+    test_group<G1<bls12_377_pp> >();
+    test_output<G1<bls12_377_pp> >();
+    test_group<G2<bls12_377_pp> >();
+    test_output<G2<bls12_377_pp> >();
+    test_mul_by_q<G2<bls12_377_pp> >();
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
-    bn128_pp::init_public_params();
-    test_group<G1<bn128_pp> >();
-    test_output<G1<bn128_pp> >();
-    test_group<G2<bn128_pp> >();
-    test_output<G2<bn128_pp> >();
+    // bn128_pp::init_public_params();
+    // test_group<G1<bn128_pp> >();
+    // test_output<G1<bn128_pp> >();
+    // test_group<G2<bn128_pp> >();
+    // test_output<G2<bn128_pp> >();
 #endif
 }

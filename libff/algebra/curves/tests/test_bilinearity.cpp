@@ -1,14 +1,9 @@
-/**
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/common/profiling.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
+#include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
@@ -19,11 +14,22 @@ template<typename ppT>
 void pairing_test()
 {
     GT<ppT> GT_one = GT<ppT>::one();
+    GT<ppT> GT_random = GT<ppT>::random_element();
+    printf("GT_one:\n");
+    GT_one.print();
+    // printf("GT_random:\n");
+    // GT_random.print();
+    G1<ppT> G1_one = G1<ppT>::one();
+    printf("G1_one:\n");
+    G1_one.print();
+    G2<ppT> G2_one = G2<ppT>::one();
+    printf("G2_one:\n");
+    G2_one.print();
 
     printf("Running bilinearity tests:\n");
-    G1<ppT> P = (Fr<ppT>::random_element()) * G1<ppT>::one();
+    G1<ppT> P = (Fr<ppT>::random_element()) * G1_one;
     //G1<ppT> P = Fr<ppT>("2") * G1<ppT>::one();
-    G2<ppT> Q = (Fr<ppT>::random_element()) * G2<ppT>::one();
+    G2<ppT> Q = (Fr<ppT>::random_element()) * G2_one;
     //G2<ppT> Q = Fr<ppT>("3") * G2<ppT>::one();
 
     printf("P:\n");
@@ -43,14 +49,19 @@ void pairing_test()
     GT<ppT> ans1 = ppT::reduced_pairing(sP, Q);
     GT<ppT> ans2 = ppT::reduced_pairing(P, sQ);
     GT<ppT> ans3 = ppT::reduced_pairing(P, Q)^s;
+    printf("e(sP,Q):\n");
     ans1.print();
+    printf("e(P,sQ):\n");
     ans2.print();
+    printf("e(P,Q)^s:\n");
     ans3.print();
     assert(ans1 == ans2);
     assert(ans2 == ans3);
-
+    printf("e(sP,Q)=e(P,sQ)=e(sP,Q)^s checked!\n");
     assert(ans1 != GT_one);
+    printf("non-degenracy e(sP,Q) != 1 checked!\n");
     assert((ans1^Fr<ppT>::field_char()) == GT_one);
+    printf("Fq12 order e(sP,Q)^r = 1 checked!\n");
     printf("\n\n");
 }
 
@@ -110,27 +121,33 @@ void affine_pairing_test()
 int main(void)
 {
     start_profiling();
-    edwards_pp::init_public_params();
-    pairing_test<edwards_pp>();
-    double_miller_loop_test<edwards_pp>();
 
-    mnt6_pp::init_public_params();
-    pairing_test<mnt6_pp>();
-    double_miller_loop_test<mnt6_pp>();
-    affine_pairing_test<mnt6_pp>();
+    // edwards_pp::init_public_params();
+    // pairing_test<edwards_pp>();
+    // double_miller_loop_test<edwards_pp>();
 
-    mnt4_pp::init_public_params();
-    pairing_test<mnt4_pp>();
-    double_miller_loop_test<mnt4_pp>();
-    affine_pairing_test<mnt4_pp>();
+    // mnt6_pp::init_public_params();
+    // pairing_test<mnt6_pp>();
+    // double_miller_loop_test<mnt6_pp>();
+    // affine_pairing_test<mnt6_pp>();
 
-    alt_bn128_pp::init_public_params();
-    pairing_test<alt_bn128_pp>();
-    double_miller_loop_test<alt_bn128_pp>();
+    // mnt4_pp::init_public_params();
+    // pairing_test<mnt4_pp>();
+    // double_miller_loop_test<mnt4_pp>();
+    // affine_pairing_test<mnt4_pp>();
+
+    // alt_bn128_pp::init_public_params();
+    // pairing_test<alt_bn128_pp>();
+    // double_miller_loop_test<alt_bn128_pp>();
+    
+    bls12_377_pp::init_public_params();
+    pairing_test<bls12_377_pp>();
+    double_miller_loop_test<bls12_377_pp>();
+
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
-    bn128_pp::init_public_params();
-    pairing_test<bn128_pp>();
-    double_miller_loop_test<bn128_pp>();
+    // bn128_pp::init_public_params();
+    // pairing_test<bn128_pp>();
+    // double_miller_loop_test<bn128_pp>();
 #endif
 }
