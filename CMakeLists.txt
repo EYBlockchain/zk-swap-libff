@@ -12,7 +12,7 @@ set(
   "BN128"
   CACHE
   STRING
-  "Default curve: one of ALT_BN128, BN128, EDWARDS, MNT4, MNT6, BLS12_377, SW6, BLS12_381"
+  "Default curve: one of ALT_BN128, BN128, EDWARDS, MNT4, MNT6, BLS12_377, SW6, BLS12_381, MNT6753, MNT4753"
 )
 
 option(
