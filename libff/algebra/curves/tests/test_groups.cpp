@@ -5,6 +5,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 #include <iostream>
+#include <sstream>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
@@ -12,10 +13,10 @@
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
-#include <sstream>
-
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
+#include <libff/algebra/curves/sw6/sw6_pp.hpp>
 
 using namespace libff;
 
@@ -175,14 +176,22 @@ int main(void)
     // test_output<G2<alt_bn128_pp> >();
     // test_mul_by_q<G2<alt_bn128_pp> >();
 
-    // new curve
+    // new curve: BLS12_377
     bls12_377_pp::init_public_params();
     test_group<G1<bls12_377_pp> >();
     test_output<G1<bls12_377_pp> >();
     test_group<G2<bls12_377_pp> >();
     test_output<G2<bls12_377_pp> >();
     test_mul_by_q<G2<bls12_377_pp> >();
-
+    
+    // new curve: SW6
+    sw6_pp::init_public_params();
+    test_group<G1<sw6_pp> >();
+    test_output<G1<sw6_pp> >();
+    test_group<G2<sw6_pp> >();
+    test_output<G2<sw6_pp> >();
+    test_mul_by_q<G2<sw6_pp> >();
+    
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     // bn128_pp::init_public_params();
     // test_group<G1<bn128_pp> >();
