@@ -13,6 +13,8 @@
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 
 using namespace libff;
 
@@ -249,14 +251,23 @@ int main(void)
     // test_all_fields<sw6_pp>();
     
     // new curve: BLS12_381 
-    bls12_381_pp::init_public_params();
-    test_field<bls12_381_Fq6>();
-    test_Frobenius<bls12_381_Fq6>();
-    test_all_fields<bls12_381_pp>();
+    // bls12_381_pp::init_public_params();
+    // test_field<bls12_381_Fq6>();
+    // test_Frobenius<bls12_381_Fq6>();
+    // test_all_fields<bls12_381_pp>();
 
+    // new curve: MNT6753
+    mnt6753_pp::init_public_params();
+    test_field<mnt6753_Fq6>();
+    test_Frobenius<mnt6753_Fq6>();
+    test_all_fields<mnt6753_pp>();
 
-
-
+    // new curve: MNT4753
+    mnt4753_pp::init_public_params();
+    test_field<mnt4753_Fq4>();
+    test_Frobenius<mnt4753_Fq4>();
+    test_all_fields<mnt4753_pp>();
+    
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     // bn128_pp::init_public_params();
     // test_field<Fr<bn128_pp> >();

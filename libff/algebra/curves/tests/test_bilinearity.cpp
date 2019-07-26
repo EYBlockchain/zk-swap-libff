@@ -10,6 +10,8 @@
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 
 using namespace libff;
 
@@ -154,9 +156,19 @@ int main(void)
     // double_miller_loop_test<sw6_pp>();
 
     // new curve: BLS12_381
-    bls12_381_pp::init_public_params();
-    pairing_test<bls12_381_pp>();
-    double_miller_loop_test<bls12_381_pp>();
+    // bls12_381_pp::init_public_params();
+    // pairing_test<bls12_381_pp>();
+    // double_miller_loop_test<bls12_381_pp>();
+    
+    // new curve: MNT6753 
+    mnt6753_pp::init_public_params();
+    pairing_test<mnt6753_pp>();
+    double_miller_loop_test<mnt6753_pp>();
+    
+    // new curve: MNT4753 
+    mnt4753_pp::init_public_params();
+    pairing_test<mnt4753_pp>();
+    double_miller_loop_test<mnt4753_pp>();
     
 
 

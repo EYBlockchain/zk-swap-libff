@@ -18,6 +18,8 @@
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 
 using namespace libff;
 
@@ -193,14 +195,32 @@ int main(void)
     // test_output<G2<sw6_pp> >();
     // test_mul_by_q<G2<sw6_pp> >();
     
-    // new curve: BLS12_377
-    bls12_377_pp::init_public_params();
-    test_group<G1<bls12_377_pp> >();
-    test_output<G1<bls12_377_pp> >();
-    test_group<G2<bls12_377_pp> >();
-    test_output<G2<bls12_377_pp> >();
-    test_mul_by_q<G2<bls12_377_pp> >();
+    // new curve: BLS12_381
+    // bls12_377_pp::init_public_params();
+    // test_group<G1<bls12_377_pp> >();
+    // test_output<G1<bls12_377_pp> >();
+    // test_group<G2<bls12_377_pp> >();
+    // test_output<G2<bls12_377_pp> >();
+    // test_mul_by_q<G2<bls12_377_pp> >();
     
+    // new curve: MNT6753 
+    mnt6753_pp::init_public_params();
+    test_group<G1<mnt6753_pp> >();
+    test_output<G1<mnt6753_pp> >();
+    test_group<G2<mnt6753_pp> >();
+    test_output<G2<mnt6753_pp> >();
+    test_mul_by_q<G2<mnt6753_pp> >();
+    
+    // new curve: MNT4753 
+    mnt4753_pp::init_public_params();
+    test_group<G1<mnt4753_pp> >();
+    test_output<G1<mnt4753_pp> >();
+    test_group<G2<mnt4753_pp> >();
+    test_output<G2<mnt4753_pp> >();
+    test_mul_by_q<G2<mnt4753_pp> >();
+    
+
+
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     // bn128_pp::init_public_params();
     // test_group<G1<bn128_pp> >();
