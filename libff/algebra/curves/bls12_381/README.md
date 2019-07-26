@@ -21,7 +21,7 @@ In `BLS12_381_init.hpp`:
 * fill in `fixed_base_exp_window_table` in G1 and G2
 
 ## Tests:
-- [ ] algebra_field_test
-- [ ] algebra_group_test
-- [ ] algebra_bilinearity_test
+- [x] algebra_field_test
+- [x] algebra_group_test
+- [x] algebra_bilinearity_test
 

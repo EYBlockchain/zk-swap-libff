@@ -1,4 +1,4 @@
-# Curves Cocks-Pinch_djo
+# Curve BLS12_377 
 Zexe ground pairing-friendly curve (embedding degree `k=12`).
 
 ### Progress:
