@@ -1,9 +1,3 @@
-/**
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
 #include <iostream>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
@@ -18,6 +12,7 @@
 
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 
 using namespace libff;
 
@@ -248,10 +243,17 @@ int main(void)
     // test_all_fields<bls12_377_pp>();
     
     // new curve: SW6
-    sw6_pp::init_public_params();
-    test_field<sw6_Fq6>();
-    test_Frobenius<sw6_Fq6>();
-    test_all_fields<sw6_pp>();
+    // sw6_pp::init_public_params();
+    // test_field<sw6_Fq6>();
+    // test_Frobenius<sw6_Fq6>();
+    // test_all_fields<sw6_pp>();
+    
+    // new curve: BLS12_381 
+    bls12_381_pp::init_public_params();
+    test_field<bls12_381_Fq6>();
+    test_Frobenius<bls12_381_Fq6>();
+    test_all_fields<bls12_381_pp>();
+
 
 
 

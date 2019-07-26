@@ -9,6 +9,7 @@
 
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 
 using namespace libff;
 
@@ -148,10 +149,15 @@ int main(void)
     double_miller_loop_test<bls12_377_pp>();
     
     // new curve: SW6
-    sw6_pp::init_public_params();
-    pairing_test<sw6_pp>();
-    double_miller_loop_test<sw6_pp>();
+    // sw6_pp::init_public_params();
+    // pairing_test<sw6_pp>();
+    // double_miller_loop_test<sw6_pp>();
 
+    // new curve: BLS12_381
+    bls12_381_pp::init_public_params();
+    pairing_test<bls12_381_pp>();
+    double_miller_loop_test<bls12_381_pp>();
+    
 
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
