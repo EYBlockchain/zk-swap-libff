@@ -1,5 +1,5 @@
 # Curve SW6 
-Zexe second pairing-friendly curve (embedding degree `k=6`), constructed over SW6 via Cocks-Pinch method.
+Zexe second pairing-friendly curve (embedding degree `k=6`), constructed over BLS12_377 via Cocks-Pinch method.
 
 ### Progress:
 - [x] SW6_g1.cpp  
