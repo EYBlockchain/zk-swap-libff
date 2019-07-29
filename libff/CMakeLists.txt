@@ -39,6 +39,11 @@ add_library(
   algebra/curves/bls12_381/bls12_381_init.cpp
   algebra/curves/bls12_381/bls12_381_pairing.cpp
   algebra/curves/bls12_381/bls12_381_pp.cpp
+  algebra/curves/sw6_bis/sw6_bis_g1.cpp
+  algebra/curves/sw6_bis/sw6_bis_g2.cpp
+  algebra/curves/sw6_bis/sw6_bis_init.cpp
+  algebra/curves/sw6_bis/sw6_bis_pairing.cpp
+  algebra/curves/sw6_bis/sw6_bis_pp.cpp
   algebra/curves/sw6/sw6_g1.cpp
   algebra/curves/sw6/sw6_g2.cpp
   algebra/curves/sw6/sw6_init.cpp
