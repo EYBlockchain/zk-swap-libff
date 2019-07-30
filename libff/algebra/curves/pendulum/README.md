@@ -14,9 +14,9 @@ A pairing-friendly curve (embedding degree `k=6`), constructed over MNT6 via Coc
 - [x] pendulum_pp.hpp
 
 ## Tests:
-- [ ] algebra_field_test
-- [ ] algebra_group_test
-- [ ] algebra_bilinearity_test
+- [x] algebra_field_test
+- [x] algebra_group_test
+- [x] algebra_bilinearity_test
 
 ## TODO:
 In `pendulum_init.hpp`:

@@ -25,3 +25,7 @@ In `sw6_bis_init.hpp`:
 
 * fill in `fixed_base_exp_window_table` in G1 and G2
 
+* use twist `twsit_b=b/ksi` since `a=0`
+
+
+
