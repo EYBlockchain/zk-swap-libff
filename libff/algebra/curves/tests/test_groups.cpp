@@ -21,6 +21,7 @@
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
+#include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 
 using namespace libff;
 
@@ -232,12 +233,21 @@ int main(void)
     // test_mul_by_q<G2<mnt4753_pp> >();
     
     // new curve: SW6_BIS
-    sw6_bis_pp::init_public_params();
-    test_group<G1<sw6_bis_pp> >();
-    test_output<G1<sw6_bis_pp> >();
-    test_group<G2<sw6_bis_pp> >();
-    test_output<G2<sw6_bis_pp> >();
-    test_mul_by_q<G2<sw6_bis_pp> >();
+    // sw6_bis_pp::init_public_params();
+    // test_group<G1<sw6_bis_pp> >();
+    // test_output<G1<sw6_bis_pp> >();
+    // test_group<G2<sw6_bis_pp> >();
+    // test_output<G2<sw6_bis_pp> >();
+    // test_mul_by_q<G2<sw6_bis_pp> >();
+    
+    // new curve: PENDULUM 
+    pendulum_pp::init_public_params();
+    test_group<G1<pendulum_pp> >();
+    test_output<G1<pendulum_pp> >();
+    test_group<G2<pendulum_pp> >();
+    test_output<G2<pendulum_pp> >();
+    test_mul_by_q<G2<pendulum_pp> >();
+
 
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled

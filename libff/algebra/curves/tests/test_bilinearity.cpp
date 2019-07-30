@@ -13,6 +13,7 @@
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
+#include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 
 using namespace libff;
 
@@ -172,9 +173,15 @@ int main(void)
     // double_miller_loop_test<mnt4753_pp>();
     
     // new curve: SW6_BIS
-    sw6_bis_pp::init_public_params();
-    pairing_test<sw6_bis_pp>();
-    double_miller_loop_test<sw6_bis_pp>();
+    // sw6_bis_pp::init_public_params();
+    // pairing_test<sw6_bis_pp>();
+    // double_miller_loop_test<sw6_bis_pp>();
+    
+    // new curve: PENDULUM 
+    pendulum_pp::init_public_params();
+    pairing_test<pendulum_pp>();
+    double_miller_loop_test<pendulum_pp>();
+
 
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled

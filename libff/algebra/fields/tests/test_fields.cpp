@@ -16,6 +16,7 @@
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
+#include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 
 using namespace libff;
 
@@ -270,10 +271,16 @@ int main(void)
     // test_all_fields<mnt4753_pp>();
     
     // new curve: SW6_BIS
-    sw6_bis_pp::init_public_params();
-    test_field<sw6_bis_Fq6>();
-    test_Frobenius<sw6_bis_Fq6>();
-    test_all_fields<sw6_bis_pp>();
+    // sw6_bis_pp::init_public_params();
+    // test_field<sw6_bis_Fq6>();
+    // test_Frobenius<sw6_bis_Fq6>();
+    // test_all_fields<sw6_bis_pp>();
+    
+    // new curve: PENDULUM 
+    pendulum_pp::init_public_params();
+    test_field<pendulum_Fq6>();
+    test_Frobenius<pendulum_Fq6>();
+    test_all_fields<pendulum_pp>();
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     // bn128_pp::init_public_params();
