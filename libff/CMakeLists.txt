@@ -23,6 +23,11 @@ endif()
 add_library(
   ff
   STATIC
+  algebra/curves/pendulum/pendulum_g1.cpp
+  algebra/curves/pendulum/pendulum_g2.cpp
+  algebra/curves/pendulum/pendulum_init.cpp
+  algebra/curves/pendulum/pendulum_pairing.cpp
+  algebra/curves/pendulum/pendulum_pp.cpp
   algebra/curves/mnt753/mnt6753/mnt6753_g1.cpp
   algebra/curves/mnt753/mnt6753/mnt6753_g2.cpp
   algebra/curves/mnt753/mnt6753/mnt6753_init.cpp
