@@ -144,6 +144,18 @@ if ("${IS_LIBFF_PARENT}")
     ff
   )
 
+  add_executable(
+    time_test
+    EXCLUDE_FROM_ALL
+
+    algebra/curves/tests/test_operations_time.cpp
+  )
+  target_link_libraries(
+    time_test
+
+    ff
+  )
+
   include(CTest)
   add_test(
     NAME algebra_bilinearity_test
@@ -157,10 +169,15 @@ if ("${IS_LIBFF_PARENT}")
     NAME algebra_fields_test
     COMMAND algebra_fields_test
   )
+  add_test(
+    NAME time_test
+    COMMAND time_test
+  )
 
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_fields_test)
+  add_dependencies(check time_test)
 
   add_executable(
     multiexp_profile
