@@ -422,6 +422,7 @@ std::ostream& operator<<(std::ostream &out, const sw6_G2 &g)
 
 std::istream& operator>>(std::istream &in, sw6_G2 &g)
 {
+    // printf("inside g2 >>\n");
     char is_zero;
     sw6_Fq3 tX, tY;
 
@@ -443,8 +444,23 @@ std::istream& operator>>(std::istream &in, sw6_G2 &g)
     if (!is_zero)
     {
         const sw6_Fq3 tX2 = tX.squared();
+        // printf("sw6_twist_coeff_a\n");
+        // sw6_G2::coeff_a.print();
+        // sw6_twist_coeff_a.print();
+        // printf("sw6_twist_coeff_b\n");
+        // sw6_G2::coeff_b.print();
+        // sw6_twist_coeff_b.print();
         const sw6_Fq3 tY2 = (tX2 + sw6_twist_coeff_a) * tX + sw6_twist_coeff_b;
+        // const sw6_Fq3 tY2 = (tX2 + sw6_G2::coeff_a) * tX + sw6_G2::coeff_b;
+        // printf("tX\n");
+        // tX.print();
+        // printf("tX2\n");
+        // tX2.print();
+        // printf("tY2\n");
+        // tY2.print();
+        // printf("before sqrt\n");
         tY = tY2.sqrt();
+        // printf("after sqrt\n");
 
         if ((tY.c0.as_bigint().data[0] & 1) != Y_lsb)
         {

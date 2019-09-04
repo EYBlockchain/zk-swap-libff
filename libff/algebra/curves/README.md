@@ -8,10 +8,10 @@ This is the same Barreto-Naehrig elliptic curve but without dynamically generate
 * MNT6 and MNT4:
 These two curves form a pairing-friendly cycle introduced in [BCTV15][1]. They are used for recursive SNARKs but do not target 128-bit security level as the field size is of 298 bits.
 * EDWARDS: 
-This is an Edwards curve built on top of ALT_BN128 to enable efficient implementation of Pedersen hash in `libsnark`. It goes by the name of Baby_Jubjub within Ethereum community.
+This is an instantiation based on Edwards curve, providing 80 bits security.
 
 ## New curves
-We implemented 7 new curves in `libff`:
+We implemented 9 new curves in `libff`:
 - [x] BLS12_381:
 This s a Barreto-Lynn-Scott curve implemented in ZCash that targets 128-bit security level, with a group of points of order 254 bits, a field size of 381 bits and an embedding degree `k=12`.
 - [x] MNT4753 and MNT6753:
@@ -26,5 +26,12 @@ This is a new curve built on top of BLS12_377 with an embedding degree `k=6` and
 This is a new curve built on top of MNT6 and enables efficient implementation of SNARKs aggregation. One would aggregate `n-1` proofs in a cascade fashion using the (less secure) MNT4/6 cycle and the aggregates the last proof on the (more secure/efficient) PENDULUM curve. 
 - [ ] JUBJUB: 
 This is an Edwards curve built on top of BLS12_381 (implemented in ZCash) to enable efficient implementation of Pedersen hash in `libsnark`.
+- [ ] BABY_JUBJUB: 
+This is an Edwards curve built on top of ALT_BN128 to enable efficient implementation of Pedersen hash in `libsnark`.
+
+---
+
+## Caution
+The windowed method for scalar multuplication (wNAF) was not fully investigated. The windows sizes are not mastered as the empirical method for generating the size is not specified in libsnark. 
 
 [1]: https://eprint.iacr.org/2014/595.pdf

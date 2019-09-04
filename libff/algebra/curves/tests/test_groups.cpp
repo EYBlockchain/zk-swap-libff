@@ -22,6 +22,7 @@
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
+#include <libff/algebra/curves/jubjub/jubjub_pp.hpp>
 
 using namespace libff;
 
@@ -149,12 +150,15 @@ template<typename GroupT>
 void test_output()
 {
     GroupT g = GroupT::one();
+    // printf("one()\n");
+    // g.print_coordinates();
 
     for (size_t i = 0; i < 100; ++i)
     {
         std::stringstream ss;
         ss << g;
         GroupT gg;
+        // printf("here\n");
         ss >> gg;
         assert(g == gg);
         /* use a random point in next iteration */
@@ -164,97 +168,117 @@ void test_output()
 
 int main(void)
 {
-    // edwards_pp::init_public_params();
-    // test_group<G1<edwards_pp> >();
-    // test_output<G1<edwards_pp> >();
-    // test_group<G2<edwards_pp> >();
-    // test_output<G2<edwards_pp> >();
-    // test_mul_by_q<G2<edwards_pp> >();
+    // EDWARDS
+    std::cout << "edwards\n";
+    edwards_pp::init_public_params();
+    test_group<G1<edwards_pp> >();
+    test_output<G1<edwards_pp> >();
+    test_group<G2<edwards_pp> >();
+    test_output<G2<edwards_pp> >();
+    test_mul_by_q<G2<edwards_pp> >();
 
-    // mnt4_pp::init_public_params();
-    // test_group<G1<mnt4_pp> >();
-    // test_output<G1<mnt4_pp> >();
-    // test_group<G2<mnt4_pp> >();
-    // test_output<G2<mnt4_pp> >();
-    // test_mul_by_q<G2<mnt4_pp> >();
+    // MNT4
+    std::cout << "mnt4\n";
+    mnt4_pp::init_public_params();
+    test_group<G1<mnt4_pp> >();
+    test_output<G1<mnt4_pp> >();
+    test_group<G2<mnt4_pp> >();
+    test_output<G2<mnt4_pp> >();
+    test_mul_by_q<G2<mnt4_pp> >();
 
-    // mnt6_pp::init_public_params();
-    // test_group<G1<mnt6_pp> >();
-    // test_output<G1<mnt6_pp> >();
-    // test_group<G2<mnt6_pp> >();
-    // test_output<G2<mnt6_pp> >();
-    // test_mul_by_q<G2<mnt6_pp> >();
+    // MNT6
+    std::cout << "mnt6\n";
+    mnt6_pp::init_public_params();
+    test_group<G1<mnt6_pp> >();
+    test_output<G1<mnt6_pp> >();
+    test_group<G2<mnt6_pp> >();
+    test_output<G2<mnt6_pp> >();
+    test_mul_by_q<G2<mnt6_pp> >();
 
-    // alt_bn128_pp::init_public_params();
-    // test_group<G1<alt_bn128_pp> >();
-    // test_output<G1<alt_bn128_pp> >();
-    // test_group<G2<alt_bn128_pp> >();
-    // test_output<G2<alt_bn128_pp> >();
-    // test_mul_by_q<G2<alt_bn128_pp> >();
+    // ALT_BN128 
+    std::cout << "alt_bn128\n";
+    alt_bn128_pp::init_public_params();
+    test_group<G1<alt_bn128_pp> >();
+    test_output<G1<alt_bn128_pp> >();
+    test_group<G2<alt_bn128_pp> >();
+    test_output<G2<alt_bn128_pp> >();
+    test_mul_by_q<G2<alt_bn128_pp> >();
 
     // new curve: BLS12_377
-    // bls12_377_pp::init_public_params();
-    // test_group<G1<bls12_377_pp> >();
-    // test_output<G1<bls12_377_pp> >();
-    // test_group<G2<bls12_377_pp> >();
-    // test_output<G2<bls12_377_pp> >();
-    // test_mul_by_q<G2<bls12_377_pp> >();
+    std::cout << "bls12_377\n";
+    bls12_377_pp::init_public_params();
+    test_group<G1<bls12_377_pp> >();
+    test_output<G1<bls12_377_pp> >();
+    test_group<G2<bls12_377_pp> >();
+    test_output<G2<bls12_377_pp> >();
+    test_mul_by_q<G2<bls12_377_pp> >();
     
     // new curve: SW6
-    // sw6_pp::init_public_params();
-    // test_group<G1<sw6_pp> >();
-    // test_output<G1<sw6_pp> >();
-    // test_group<G2<sw6_pp> >();
-    // test_output<G2<sw6_pp> >();
-    // test_mul_by_q<G2<sw6_pp> >();
+    std::cout << "sw6\n";
+    sw6_pp::init_public_params();
+    test_group<G1<sw6_pp> >();
+    test_output<G1<sw6_pp> >();
+    test_group<G2<sw6_pp> >();
+    test_output<G2<sw6_pp> >();
+    test_mul_by_q<G2<sw6_pp> >();
     
     // new curve: BLS12_381
-    // bls12_377_pp::init_public_params();
-    // test_group<G1<bls12_377_pp> >();
-    // test_output<G1<bls12_377_pp> >();
-    // test_group<G2<bls12_377_pp> >();
-    // test_output<G2<bls12_377_pp> >();
-    // test_mul_by_q<G2<bls12_377_pp> >();
-    
+    std::cout << "bls12_381\n";
+    bls12_377_pp::init_public_params();
+    test_group<G1<bls12_377_pp> >();
+    test_output<G1<bls12_377_pp> >();
+    test_group<G2<bls12_377_pp> >();
+    test_output<G2<bls12_377_pp> >();
+    test_mul_by_q<G2<bls12_377_pp> >();
+     
     // new curve: MNT6753 
-    // mnt6753_pp::init_public_params();
-    // test_group<G1<mnt6753_pp> >();
-    // test_output<G1<mnt6753_pp> >();
-    // test_group<G2<mnt6753_pp> >();
-    // test_output<G2<mnt6753_pp> >();
-    // test_mul_by_q<G2<mnt6753_pp> >();
-    
+    std::cout << "mnt6753\n";
+    mnt6753_pp::init_public_params();
+    test_group<G1<mnt6753_pp> >();
+    test_output<G1<mnt6753_pp> >();
+    test_group<G2<mnt6753_pp> >();
+    test_output<G2<mnt6753_pp> >();
+    test_mul_by_q<G2<mnt6753_pp> >();
+     
     // new curve: MNT4753 
-    // mnt4753_pp::init_public_params();
-    // test_group<G1<mnt4753_pp> >();
-    // test_output<G1<mnt4753_pp> >();
-    // test_group<G2<mnt4753_pp> >();
-    // test_output<G2<mnt4753_pp> >();
-    // test_mul_by_q<G2<mnt4753_pp> >();
+    std::cout << "mnt4753\n";
+    mnt4753_pp::init_public_params();
+    test_group<G1<mnt4753_pp> >();
+    test_output<G1<mnt4753_pp> >();
+    test_group<G2<mnt4753_pp> >();
+    test_output<G2<mnt4753_pp> >();
+    test_mul_by_q<G2<mnt4753_pp> >();
     
     // new curve: SW6_BIS
-    // sw6_bis_pp::init_public_params();
-    // test_group<G1<sw6_bis_pp> >();
-    // test_output<G1<sw6_bis_pp> >();
-    // test_group<G2<sw6_bis_pp> >();
-    // test_output<G2<sw6_bis_pp> >();
-    // test_mul_by_q<G2<sw6_bis_pp> >();
+    std::cout << "sw6_bis\n";
+    sw6_bis_pp::init_public_params();
+    test_group<G1<sw6_bis_pp> >();
+    test_output<G1<sw6_bis_pp> >();
+    test_group<G2<sw6_bis_pp> >();
+    test_output<G2<sw6_bis_pp> >();
+    test_mul_by_q<G2<sw6_bis_pp> >();
     
     // new curve: PENDULUM 
+    std::cout << "pendulum\n";
     pendulum_pp::init_public_params();
     test_group<G1<pendulum_pp> >();
     test_output<G1<pendulum_pp> >();
     test_group<G2<pendulum_pp> >();
     test_output<G2<pendulum_pp> >();
     test_mul_by_q<G2<pendulum_pp> >();
-
+    
+    // new curve: JUBJUB 
+    // jubjub_pp::init_public_params();
+    // test_group<G1<jubjub_pp> >();
+    // test_output<G1<jubjub_pp> >();
 
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
-    // bn128_pp::init_public_params();
-    // test_group<G1<bn128_pp> >();
-    // test_output<G1<bn128_pp> >();
-    // test_group<G2<bn128_pp> >();
-    // test_output<G2<bn128_pp> >();
+    std::cout << "bn128\n";
+    bn128_pp::init_public_params();
+    test_group<G1<bn128_pp> >();
+    test_output<G1<bn128_pp> >();
+    test_group<G2<bn128_pp> >();
+    test_output<G2<bn128_pp> >();
 #endif
 }

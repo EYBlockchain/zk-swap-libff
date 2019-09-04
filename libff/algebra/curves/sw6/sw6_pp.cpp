@@ -1,7 +1,7 @@
 /** @file
  *****************************************************************************
 
- Implementation of interfaces for public parameters of MNT6.
+ Implementation of interfaces for public parameters of SW6.
 
  See sw6_pp.hpp .
 

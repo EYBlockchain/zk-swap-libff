@@ -38,6 +38,7 @@
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
+#include <libff/algebra/curves/jubjub/jubjub_pp.hpp>
 
 using namespace libff;
 
@@ -138,6 +139,12 @@ int main(void)
     pendulum_pp::init_public_params();
     time_test<pendulum_pp>();
     printf("*************************\n\n");
+
+    // printf("JUBJUB curve:\n");
+    // jubjub_pp::init_public_params();
+    // time_test<jubjub_pp>();
+    // printf("*************************\n\n");
+
 
 #ifdef CURVE_BN128
     printf("BN128 curve:\n");

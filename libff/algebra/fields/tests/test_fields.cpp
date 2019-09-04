@@ -221,70 +221,80 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
-    // edwards_pp::init_public_params();
-    // test_all_fields<edwards_pp>();
-    // test_cyclotomic_squaring<Fqk<edwards_pp> >();
+    // EDWARDS
+    edwards_pp::init_public_params();
+    test_all_fields<edwards_pp>();
+    test_cyclotomic_squaring<Fqk<edwards_pp> >();
 
-    // mnt4_pp::init_public_params();
-    // test_all_fields<mnt4_pp>();
-    // test_Fp4_tom_cook<mnt4_Fq4>();
-    // test_two_squarings<Fqe<mnt4_pp> >();
-    // test_cyclotomic_squaring<Fqk<mnt4_pp> >();
+    // MNT4
+    mnt4_pp::init_public_params();
+    test_all_fields<mnt4_pp>();
+    test_Fp4_tom_cook<mnt4_Fq4>();
+    test_two_squarings<Fqe<mnt4_pp> >();
+    test_cyclotomic_squaring<Fqk<mnt4_pp> >();
 
-    // mnt6_pp::init_public_params();
-    // test_all_fields<mnt6_pp>();
-    // test_cyclotomic_squaring<Fqk<mnt6_pp> >();
+    // MNT6 
+    mnt6_pp::init_public_params();
+    test_all_fields<mnt6_pp>();
+    test_cyclotomic_squaring<Fqk<mnt6_pp> >();
 
-    // alt_bn128_pp::init_public_params();
-    // test_field<alt_bn128_Fq6>();
-    // test_Frobenius<alt_bn128_Fq6>();
-    // test_all_fields<alt_bn128_pp>();
+    // ALT_BN128 
+    alt_bn128_pp::init_public_params();
+    test_field<alt_bn128_Fq6>();
+    test_Frobenius<alt_bn128_Fq6>();
+    test_all_fields<alt_bn128_pp>();
 
     // new curve: BLS12_377
-    // bls12_377_pp::init_public_params();
-    // test_field<bls12_377_Fq6>();
-    // test_Frobenius<bls12_377_Fq6>();
-    // test_all_fields<bls12_377_pp>();
+    bls12_377_pp::init_public_params();
+    test_field<bls12_377_Fq6>();
+    test_Frobenius<bls12_377_Fq6>();
+    test_all_fields<bls12_377_pp>();
     
     // new curve: SW6
-    // sw6_pp::init_public_params();
-    // test_field<sw6_Fq6>();
-    // test_Frobenius<sw6_Fq6>();
-    // test_all_fields<sw6_pp>();
+    sw6_pp::init_public_params();
+    test_field<sw6_Fq6>();
+    test_Frobenius<sw6_Fq6>();
+    test_all_fields<sw6_pp>();
     
     // new curve: BLS12_381 
-    // bls12_381_pp::init_public_params();
-    // test_field<bls12_381_Fq6>();
-    // test_Frobenius<bls12_381_Fq6>();
-    // test_all_fields<bls12_381_pp>();
+    bls12_381_pp::init_public_params();
+    test_field<bls12_381_Fq6>();
+    test_Frobenius<bls12_381_Fq6>();
+    test_all_fields<bls12_381_pp>();
 
     // new curve: MNT6753
-    // mnt6753_pp::init_public_params();
-    // test_field<mnt6753_Fq6>();
-    // test_Frobenius<mnt6753_Fq6>();
-    // test_all_fields<mnt6753_pp>();
+    mnt6753_pp::init_public_params();
+    test_field<mnt6753_Fq6>();
+    test_Frobenius<mnt6753_Fq6>();
+    test_all_fields<mnt6753_pp>();
 
     // new curve: MNT4753
-    // mnt4753_pp::init_public_params();
-    // test_field<mnt4753_Fq4>();
-    // test_Frobenius<mnt4753_Fq4>();
-    // test_all_fields<mnt4753_pp>();
+    mnt4753_pp::init_public_params();
+    test_field<mnt4753_Fq4>();
+    test_Frobenius<mnt4753_Fq4>();
+    test_all_fields<mnt4753_pp>();
     
     // new curve: SW6_BIS
-    // sw6_bis_pp::init_public_params();
-    // test_field<sw6_bis_Fq6>();
-    // test_Frobenius<sw6_bis_Fq6>();
-    // test_all_fields<sw6_bis_pp>();
+    sw6_bis_pp::init_public_params();
+    test_field<sw6_bis_Fq6>();
+    test_Frobenius<sw6_bis_Fq6>();
+    test_all_fields<sw6_bis_pp>();
     
     // new curve: PENDULUM 
     pendulum_pp::init_public_params();
     test_field<pendulum_Fq6>();
     test_Frobenius<pendulum_Fq6>();
     test_all_fields<pendulum_pp>();
+    
+    // new curve: JUBJUB 
+    // jubjub_pp::init_public_params();
+    // test_field<jubjub_Fq>();
+    // test_field<jubjub_Fr>();
+
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
-    // bn128_pp::init_public_params();
-    // test_field<Fr<bn128_pp> >();
-    // test_field<Fq<bn128_pp> >();
+    bn128_pp::init_public_params();
+    test_field<Fr<bn128_pp> >();
+    test_field<Fq<bn128_pp> >();
 #endif
 }

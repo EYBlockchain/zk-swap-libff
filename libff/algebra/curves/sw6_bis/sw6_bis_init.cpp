@@ -119,6 +119,8 @@ void init_sw6_bis_params()
     /* choice of short Weierstrass curve and its twist */
     sw6_bis_coeff_a = sw6_bis_Fq("0");
     sw6_bis_coeff_b = sw6_bis_Fq("5428247903343207843304490009542442997117969973913823318164330064320104021081180430153151788629347606889122435541645149581251622306618937027915190165889600280602116819284463614893841480114928247406042232431052188770336204942290254");
+    sw6_bis_G1::coeff_a = sw6_bis_coeff_a;
+    sw6_bis_G1::coeff_b = sw6_bis_coeff_b;
     sw6_bis_twist = sw6_bis_Fq3(sw6_bis_Fq::zero(), sw6_bis_Fq::one(), sw6_bis_Fq::zero()); // from zexe
     sw6_bis_twist_coeff_a = sw6_bis_Fq3(sw6_bis_Fq::zero(), sw6_bis_Fq::zero(), sw6_bis_G1::coeff_a);
     sw6_bis_twist_coeff_b = sw6_bis_Fq3(sw6_bis_G1::coeff_b * sw6_bis_Fq3::non_residue, sw6_bis_Fq::zero(), sw6_bis_Fq::zero());
@@ -145,58 +147,58 @@ void init_sw6_bis_params()
 
 
     // TODO: wNAF window table
-    // sw6_bis_G1::wnaf_window_table.resize(0);
-    // sw6_bis_G1::wnaf_window_table.push_back(11);
-    // sw6_bis_G1::wnaf_window_table.push_back(24);
-    // sw6_bis_G1::wnaf_window_table.push_back(60);
-    // sw6_bis_G1::wnaf_window_table.push_back(127);
+    sw6_bis_G1::wnaf_window_table.resize(0);
+    sw6_bis_G1::wnaf_window_table.push_back(11);
+    sw6_bis_G1::wnaf_window_table.push_back(24);
+    sw6_bis_G1::wnaf_window_table.push_back(60);
+    sw6_bis_G1::wnaf_window_table.push_back(127);
 
-    // // TODO: fixed-base exponentiation table
-    // sw6_bis_G1::fixed_base_exp_window_table.resize(0);
-    // // window 1 is unbeaten in [-inf, 4.99]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(1);
-    // // window 2 is unbeaten in [4.99, 10.99]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(5);
-    // // window 3 is unbeaten in [10.99, 32.29]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(11);
-    // // window 4 is unbeaten in [32.29, 55.23]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(32);
-    // // window 5 is unbeaten in [55.23, 162.03]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(55);
-    // // window 6 is unbeaten in [162.03, 360.15]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(162);
-    // // window 7 is unbeaten in [360.15, 815.44]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(360);
-    // // window 8 is unbeaten in [815.44, 2373.07]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(815);
-    // // window 9 is unbeaten in [2373.07, 6977.75]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(2373);
-    // // window 10 is unbeaten in [6977.75, 7122.23]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(6978);
-    // // window 11 is unbeaten in [7122.23, 57818.46]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(7122);
-    // // window 12 is never the best
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 13 is unbeaten in [57818.46, 169679.14]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(57818);
-    // // window 14 is never the best
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 15 is unbeaten in [169679.14, 439758.91]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(169679);
-    // // window 16 is unbeaten in [439758.91, 936073.41]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(439759);
-    // // window 17 is unbeaten in [936073.41, 4666554.74]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(936073);
-    // // window 18 is never the best
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 19 is unbeaten in [4666554.74, 7580404.42]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(4666555);
-    // // window 20 is unbeaten in [7580404.42, 34552892.20]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(7580404);
-    // // window 21 is never the best
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 22 is unbeaten in [34552892.20, inf]
-    // sw6_bis_G1::fixed_base_exp_window_table.push_back(34552892);
+    // TODO: fixed-base exponentiation table
+    sw6_bis_G1::fixed_base_exp_window_table.resize(0);
+    // window 1 is unbeaten in [-inf, 4.99]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(1);
+    // window 2 is unbeaten in [4.99, 10.99]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(5);
+    // window 3 is unbeaten in [10.99, 32.29]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(11);
+    // window 4 is unbeaten in [32.29, 55.23]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(32);
+    // window 5 is unbeaten in [55.23, 162.03]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(55);
+    // window 6 is unbeaten in [162.03, 360.15]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(162);
+    // window 7 is unbeaten in [360.15, 815.44]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(360);
+    // window 8 is unbeaten in [815.44, 2373.07]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(815);
+    // window 9 is unbeaten in [2373.07, 6977.75]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(2373);
+    // window 10 is unbeaten in [6977.75, 7122.23]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(6978);
+    // window 11 is unbeaten in [7122.23, 57818.46]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(7122);
+    // window 12 is never the best
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
+    // window 13 is unbeaten in [57818.46, 169679.14]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(57818);
+    // window 14 is never the best
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
+    // window 15 is unbeaten in [169679.14, 439758.91]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(169679);
+    // window 16 is unbeaten in [439758.91, 936073.41]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(439759);
+    // window 17 is unbeaten in [936073.41, 4666554.74]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(936073);
+    // window 18 is never the best
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
+    // window 19 is unbeaten in [4666554.74, 7580404.42]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(4666555);
+    // window 20 is unbeaten in [7580404.42, 34552892.20]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(7580404);
+    // window 21 is never the best
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(0);
+    // window 22 is unbeaten in [34552892.20, inf]
+    sw6_bis_G1::fixed_base_exp_window_table.push_back(34552892);
 
 
     /* choice of group G2 */
@@ -204,10 +206,6 @@ void init_sw6_bis_params()
                              sw6_bis_Fq3::one(),
                              sw6_bis_Fq3::zero());
 
-    // simple G2 generator
-    sw6_bis_G2::G2_zero = sw6_bis_G2(sw6_bis_Fq3::zero(),
-                               sw6_bis_Fq3::one(),
-                               sw6_bis_Fq3::zero());
     sw6_bis_G2::G2_one = sw6_bis_G2(sw6_bis_Fq3(sw6_bis_Fq("0"),
                                     sw6_bis_Fq("0"),
                                     sw6_bis_Fq("2762333537634180879188497831180460021045024768964216860077326831768282319295307213190468027456390916014688653832658199933857161399195589808528083537985014526923490693736135387257722421714776391535494333278083320743942589072320465")),
@@ -217,59 +215,59 @@ void init_sw6_bis_params()
                             sw6_bis_Fq3::one());
 
 
-    // // TODO: wNAF window table
-    // sw6_bis_G2::wnaf_window_table.resize(0);
-    // sw6_bis_G2::wnaf_window_table.push_back(5);
-    // sw6_bis_G2::wnaf_window_table.push_back(15);
-    // sw6_bis_G2::wnaf_window_table.push_back(39);
-    // sw6_bis_G2::wnaf_window_table.push_back(109);
+    // TODO: wNAF window table
+    sw6_bis_G2::wnaf_window_table.resize(0);
+    sw6_bis_G2::wnaf_window_table.push_back(5);
+    sw6_bis_G2::wnaf_window_table.push_back(15);
+    sw6_bis_G2::wnaf_window_table.push_back(39);
+    sw6_bis_G2::wnaf_window_table.push_back(109);
 
-    // // TODO: fixed-base exponentiation table 
-    // sw6_bis_G2::fixed_base_exp_window_table.resize(0);
-    // // window 1 is unbeaten in [-inf, 5.10]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(1);
-    // // window 2 is unbeaten in [5.10, 10.43]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(5);
-    // // window 3 is unbeaten in [10.43, 25.28]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(10);
-    // // window 4 is unbeaten in [25.28, 59.00]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(25);
-    // // window 5 is unbeaten in [59.00, 154.03]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(59);
-    // // window 6 is unbeaten in [154.03, 334.25]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(154);
-    // // window 7 is unbeaten in [334.25, 742.58]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(334);
-    // // window 8 is unbeaten in [742.58, 2034.40]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(743);
-    // // window 9 is unbeaten in [2034.40, 4987.56]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(2034);
-    // // window 10 is unbeaten in [4987.56, 8888.27]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(4988);
-    // // window 11 is unbeaten in [8888.27, 26271.13]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(8888);
-    // // window 12 is unbeaten in [26271.13, 39768.20]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(26271);
-    // // window 13 is unbeaten in [39768.20, 106275.75]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(39768);
-    // // window 14 is unbeaten in [106275.75, 141703.40]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(106276);
-    // // window 15 is unbeaten in [141703.40, 462422.97]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(141703);
-    // // window 16 is unbeaten in [462422.97, 926871.84]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(462423);
-    // // window 17 is unbeaten in [926871.84, 4873049.17]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(926872);
-    // // window 18 is never the best
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(0);
-    // // window 19 is unbeaten in [4873049.17, 5706707.88]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(4873049);
-    // // window 20 is unbeaten in [5706707.88, 31673814.95]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(5706708);
-    // // window 21 is never the best
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(0);
-    // // window 22 is unbeaten in [31673814.95, inf]
-    // sw6_bis_G2::fixed_base_exp_window_table.push_back(31673815);
+    // TODO: fixed-base exponentiation table 
+    sw6_bis_G2::fixed_base_exp_window_table.resize(0);
+    // window 1 is unbeaten in [-inf, 5.10]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(1);
+    // window 2 is unbeaten in [5.10, 10.43]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(5);
+    // window 3 is unbeaten in [10.43, 25.28]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(10);
+    // window 4 is unbeaten in [25.28, 59.00]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(25);
+    // window 5 is unbeaten in [59.00, 154.03]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(59);
+    // window 6 is unbeaten in [154.03, 334.25]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(154);
+    // window 7 is unbeaten in [334.25, 742.58]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(334);
+    // window 8 is unbeaten in [742.58, 2034.40]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(743);
+    // window 9 is unbeaten in [2034.40, 4987.56]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(2034);
+    // window 10 is unbeaten in [4987.56, 8888.27]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(4988);
+    // window 11 is unbeaten in [8888.27, 26271.13]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(8888);
+    // window 12 is unbeaten in [26271.13, 39768.20]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(26271);
+    // window 13 is unbeaten in [39768.20, 106275.75]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(39768);
+    // window 14 is unbeaten in [106275.75, 141703.40]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(106276);
+    // window 15 is unbeaten in [141703.40, 462422.97]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(141703);
+    // window 16 is unbeaten in [462422.97, 926871.84]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(462423);
+    // window 17 is unbeaten in [926871.84, 4873049.17]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(926872);
+    // window 18 is never the best
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(0);
+    // window 19 is unbeaten in [4873049.17, 5706707.88]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(4873049);
+    // window 20 is unbeaten in [5706707.88, 31673814.95]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(5706708);
+    // window 21 is never the best
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(0);
+    // window 22 is unbeaten in [31673814.95, inf]
+    sw6_bis_G2::fixed_base_exp_window_table.push_back(31673815);
 
 
 

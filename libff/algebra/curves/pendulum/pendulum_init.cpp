@@ -116,6 +116,8 @@ void init_pendulum_params()
     /* choice of short Weierstrass curve and its twist */
     pendulum_coeff_a = pendulum_Fq("0");
     pendulum_coeff_b = pendulum_Fq("3779136");
+    pendulum_G1::coeff_a = pendulum_coeff_a; 
+    pendulum_G1::coeff_b = pendulum_coeff_b;
     pendulum_twist = pendulum_Fq3(pendulum_Fq::zero(), pendulum_Fq::one(), pendulum_Fq::zero()); // from zexe
     pendulum_twist_coeff_a = pendulum_Fq3(pendulum_Fq::zero(), pendulum_Fq::zero(), pendulum_G1::coeff_a);
     pendulum_twist_coeff_b = pendulum_Fq3(pendulum_G1::coeff_b * pendulum_Fq3::non_residue, pendulum_Fq::zero(), pendulum_Fq::zero());
