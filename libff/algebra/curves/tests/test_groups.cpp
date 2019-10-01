@@ -7,6 +7,8 @@
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/common/profiling.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
@@ -14,6 +16,8 @@
 #include <sstream>
 
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+#include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
+#include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 
 using namespace libff;
 
@@ -138,6 +142,7 @@ void test_output()
 
 int main(void)
 {
+    printf("edwards: \n");
     edwards_pp::init_public_params();
     test_group<G1<edwards_pp> >();
     test_output<G1<edwards_pp> >();
@@ -145,6 +150,7 @@ int main(void)
     test_output<G2<edwards_pp> >();
     test_mul_by_q<G2<edwards_pp> >();
 
+    printf("mnt4: \n");
     mnt4_pp::init_public_params();
     test_group<G1<mnt4_pp> >();
     test_output<G1<mnt4_pp> >();
@@ -152,6 +158,7 @@ int main(void)
     test_output<G2<mnt4_pp> >();
     test_mul_by_q<G2<mnt4_pp> >();
 
+    printf("mnt6: \n");
     mnt6_pp::init_public_params();
     test_group<G1<mnt6_pp> >();
     test_output<G1<mnt6_pp> >();
@@ -159,12 +166,29 @@ int main(void)
     test_output<G2<mnt6_pp> >();
     test_mul_by_q<G2<mnt6_pp> >();
 
+    printf("alt_bn128: \n");
     alt_bn128_pp::init_public_params();
     test_group<G1<alt_bn128_pp> >();
     test_output<G1<alt_bn128_pp> >();
     test_group<G2<alt_bn128_pp> >();
     test_output<G2<alt_bn128_pp> >();
     test_mul_by_q<G2<alt_bn128_pp> >();
+
+    printf("bls12_377: \n");
+    bls12_377_pp::init_public_params();
+    test_group<G1<bls12_377_pp> >();
+    test_output<G1<bls12_377_pp> >();
+    test_group<G2<bls12_377_pp> >();
+    test_output<G2<bls12_377_pp> >();
+    test_mul_by_q<G2<bls12_377_pp> >();
+
+    printf("toy_curve: \n");
+    toy_curve_pp::init_public_params();
+    test_group<G1<toy_curve_pp> >();
+    test_output<G1<toy_curve_pp> >();
+    test_group<G2<toy_curve_pp> >();
+    test_output<G2<toy_curve_pp> >();
+    test_mul_by_q<G2<toy_curve_pp> >();
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();

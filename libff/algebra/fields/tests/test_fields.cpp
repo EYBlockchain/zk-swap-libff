@@ -7,11 +7,15 @@
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/common/profiling.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+#include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
+#include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/fields/fp12_2over3over2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
 
@@ -218,24 +222,43 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
+
+    printf("edwards:\n");
     edwards_pp::init_public_params();
     test_all_fields<edwards_pp>();
     test_cyclotomic_squaring<Fqk<edwards_pp> >();
 
+
+    printf("mnt4:\n");
     mnt4_pp::init_public_params();
     test_all_fields<mnt4_pp>();
     test_Fp4_tom_cook<mnt4_Fq4>();
     test_two_squarings<Fqe<mnt4_pp> >();
     test_cyclotomic_squaring<Fqk<mnt4_pp> >();
 
+
+    printf("mnt6:\n");
     mnt6_pp::init_public_params();
     test_all_fields<mnt6_pp>();
     test_cyclotomic_squaring<Fqk<mnt6_pp> >();
 
+    printf("alt_bn128:\n");
     alt_bn128_pp::init_public_params();
     test_field<alt_bn128_Fq6>();
     test_Frobenius<alt_bn128_Fq6>();
     test_all_fields<alt_bn128_pp>();
+
+    printf("toy_curve:\n");
+    toy_curve_pp::init_public_params();
+    test_field<toy_curve_Fq6>();
+    test_Frobenius<toy_curve_Fq6>();
+    test_all_fields<toy_curve_pp>();
+
+    printf("bls12_377:\n");
+    bls12_377_pp::init_public_params();
+    test_field<bls12_377_Fq6>();
+    test_Frobenius<bls12_377_Fq6>();
+    test_all_fields<bls12_377_pp>();
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();

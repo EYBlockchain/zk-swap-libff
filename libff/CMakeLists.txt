@@ -23,7 +23,27 @@ endif()
 add_library(
   ff
   STATIC
-
+  algebra/curves/toy_curve/toy_curve_g1.cpp
+  algebra/curves/toy_curve/toy_curve_g2.cpp
+  algebra/curves/toy_curve/toy_curve_init.cpp
+  algebra/curves/toy_curve/toy_curve_pairing.cpp
+  algebra/curves/toy_curve/toy_curve_pp.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_g1.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_g2.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_init.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_pairing.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_pp.cpp
+  algebra/curves/mnt753/mnt46753_common.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_g2.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_init.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_pairing.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_pp.cpp
+  algebra/curves/bls12_377/bls12_377_g1.cpp
+  algebra/curves/bls12_377/bls12_377_g2.cpp
+  algebra/curves/bls12_377/bls12_377_init.cpp
+  algebra/curves/bls12_377/bls12_377_pairing.cpp
+  algebra/curves/bls12_377/bls12_377_pp.cpp
   algebra/curves/alt_bn128/alt_bn128_g1.cpp
   algebra/curves/alt_bn128/alt_bn128_g2.cpp
   algebra/curves/alt_bn128/alt_bn128_init.cpp
@@ -127,10 +147,11 @@ if ("${IS_LIBFF_PARENT}")
     NAME algebra_fields_test
     COMMAND algebra_fields_test
   )
-
+  
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_fields_test)
+  add_dependencies(check time_test)
 
   add_executable(
     multiexp_profile
