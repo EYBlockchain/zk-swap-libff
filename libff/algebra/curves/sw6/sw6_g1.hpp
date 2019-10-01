@@ -24,9 +24,8 @@ std::ostream& operator<<(std::ostream &, const sw6_G1&);
 std::istream& operator>>(std::istream &, sw6_G1&);
 
 class sw6_G1 {
-private:
-    sw6_Fq X_, Y_, Z_;
 public:
+    sw6_Fq X, Y, Z;
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
     static long long dbl_cnt;
@@ -43,12 +42,8 @@ public:
 
     // using projective coordinates
     sw6_G1();
-    sw6_G1(const sw6_Fq& X, const sw6_Fq& Y) : X_(X), Y_(Y), Z_(base_field::one()) {}
-    sw6_G1(const sw6_Fq& X, const sw6_Fq& Y, const sw6_Fq& Z) : X_(X), Y_(Y), Z_(Z) {}
-
-    sw6_Fq X() const { return X_; }
-    sw6_Fq Y() const { return Y_; }
-    sw6_Fq Z() const { return Z_; }
+    sw6_G1(const sw6_Fq& X, const sw6_Fq& Y) : X(X), Y(Y), Z(base_field::one()) {}
+    sw6_G1(const sw6_Fq& X, const sw6_Fq& Y, const sw6_Fq& Z) : X(X), Y(Y), Z(Z) {}
 
     void print() const;
     void print_coordinates() const;

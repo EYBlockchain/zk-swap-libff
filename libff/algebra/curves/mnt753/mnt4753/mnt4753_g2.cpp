@@ -27,9 +27,9 @@ mnt4753_Fq2 mnt4753_G2::mul_by_b(const mnt4753_Fq2 &elt)
 
 mnt4753_G2::mnt4753_G2()
 {
-    this->X_ = G2_zero.X_;
-    this->Y_ = G2_zero.Y_;
-    this->Z_ = G2_zero.Z_;
+    this->X = G2_zero.X;
+    this->Y = G2_zero.Y;
+    this->Z = G2_zero.Z;
 }
 
 void mnt4753_G2::print() const
@@ -43,10 +43,10 @@ void mnt4753_G2::print() const
         mnt4753_G2 copy(*this);
         copy.to_affine_coordinates();
         gmp_printf("(%Nd*z + %Nd , %Nd*z + %Nd)\n",
-                   copy.X_.c1.as_bigint().data, mnt4753_Fq::num_limbs,
-                   copy.X_.c0.as_bigint().data, mnt4753_Fq::num_limbs,
-                   copy.Y_.c1.as_bigint().data, mnt4753_Fq::num_limbs,
-                   copy.Y_.c0.as_bigint().data, mnt4753_Fq::num_limbs);
+                   copy.X.c1.as_bigint().data, mnt4753_Fq::num_limbs,
+                   copy.X.c0.as_bigint().data, mnt4753_Fq::num_limbs,
+                   copy.Y.c1.as_bigint().data, mnt4753_Fq::num_limbs,
+                   copy.Y.c0.as_bigint().data, mnt4753_Fq::num_limbs);
     }
 }
 
@@ -59,12 +59,12 @@ void mnt4753_G2::print_coordinates() const
     else
     {
         gmp_printf("(%Nd*z + %Nd : %Nd*z + %Nd : %Nd*z + %Nd)\n",
-                   this->X_.c1.as_bigint().data, mnt4753_Fq::num_limbs,
-                   this->X_.c0.as_bigint().data, mnt4753_Fq::num_limbs,
-                   this->Y_.c1.as_bigint().data, mnt4753_Fq::num_limbs,
-                   this->Y_.c0.as_bigint().data, mnt4753_Fq::num_limbs,
-                   this->Z_.c1.as_bigint().data, mnt4753_Fq::num_limbs,
-                   this->Z_.c0.as_bigint().data, mnt4753_Fq::num_limbs);
+                   this->X.c1.as_bigint().data, mnt4753_Fq::num_limbs,
+                   this->X.c0.as_bigint().data, mnt4753_Fq::num_limbs,
+                   this->Y.c1.as_bigint().data, mnt4753_Fq::num_limbs,
+                   this->Y.c0.as_bigint().data, mnt4753_Fq::num_limbs,
+                   this->Z.c1.as_bigint().data, mnt4753_Fq::num_limbs,
+                   this->Z.c0.as_bigint().data, mnt4753_Fq::num_limbs);
     }
 }
 
@@ -72,16 +72,16 @@ void mnt4753_G2::to_affine_coordinates()
 {
     if (this->is_zero())
     {
-        this->X_ = mnt4753_Fq2::zero();
-        this->Y_ = mnt4753_Fq2::one();
-        this->Z_ = mnt4753_Fq2::zero();
+        this->X = mnt4753_Fq2::zero();
+        this->Y = mnt4753_Fq2::one();
+        this->Z = mnt4753_Fq2::zero();
     }
     else
     {
-        const mnt4753_Fq2 Z_inv = Z_.inverse();
-        X_ = X_ * Z_inv;
-        Y_ = Y_ * Z_inv;
-        Z_ = mnt4753_Fq2::one();
+        const mnt4753_Fq2 Z_inv = Z.inverse();
+        X = X * Z_inv;
+        Y = Y * Z_inv;
+        Z = mnt4753_Fq2::one();
     }
 }
 
@@ -92,12 +92,12 @@ void mnt4753_G2::to_special()
 
 bool mnt4753_G2::is_special() const
 {
-    return (this->is_zero() || this->Z_ == mnt4753_Fq2::one());
+    return (this->is_zero() || this->Z == mnt4753_Fq2::one());
 }
 
 bool mnt4753_G2::is_zero() const
 {
-    return (this->X_.is_zero() && this->Z_.is_zero());
+    return (this->X.is_zero() && this->Z.is_zero());
 }
 
 bool mnt4753_G2::operator==(const mnt4753_G2 &other) const
@@ -115,13 +115,13 @@ bool mnt4753_G2::operator==(const mnt4753_G2 &other) const
     /* now neither is O */
 
     // X1/Z1 = X2/Z2 <=> X1*Z2 = X2*Z1
-    if ((this->X_ * other.Z_) != (other.X_ * this->Z_))
+    if ((this->X * other.Z) != (other.X * this->Z))
     {
         return false;
     }
 
     // Y1/Z1 = Y2/Z2 <=> Y1*Z2 = Y2*Z1
-    if ((this->Y_ * other.Z_) != (other.Y_ * this->Z_))
+    if ((this->Y * other.Z) != (other.Y * this->Z))
     {
         return false;
     }
@@ -164,27 +164,27 @@ mnt4753_G2 mnt4753_G2::operator+(const mnt4753_G2 &other) const
       }
     */
 
-    const mnt4753_Fq2 X1Z2 = (this->X_) * (other.Z_);        // X1Z2 = X1*Z2
-    const mnt4753_Fq2 X2Z1 = (this->Z_) * (other.X_);        // X2Z1 = X2*Z1
+    const mnt4753_Fq2 X1Z2 = (this->X) * (other.Z);        // X1Z2 = X1*Z2
+    const mnt4753_Fq2 X2Z1 = (this->Z) * (other.X);        // X2Z1 = X2*Z1
 
     // (used both in add and double checks)
 
-    const mnt4753_Fq2 Y1Z2 = (this->Y_) * (other.Z_);        // Y1Z2 = Y1*Z2
-    const mnt4753_Fq2 Y2Z1 = (this->Z_) * (other.Y_);        // Y2Z1 = Y2*Z1
+    const mnt4753_Fq2 Y1Z2 = (this->Y) * (other.Z);        // Y1Z2 = Y1*Z2
+    const mnt4753_Fq2 Y2Z1 = (this->Z) * (other.Y);        // Y2Z1 = Y2*Z1
 
     if (X1Z2 == X2Z1 && Y1Z2 == Y2Z1)
     {
         // perform dbl case
-        const mnt4753_Fq2 XX   = (this->X_).squared();                   // XX  = X1^2
-        const mnt4753_Fq2 ZZ   = (this->Z_).squared();                   // ZZ  = Z1^2
+        const mnt4753_Fq2 XX   = (this->X).squared();                   // XX  = X1^2
+        const mnt4753_Fq2 ZZ   = (this->Z).squared();                   // ZZ  = Z1^2
         const mnt4753_Fq2 w    = mnt4753_G2::mul_by_a(ZZ) + (XX + XX + XX); // w   = a*ZZ + 3*XX
-        const mnt4753_Fq2 Y1Z1 = (this->Y_) * (this->Z_);
+        const mnt4753_Fq2 Y1Z1 = (this->Y) * (this->Z);
         const mnt4753_Fq2 s    = Y1Z1 + Y1Z1;                            // s   = 2*Y1*Z1
         const mnt4753_Fq2 ss   = s.squared();                            // ss  = s^2
         const mnt4753_Fq2 sss  = s * ss;                                 // sss = s*ss
-        const mnt4753_Fq2 R    = (this->Y_) * s;                         // R   = Y1*s
+        const mnt4753_Fq2 R    = (this->Y) * s;                         // R   = Y1*s
         const mnt4753_Fq2 RR   = R.squared();                            // RR  = R^2
-        const mnt4753_Fq2 B    = ((this->X_)+R).squared()-XX-RR;         // B   = (X1+R)^2 - XX - RR
+        const mnt4753_Fq2 B    = ((this->X)+R).squared()-XX-RR;         // B   = (X1+R)^2 - XX - RR
         const mnt4753_Fq2 h    = w.squared() - (B+B);                    // h   = w^2 - 2*B
         const mnt4753_Fq2 X3   = h * s;                                  // X3  = h*s
         const mnt4753_Fq2 Y3   = w * (B-h)-(RR+RR);                      // Y3  = w*(B-h) - 2*RR
@@ -194,7 +194,7 @@ mnt4753_G2 mnt4753_G2::operator+(const mnt4753_G2 &other) const
     }
 
     // if we have arrived here we are in the add case
-    const mnt4753_Fq2 Z1Z2 = (this->Z_) * (other.Z_);      // Z1Z2 = Z1*Z2
+    const mnt4753_Fq2 Z1Z2 = (this->Z) * (other.Z);      // Z1Z2 = Z1*Z2
     const mnt4753_Fq2 u    = Y2Z1 - Y1Z2;                  // u    = Y2*Z1-Y1Z2
     const mnt4753_Fq2 uu   = u.squared();                  // uu   = u^2
     const mnt4753_Fq2 v    = X2Z1 - X1Z2;                  // v    = X2*Z1-X1Z2
@@ -211,7 +211,7 @@ mnt4753_G2 mnt4753_G2::operator+(const mnt4753_G2 &other) const
 
 mnt4753_G2 mnt4753_G2::operator-() const
 {
-    return mnt4753_G2(this->X_, -(this->Y_), this->Z_);
+    return mnt4753_G2(this->X, -(this->Y), this->Z);
 }
 
 
@@ -248,12 +248,12 @@ mnt4753_G2 mnt4753_G2::add(const mnt4753_G2 &other) const
     // NOTE: does not handle O and pts of order 2,4
     // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#addition-add-1998-cmo-2
 
-    const mnt4753_Fq2 Y1Z2 = (this->Y_) * (other.Z_);        // Y1Z2 = Y1*Z2
-    const mnt4753_Fq2 X1Z2 = (this->X_) * (other.Z_);        // X1Z2 = X1*Z2
-    const mnt4753_Fq2 Z1Z2 = (this->Z_) * (other.Z_);        // Z1Z2 = Z1*Z2
-    const mnt4753_Fq2 u    = (other.Y_) * (this->Z_) - Y1Z2; // u    = Y2*Z1-Y1Z2
+    const mnt4753_Fq2 Y1Z2 = (this->Y) * (other.Z);        // Y1Z2 = Y1*Z2
+    const mnt4753_Fq2 X1Z2 = (this->X) * (other.Z);        // X1Z2 = X1*Z2
+    const mnt4753_Fq2 Z1Z2 = (this->Z) * (other.Z);        // Z1Z2 = Z1*Z2
+    const mnt4753_Fq2 u    = (other.Y) * (this->Z) - Y1Z2; // u    = Y2*Z1-Y1Z2
     const mnt4753_Fq2 uu   = u.squared();                    // uu   = u^2
-    const mnt4753_Fq2 v    = (other.X_) * (this->Z_) - X1Z2; // v    = X2*Z1-X1Z2
+    const mnt4753_Fq2 v    = (other.X) * (this->Z) - X1Z2; // v    = X2*Z1-X1Z2
     const mnt4753_Fq2 vv   = v.squared();                    // vv   = v^2
     const mnt4753_Fq2 vvv  = v * vv;                         // vvv  = v*vv
     const mnt4753_Fq2 R    = vv * X1Z2;                      // R    = vv*X1Z2
@@ -288,29 +288,29 @@ mnt4753_G2 mnt4753_G2::mixed_add(const mnt4753_G2 &other) const
     assert(other.is_special());
 #endif
 
-    const mnt4753_Fq2 &X1Z2 = (this->X_);                   // X1Z2 = X1*Z2 (but other is special and not zero)
-    const mnt4753_Fq2 X2Z1 = (this->Z_) * (other.X_);       // X2Z1 = X2*Z1
+    const mnt4753_Fq2 &X1Z2 = (this->X);                   // X1Z2 = X1*Z2 (but other is special and not zero)
+    const mnt4753_Fq2 X2Z1 = (this->Z) * (other.X);       // X2Z1 = X2*Z1
 
     // (used both in add and double checks)
 
-    const mnt4753_Fq2 &Y1Z2 = (this->Y_);                   // Y1Z2 = Y1*Z2 (but other is special and not zero)
-    const mnt4753_Fq2 Y2Z1 = (this->Z_) * (other.Y_);       // Y2Z1 = Y2*Z1
+    const mnt4753_Fq2 &Y1Z2 = (this->Y);                   // Y1Z2 = Y1*Z2 (but other is special and not zero)
+    const mnt4753_Fq2 Y2Z1 = (this->Z) * (other.Y);       // Y2Z1 = Y2*Z1
 
     if (X1Z2 == X2Z1 && Y1Z2 == Y2Z1)
     {
         return this->dbl();
     }
 
-    const mnt4753_Fq2 u = Y2Z1 - this->Y_;              // u = Y2*Z1-Y1
+    const mnt4753_Fq2 u = Y2Z1 - this->Y;              // u = Y2*Z1-Y1
     const mnt4753_Fq2 uu = u.squared();                 // uu = u2
-    const mnt4753_Fq2 v = X2Z1 - this->X_;              // v = X2*Z1-X1
+    const mnt4753_Fq2 v = X2Z1 - this->X;              // v = X2*Z1-X1
     const mnt4753_Fq2 vv = v.squared();                 // vv = v2
     const mnt4753_Fq2 vvv = v*vv;                       // vvv = v*vv
-    const mnt4753_Fq2 R = vv * this->X_;                // R = vv*X1
-    const mnt4753_Fq2 A = uu * this->Z_ - vvv - R - R;  // A = uu*Z1-vvv-2*R
+    const mnt4753_Fq2 R = vv * this->X;                // R = vv*X1
+    const mnt4753_Fq2 A = uu * this->Z - vvv - R - R;  // A = uu*Z1-vvv-2*R
     const mnt4753_Fq2 X3 = v * A;                       // X3 = v*A
-    const mnt4753_Fq2 Y3 = u*(R-A) - vvv * this->Y_;    // Y3 = u*(R-A)-vvv*Y1
-    const mnt4753_Fq2 Z3 = vvv * this->Z_;              // Z3 = vvv*Z1
+    const mnt4753_Fq2 Y3 = u*(R-A) - vvv * this->Y;    // Y3 = u*(R-A)-vvv*Y1
+    const mnt4753_Fq2 Z3 = vvv * this->Z;              // Z3 = vvv*Z1
 
     return mnt4753_G2(X3, Y3, Z3);
 }
@@ -329,16 +329,16 @@ mnt4753_G2 mnt4753_G2::dbl() const
         // NOTE: does not handle O and pts of order 2,4
         // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#doubling-dbl-2007-bl
 
-        const mnt4753_Fq2 XX   = (this->X_).squared();                     // XX  = X1^2
-        const mnt4753_Fq2 ZZ   = (this->Z_).squared();                     // ZZ  = Z1^2
+        const mnt4753_Fq2 XX   = (this->X).squared();                     // XX  = X1^2
+        const mnt4753_Fq2 ZZ   = (this->Z).squared();                     // ZZ  = Z1^2
         const mnt4753_Fq2 w    = mnt4753_G2::mul_by_a(ZZ) + (XX + XX + XX);   // w   = a*ZZ + 3*XX
-        const mnt4753_Fq2 Y1Z1 = (this->Y_) * (this->Z_);
+        const mnt4753_Fq2 Y1Z1 = (this->Y) * (this->Z);
         const mnt4753_Fq2 s    = Y1Z1 + Y1Z1;                              // s   = 2*Y1*Z1
         const mnt4753_Fq2 ss   = s.squared();                              // ss  = s^2
         const mnt4753_Fq2 sss  = s * ss;                                   // sss = s*ss
-        const mnt4753_Fq2 R    = (this->Y_) * s;                           // R   = Y1*s
+        const mnt4753_Fq2 R    = (this->Y) * s;                           // R   = Y1*s
         const mnt4753_Fq2 RR   = R.squared();                              // RR  = R^2
-        const mnt4753_Fq2 B    = ((this->X_)+R).squared()-XX-RR;           // B   = (X1+R)^2 - XX - RR
+        const mnt4753_Fq2 B    = ((this->X)+R).squared()-XX-RR;           // B   = (X1+R)^2 - XX - RR
         const mnt4753_Fq2 h    = w.squared() - (B+B);                      // h   = w^2-2*B
         const mnt4753_Fq2 X3   = h * s;                                    // X3  = h*s
         const mnt4753_Fq2 Y3   = w * (B-h)-(RR+RR);                        // Y3  = w*(B-h) - 2*RR
@@ -350,9 +350,9 @@ mnt4753_G2 mnt4753_G2::dbl() const
 
 mnt4753_G2 mnt4753_G2::mul_by_q() const
 {
-    return mnt4753_G2(mnt4753_twist_mul_by_q_X * (this->X_).Frobenius_map(1),
-                   mnt4753_twist_mul_by_q_Y * (this->Y_).Frobenius_map(1),
-                   (this->Z_).Frobenius_map(1));
+    return mnt4753_G2(mnt4753_twist_mul_by_q_X * (this->X).Frobenius_map(1),
+                   mnt4753_twist_mul_by_q_Y * (this->Y).Frobenius_map(1),
+                   (this->Z).Frobenius_map(1));
 }
 
 bool mnt4753_G2::is_well_formed() const
@@ -373,12 +373,12 @@ bool mnt4753_G2::is_well_formed() const
 
           z (y^2 - b z^2) = x ( x^2 + a z^2)
         */
-        const mnt4753_Fq2 X2 = this->X_.squared();
-        const mnt4753_Fq2 Y2 = this->Y_.squared();
-        const mnt4753_Fq2 Z2 = this->Z_.squared();
+        const mnt4753_Fq2 X2 = this->X.squared();
+        const mnt4753_Fq2 Y2 = this->Y.squared();
+        const mnt4753_Fq2 Z2 = this->Z.squared();
         const mnt4753_Fq2 aZ2 =  mnt4753_twist_coeff_a * Z2;
 
-        return (this->Z_ * (Y2 - mnt4753_twist_coeff_b * Z2) == this->X_ * (X2 + aZ2));
+        return (this->Z * (Y2 - mnt4753_twist_coeff_b * Z2) == this->X * (X2 + aZ2));
     }
 }
 
@@ -404,10 +404,10 @@ std::ostream& operator<<(std::ostream &out, const mnt4753_G2 &g)
 
     out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
 #ifdef NO_PT_COMPRESSION
-    out << copy.X_ << OUTPUT_SEPARATOR << copy.Y_;
+    out << copy.X << OUTPUT_SEPARATOR << copy.Y;
 #else
     /* storing LSB of Y */
-    out << copy.X_ << OUTPUT_SEPARATOR << (copy.Y_.c0.as_bigint().data[0] & 1);
+    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.c0.as_bigint().data[0] & 1);
 #endif
 
     return out;
@@ -448,9 +448,9 @@ std::istream& operator>>(std::istream &in, mnt4753_G2 &g)
     // using projective coordinates
     if (!is_zero)
     {
-        g.X_ = tX;
-        g.Y_ = tY;
-        g.Z_ = mnt4753_Fq2::one();
+        g.X = tX;
+        g.Y = tY;
+        g.Z = mnt4753_Fq2::one();
     }
     else
     {
@@ -467,7 +467,7 @@ void mnt4753_G2::batch_to_special_all_non_zeros(std::vector<mnt4753_G2> &vec)
 
     for (auto &el: vec)
     {
-        Z_vec.emplace_back(el.Z());
+        Z_vec.emplace_back(el.Z);
     }
     batch_invert<mnt4753_Fq2>(Z_vec);
 
@@ -475,7 +475,7 @@ void mnt4753_G2::batch_to_special_all_non_zeros(std::vector<mnt4753_G2> &vec)
 
     for (size_t i = 0; i < vec.size(); ++i)
     {
-        vec[i] = mnt4753_G2(vec[i].X() * Z_vec[i], vec[i].Y() * Z_vec[i], one);
+        vec[i] = mnt4753_G2(vec[i].X * Z_vec[i], vec[i].Y * Z_vec[i], one);
     }
 }
 

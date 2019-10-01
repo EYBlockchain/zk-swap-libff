@@ -13,9 +13,8 @@ std::ostream& operator<<(std::ostream &, const mnt6753_G1&);
 std::istream& operator>>(std::istream &, mnt6753_G1&);
 
 class mnt6753_G1 {
-private:
-    mnt6753_Fq X_, Y_, Z_;
 public:
+    mnt6753_Fq X, Y, Z;
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
     static long long dbl_cnt;
@@ -32,12 +31,8 @@ public:
 
     // using projective coordinates
     mnt6753_G1();
-    mnt6753_G1(const mnt6753_Fq& X, const mnt6753_Fq& Y) : X_(X), Y_(Y), Z_(base_field::one()) {}
-    mnt6753_G1(const mnt6753_Fq& X, const mnt6753_Fq& Y, const mnt6753_Fq& Z) : X_(X), Y_(Y), Z_(Z) {}
-
-    mnt6753_Fq X() const { return X_; }
-    mnt6753_Fq Y() const { return Y_; }
-    mnt6753_Fq Z() const { return Z_; }
+    mnt6753_G1(const mnt6753_Fq& X, const mnt6753_Fq& Y) : X(X), Y(Y), Z(base_field::one()) {}
+    mnt6753_G1(const mnt6753_Fq& X, const mnt6753_Fq& Y, const mnt6753_Fq& Z) : X(X), Y(Y), Z(Z) {}
 
     void print() const;
     void print_coordinates() const;

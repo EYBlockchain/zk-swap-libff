@@ -219,9 +219,9 @@ mnt4753_affine_ate_G1_precomputation mnt4753_affine_ate_precompute_G1(const mnt4
     Pcopy.to_affine_coordinates();
 
     mnt4753_affine_ate_G1_precomputation result;
-    result.PX = Pcopy.X();
-    result.PY = Pcopy.Y();
-    result.PY_twist_squared = Pcopy.Y() * mnt4753_twist.squared();
+    result.PX = Pcopy.X;
+    result.PY = Pcopy.Y;
+    result.PY_twist_squared = Pcopy.Y * mnt4753_twist.squared();
 
     leave_block("Call to mnt4753_affine_ate_precompute_G1");
     return result;
@@ -235,11 +235,11 @@ mnt4753_affine_ate_G2_precomputation mnt4753_affine_ate_precompute_G2(const mnt4
     Qcopy.to_affine_coordinates();
 
     mnt4753_affine_ate_G2_precomputation result;
-    result.QX = Qcopy.X();
-    result.QY = Qcopy.Y();
+    result.QX = Qcopy.X;
+    result.QY = Qcopy.Y;
 
-    mnt4753_Fq2 RX = Qcopy.X();
-    mnt4753_Fq2 RY = Qcopy.Y();
+    mnt4753_Fq2 RX = Qcopy.X;
+    mnt4753_Fq2 RY = Qcopy.Y;
 
     const bigint<mnt4753_Fr::num_limbs> &loop_count = mnt4753_ate_loop_count;
     bool found_nonzero = false;
@@ -458,10 +458,10 @@ mnt4753_ate_G1_precomp mnt4753_ate_precompute_G1(const mnt4753_G1& P)
     Pcopy.to_affine_coordinates();
 
     mnt4753_ate_G1_precomp result;
-    result.PX = Pcopy.X();
-    result.PY = Pcopy.Y();
-    result.PX_twist = Pcopy.X() * mnt4753_twist;
-    result.PY_twist = Pcopy.Y() * mnt4753_twist;
+    result.PX = Pcopy.X;
+    result.PY = Pcopy.Y;
+    result.PX_twist = Pcopy.X * mnt4753_twist;
+    result.PY_twist = Pcopy.Y * mnt4753_twist;
 
     leave_block("Call to mnt4753_ate_precompute_G1");
     return result;
@@ -475,15 +475,15 @@ mnt4753_ate_G2_precomp mnt4753_ate_precompute_G2(const mnt4753_G2& Q)
     Qcopy.to_affine_coordinates();
 
     mnt4753_ate_G2_precomp result;
-    result.QX = Qcopy.X();
-    result.QY = Qcopy.Y();
-    result.QY2 = Qcopy.Y().squared();
-    result.QX_over_twist = Qcopy.X() * mnt4753_twist.inverse();
-    result.QY_over_twist = Qcopy.Y() * mnt4753_twist.inverse();
+    result.QX = Qcopy.X;
+    result.QY = Qcopy.Y;
+    result.QY2 = Qcopy.Y.squared();
+    result.QX_over_twist = Qcopy.X * mnt4753_twist.inverse();
+    result.QY_over_twist = Qcopy.Y * mnt4753_twist.inverse();
 
     extended_mnt4753_G2_projective R;
-    R.X = Qcopy.X();
-    R.Y = Qcopy.Y();
+    R.X = Qcopy.X;
+    R.Y = Qcopy.Y;
     R.Z = mnt4753_Fq2::one();
     R.T = mnt4753_Fq2::one();
 

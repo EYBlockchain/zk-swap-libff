@@ -21,7 +21,8 @@ bls12_381_G2::bls12_381_G2()
 
 bls12_381_Fq2 bls12_381_G2::mul_by_b(const bls12_381_Fq2 &elt)
 {
-    return bls12_381_Fq2(bls12_381_twist_mul_by_b_c0 * elt.c0, bls12_381_twist_mul_by_b_c1 * elt.c1);
+    return elt * bls12_381_twist_coeff_b;
+    //return bls12_381_Fq2(bls12_381_twist_mul_by_b_c0 * elt.c0, bls12_381_twist_mul_by_b_c1 * elt.c1);
 }
 
 void bls12_381_G2::print() const
@@ -360,8 +361,8 @@ bls12_381_G2 bls12_381_G2::dbl() const
 bls12_381_G2 bls12_381_G2::mul_by_q() const
 {
     return bls12_381_G2(bls12_381_twist_mul_by_q_X * (this->X).Frobenius_map(1),
-                      bls12_381_twist_mul_by_q_Y * (this->Y).Frobenius_map(1),
-                      (this->Z).Frobenius_map(1));
+                        bls12_381_twist_mul_by_q_Y * (this->Y).Frobenius_map(1),
+                        (this->Z).Frobenius_map(1));
 }
 
 bool bls12_381_G2::is_well_formed() const

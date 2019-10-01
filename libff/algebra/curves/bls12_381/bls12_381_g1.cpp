@@ -391,7 +391,8 @@ bls12_381_G1 bls12_381_G1::one()
 
 bls12_381_G1 bls12_381_G1::random_element()
 {
-    return (scalar_field::random_element().as_bigint()) * G1_one;
+    const auto x = scalar_field::random_element().as_bigint();
+    return x * G1_one;
 }
 
 std::ostream& operator<<(std::ostream &out, const bls12_381_G1 &g)

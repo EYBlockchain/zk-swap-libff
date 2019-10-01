@@ -13,9 +13,8 @@ std::ostream& operator<<(std::ostream &, const sw6_G2&);
 std::istream& operator>>(std::istream &, sw6_G2&);
 
 class sw6_G2 {
-private:
-    sw6_Fq3 X_, Y_, Z_;
 public:
+    sw6_Fq3 X, Y, Z;
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
     static long long dbl_cnt;
@@ -34,11 +33,7 @@ public:
 
     // using projective coordinates
     sw6_G2();
-    sw6_G2(const sw6_Fq3& X, const sw6_Fq3& Y, const sw6_Fq3& Z) : X_(X), Y_(Y), Z_(Z) {}
-
-    sw6_Fq3 X() const { return X_; }
-    sw6_Fq3 Y() const { return Y_; }
-    sw6_Fq3 Z() const { return Z_; }
+    sw6_G2(const sw6_Fq3& X, const sw6_Fq3& Y, const sw6_Fq3& Z) : X(X), Y(Y), Z(Z) {}
 
     static sw6_Fq3 mul_by_a(const sw6_Fq3 &elt);
     static sw6_Fq3 mul_by_b(const sw6_Fq3 &elt);

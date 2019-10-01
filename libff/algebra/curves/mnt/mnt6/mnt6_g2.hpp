@@ -24,9 +24,8 @@ std::ostream& operator<<(std::ostream &, const mnt6_G2&);
 std::istream& operator>>(std::istream &, mnt6_G2&);
 
 class mnt6_G2 {
-private:
-    mnt6_Fq3 X_, Y_, Z_;
 public:
+    mnt6_Fq3 X, Y, Z;
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
     static long long dbl_cnt;
@@ -45,11 +44,7 @@ public:
 
     // using projective coordinates
     mnt6_G2();
-    mnt6_G2(const mnt6_Fq3& X, const mnt6_Fq3& Y, const mnt6_Fq3& Z) : X_(X), Y_(Y), Z_(Z) {}
-
-    mnt6_Fq3 X() const { return X_; }
-    mnt6_Fq3 Y() const { return Y_; }
-    mnt6_Fq3 Z() const { return Z_; }
+    mnt6_G2(const mnt6_Fq3& X, const mnt6_Fq3& Y, const mnt6_Fq3& Z) : X(X), Y(Y), Z(Z) {}
 
     static mnt6_Fq3 mul_by_a(const mnt6_Fq3 &elt);
     static mnt6_Fq3 mul_by_b(const mnt6_Fq3 &elt);

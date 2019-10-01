@@ -38,7 +38,7 @@
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 #include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
-#include <libff/algebra/curves/jubjub/jubjub_pp.hpp>
+//#include <libff/algebra/curves/jubjub/jubjub_pp.hpp>
 
 using namespace libff;
 
