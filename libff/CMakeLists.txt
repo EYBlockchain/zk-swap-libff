@@ -23,6 +23,11 @@ endif()
 add_library(
   ff
   STATIC
+  algebra/curves/bls12_381/bls12_381_g1.cpp
+  algebra/curves/bls12_381/bls12_381_g2.cpp
+  algebra/curves/bls12_381/bls12_381_init.cpp
+  algebra/curves/bls12_381/bls12_381_pairing.cpp
+  algebra/curves/bls12_381/bls12_381_pp.cpp
   algebra/curves/toy_curve/toy_curve_g1.cpp
   algebra/curves/toy_curve/toy_curve_g2.cpp
   algebra/curves/toy_curve/toy_curve_init.cpp

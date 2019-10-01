@@ -18,6 +18,7 @@
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 
 using namespace libff;
 
@@ -120,7 +121,9 @@ template<typename GroupT>
 void test_mul_by_q()
 {
     GroupT a = GroupT::random_element();
-    assert((GroupT::base_field_char()*a) == a.mul_by_q());
+    GroupT b = GroupT::base_field_char()*a;
+    GroupT c = a.mul_by_q();
+    assert( b == c);
 }
 
 template<typename GroupT>
@@ -173,6 +176,14 @@ int main(void)
     test_group<G2<alt_bn128_pp> >();
     test_output<G2<alt_bn128_pp> >();
     test_mul_by_q<G2<alt_bn128_pp> >();
+
+    printf("bls12_381: \n");
+    bls12_381_pp::init_public_params();
+    test_group<G1<bls12_381_pp> >();
+    test_output<G1<bls12_381_pp> >();
+    test_group<G2<bls12_381_pp> >();
+    test_output<G2<bls12_381_pp> >();
+    test_mul_by_q<G2<bls12_381_pp> >();
 
     printf("bls12_377: \n");
     bls12_377_pp::init_public_params();
