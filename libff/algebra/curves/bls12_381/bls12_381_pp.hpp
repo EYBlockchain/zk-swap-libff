@@ -20,8 +20,8 @@ public:
     typedef bls12_381_Fr Fp_type;
     typedef bls12_381_G1 G1_type;
     typedef bls12_381_G2 G2_type;
-    typedef bls12_381_G1_precomp G1_precomp_type;
-    typedef bls12_381_G2_precomp G2_precomp_type;
+    //typedef bls12_381_G1_precomp G1_precomp_type;
+    //typedef bls12_381_G2_precomp G2_precomp_type;
     typedef bls12_381_Fq Fq_type;
     typedef bls12_381_Fq2 Fqe_type;
     typedef bls12_381_Fq12 Fqk_type;
@@ -30,6 +30,7 @@ public:
     static const bool has_affine_pairing = false;
 
     static void init_public_params();
+    /*
     static bls12_381_GT final_exponentiation(const bls12_381_Fq12 &elt);
     static bls12_381_G1_precomp precompute_G1(const bls12_381_G1 &P);
     static bls12_381_G2_precomp precompute_G2(const bls12_381_G2 &Q);
@@ -39,6 +40,7 @@ public:
                                              const bls12_381_G2_precomp &prec_Q1,
                                              const bls12_381_G1_precomp &prec_P2,
                                              const bls12_381_G2_precomp &prec_Q2);
+    */
     static bls12_381_Fq12 pairing(const bls12_381_G1 &P,
                                   const bls12_381_G2 &Q);
     static bls12_381_Fq12 reduced_pairing(const bls12_381_G1 &P,

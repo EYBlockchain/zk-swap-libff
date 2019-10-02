@@ -120,6 +120,64 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::squared_complex() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::copy(const my_Fp2 &x)
+{
+    this->c0 = x.c0;
+    this->c1 = x.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::multiply2(const my_Fp2 &x)
+{
+    copy(x + x);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::square(const my_Fp2 &x)
+{
+    copy(x.squared());
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::negate(const my_Fp2 &x)
+{
+    copy(-x);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::multiply(const my_Fp2 &x, const my_Fp2 &y)
+{
+    copy(x * y);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::add(const my_Fp2 &x, const my_Fp2 &y)
+{
+    copy(x + y);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::subtract(const my_Fp2 &x, const my_Fp2 &y)
+{
+    copy(x - y);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::multiply_by_nonresidue() {
+    multiply_by_nonresidue(this);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::multiply_by_nonresidue(const Fp2_model<n,modulus> &a) {
+    const my_Fp t0 = a.c0;
+    this->c0 = (a.c0 - a.c1);
+    this->c1 = (a.c1 + t0);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::inverse() const
 {
     const my_Fp &a = this->c0, &b = this->c1;

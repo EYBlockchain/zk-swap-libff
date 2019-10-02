@@ -38,6 +38,7 @@ class Fp6_3over2_model {
 public:
     typedef Fp_model<n, modulus> my_Fp;
     typedef Fp2_model<n, modulus> my_Fp2;
+    typedef Fp6_3over2_model<n,modulus> my_Fp6;
 
     static my_Fp2 non_residue;
     static my_Fp2 Frobenius_coeffs_c1[6]; // non_residue^((modulus^i-1)/3)   for i=0,1,2,3,4,5
@@ -66,7 +67,15 @@ public:
     Fp6_3over2_model inverse() const;
     Fp6_3over2_model Frobenius_map(unsigned long power) const;
 
+    void copy(const my_Fp6 &x);
+    void add(const my_Fp6 &x, const my_Fp6 &y);
+    void subtract(const my_Fp6 &x, const my_Fp6 &y);
+    void multiply_by_nonresidue(const my_Fp6 &x);
+
     static my_Fp2 mul_by_non_residue(const my_Fp2 &elt);
+
+    void multiply_by_c1(const my_Fp6 &a, const my_Fp2 &c1);
+    void multiply_by_c01(const my_Fp6 &a, const my_Fp2 &c0, const my_Fp2 & c1);
 
     template<mp_size_t m>
     Fp6_3over2_model operator^(const bigint<m> &other) const;

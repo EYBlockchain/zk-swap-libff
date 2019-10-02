@@ -13,11 +13,18 @@
 
 namespace libff {
 
-/* final exponentiation */
+static const bigint<bls12_381_r_limbs> bls12_381_x("15132376222941642752");
+static constexpr unsigned int bls12_381_x_num_set_bits = 6;
+static constexpr unsigned int bls12_381_x_highest_set_bit = 63;
+static constexpr bool bls12_381_x_is_negative = true;
+
+
+/*
+// final exponentiation
 
 bls12_381_GT bls12_381_final_exponentiation(const bls12_381_Fq12 &elt);
 
-/* ate pairing */
+// ate pairing
 
 struct bls12_381_ate_G1_precomp {
     bls12_381_Fq PX;
@@ -48,9 +55,12 @@ struct bls12_381_ate_G2_precomp {
     friend std::istream& operator>>(std::istream &in, bls12_381_ate_G2_precomp &prec_Q);
 };
 
+*/
+
+
+/*
 bls12_381_ate_G1_precomp bls12_381_ate_precompute_G1(const bls12_381_G1& P);
 bls12_381_ate_G2_precomp bls12_381_ate_precompute_G2(const bls12_381_G2& Q);
-
 bls12_381_Fq12 bls12_381_ate_miller_loop(const bls12_381_ate_G1_precomp &prec_P,
                               const bls12_381_ate_G2_precomp &prec_Q);
 bls12_381_Fq12 bls12_381_ate_double_miller_loop(const bls12_381_ate_G1_precomp &prec_P1,
@@ -62,8 +72,6 @@ bls12_381_Fq12 bls12_381_ate_pairing(const bls12_381_G1& P,
                           const bls12_381_G2 &Q);
 bls12_381_GT bls12_381_ate_reduced_pairing(const bls12_381_G1 &P,
                                  const bls12_381_G2 &Q);
-
-/* choice of pairing */
 
 typedef bls12_381_ate_G1_precomp bls12_381_G1_precomp;
 typedef bls12_381_ate_G2_precomp bls12_381_G2_precomp;
@@ -80,14 +88,17 @@ bls12_381_Fq12 bls12_381_double_miller_loop(const bls12_381_G1_precomp &prec_P1,
                                  const bls12_381_G1_precomp &prec_P2,
                                  const bls12_381_G2_precomp &prec_Q2);
 
-bls12_381_Fq12 bls12_381_pairing(const bls12_381_G1& P,
-                      const bls12_381_G2 &Q);
 
 bls12_381_GT bls12_381_reduced_pairing(const bls12_381_G1 &P,
                              const bls12_381_G2 &Q);
 
 bls12_381_GT bls12_381_affine_reduced_pairing(const bls12_381_G1 &P,
                                     const bls12_381_G2 &Q);
+
+*/
+
+bls12_381_Fq12 bls12_381_pairing(const bls12_381_G1& P, const bls12_381_G2 &Q);
+bls12_381_Fq12 bls12_381_reduced_pairing(const bls12_381_G1& P, const bls12_381_G2 &Q);
 
 } // libff
 #endif // BLS12_381_PAIRING_HPP_

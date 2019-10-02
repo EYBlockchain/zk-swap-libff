@@ -11,6 +11,7 @@
 #define FP6_3OVER2_TCC_
 #include <libff/algebra/fields/field_utils.hpp>
 
+
 namespace libff {
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -146,6 +147,83 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::inverse() const
     const my_Fp2 c2 = t1 - t4; // typo in paper referenced above. should be "-" as per Scott, but is "*"
     const my_Fp2 t6 = (a * c0 + Fp6_3over2_model<n,modulus>::mul_by_non_residue((c * c1 + b * c2))).inverse();
     return Fp6_3over2_model<n,modulus>(t6 * c0, t6 * c1, t6 * c2);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::multiply_by_c1(const Fp6_3over2_model<n,modulus> &a, const my_Fp2 &c1)
+{
+    my_Fp2 tmp1;
+    my_Fp2 tmp2;
+    tmp1.add(a.c1, a.c2);
+    tmp2.add(a.c0, a.c1);
+
+    this->c2.multiply(a.c1, c1);
+
+    this->c0.multiply(c1, tmp1);
+    this->c0.subtract(this->c0, this->c2);
+    this->c0.multiply_by_nonresidue(this->c0);
+
+    this->c1.multiply(c1, tmp2);
+    this->c1.subtract(this->c1, this->c2);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::multiply_by_c01(const my_Fp6 &a, const my_Fp2 &c0, const my_Fp2 & c1)
+{
+    my_Fp2 tmp1;
+    my_Fp2 tmp2;
+    my_Fp2 tmp3;
+    tmp1.add(a.c1, a.c2);
+    tmp2.add(a.c0, a.c1);
+    tmp3.add(a.c0, a.c2);
+
+    my_Fp2 a_a;
+    my_Fp2 b_b;
+    a_a.multiply(a.c0, c0);
+    b_b.multiply(a.c1, c1);
+
+    this->c0.multiply(c1, tmp1);
+    this->c0.subtract(this->c0, b_b);
+    this->c0.multiply_by_nonresidue(this->c0);
+    this->c0.add(this->c0, a_a);
+
+    this->c1.add(c0, c1);
+    this->c1.multiply(this->c1, tmp2);
+    this->c1.subtract(this->c1, a_a);
+    this->c1.subtract(this->c1, b_b);
+
+    this->c2.multiply(c0, tmp3);
+    this->c2.subtract(this->c2, a_a);
+    this->c2.add(this->c2, b_b);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::copy(const my_Fp6 &x)
+{
+    this->c0 = x.c0;
+    this->c1 = x.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::add(const my_Fp6 &x, const my_Fp6 &y)
+{
+    copy(x + y);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::subtract(const my_Fp6 &x, const my_Fp6 &y)
+{
+    copy(x + y);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::multiply_by_nonresidue(const my_Fp6 &a) {
+    my_Fp2 t0;
+    t0.copy(a.c0);
+    this->c0.multiply_by_nonresidue(a.c2);
+    this->c2.copy(a.c1);
+    this->c1.copy(t0);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

@@ -40,6 +40,7 @@ public:
     typedef Fp_model<n, modulus> my_Fp;
     typedef Fp2_model<n, modulus> my_Fp2;
     typedef Fp6_3over2_model<n, modulus> my_Fp6;
+    typedef Fp12_2over3over2_model<n, modulus> my_Fp12;
 
     static Fp2_model<n, modulus> non_residue;
     static Fp2_model<n, modulus> Frobenius_coeffs_c1[12]; // non_residue^((modulus^i-1)/6) for i=0,...,11
@@ -63,14 +64,24 @@ public:
     Fp12_2over3over2_model operator-(const Fp12_2over3over2_model &other) const;
     Fp12_2over3over2_model operator*(const Fp12_2over3over2_model &other) const;
     Fp12_2over3over2_model operator-() const;
+    void add(const my_Fp12 &x, const my_Fp12 &y);
+    void subtract(const my_Fp12 &x, const my_Fp12 &y);
+    void negate(const my_Fp12 &x);
+    void copy(const my_Fp12 &x);
+    void square(const my_Fp12 &x);
     Fp12_2over3over2_model squared() const; // default is squared_complex
     Fp12_2over3over2_model squared_karatsuba() const;
     Fp12_2over3over2_model squared_complex() const;
+    void inverse(const my_Fp12 &x);
     Fp12_2over3over2_model inverse() const;
+    void multiply(const my_Fp12 &x, const my_Fp12 &y);
+    void frobenius_map(const my_Fp12 &x, unsigned long power);
     Fp12_2over3over2_model Frobenius_map(unsigned long power) const;
     Fp12_2over3over2_model unitary_inverse() const;
+    void conjugate(const my_Fp12 &x);
     Fp12_2over3over2_model cyclotomic_squared() const;
 
+    void multiply_by_c014(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4);
     Fp12_2over3over2_model mul_by_024(const my_Fp2 &ell_0, const my_Fp2 &ell_VW, const my_Fp2 &ell_VV) const;
 
     static my_Fp6 mul_by_non_residue(const my_Fp6 &elt);

@@ -35,11 +35,13 @@ extern bls12_381_Fq2 bls12_381_twist_mul_by_q_X;
 extern bls12_381_Fq2 bls12_381_twist_mul_by_q_Y;
 
 // parameters for pairing
+/*
 extern bigint<bls12_381_q_limbs> bls12_381_ate_loop_count;
 extern bool bls12_381_ate_is_loop_count_neg;
 extern bigint<12*bls12_381_q_limbs> bls12_381_final_exponent;
 extern bigint<bls12_381_q_limbs> bls12_381_final_exponent_z;
 extern bool bls12_381_final_exponent_is_z_neg;
+*/
 
 void init_bls12_381_params();
 

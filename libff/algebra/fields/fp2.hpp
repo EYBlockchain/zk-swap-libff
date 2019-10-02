@@ -36,6 +36,7 @@ template<mp_size_t n, const bigint<n>& modulus>
 class Fp2_model {
 public:
     typedef Fp_model<n, modulus> my_Fp;
+    typedef Fp2_model<n, modulus> my_Fp2;
 
     static bigint<2*n> euler; // (modulus^2-1)/2
     static size_t s;       // modulus^2 = 2^s * t + 1
@@ -61,6 +62,9 @@ public:
     bool operator==(const Fp2_model &other) const;
     bool operator!=(const Fp2_model &other) const;
 
+    void multiply_by_nonresidue();
+    void multiply_by_nonresidue(const Fp2_model<n,modulus> &a);
+
     Fp2_model operator+(const Fp2_model &other) const;
     Fp2_model operator-(const Fp2_model &other) const;
     Fp2_model operator*(const Fp2_model &other) const;
@@ -71,6 +75,14 @@ public:
     Fp2_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
     Fp2_model squared_karatsuba() const;
     Fp2_model squared_complex() const;
+
+    void copy(const my_Fp2 &x);
+    void negate(const my_Fp2 &x);
+    void multiply2(const my_Fp2 &x);
+    void square(const my_Fp2 &x);
+    void multiply(const my_Fp2 &x, const my_Fp2 &y);
+    void add(const my_Fp2 &x, const my_Fp2 &y);
+    void subtract(const my_Fp2 &x, const my_Fp2 &y);
 
     template<mp_size_t m>
     Fp2_model operator^(const bigint<m> &other) const;

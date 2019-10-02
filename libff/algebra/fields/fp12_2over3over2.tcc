@@ -140,6 +140,39 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_com
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::copy(const my_Fp12 &x) {
+    this->c0 = x.c0;
+    this->c1 = x.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::subtract(const my_Fp12 &x, const my_Fp12 &y) {
+    const auto tmp = x - y;
+    this->c0 = tmp.c0;
+    this->c1 = tmp.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::add(const my_Fp12 &x, const my_Fp12 &y) {
+    const auto tmp = x + y;
+    this->c0 = tmp.c0;
+    this->c1 = tmp.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::negate(const my_Fp12 &x) {
+    this->c0 = -x.c0;
+    this->c1 = -x.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::square(const my_Fp12 &x) {
+    const auto tmp = x.squared();
+    this->c0 = tmp.c0;
+    this->c1 = tmp.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::inverse() const
 {
     /* From "High-Speed Software Implementation of the Optimal Ate Pairing over Barreto-Naehrig Curves"; Algorithm 8 */
@@ -156,6 +189,21 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::inverse() c
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::inverse(const my_Fp12 &x) {
+    const auto tmp = x.inverse();
+    this->c0 = tmp.c0;
+    this->c1 = tmp.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::multiply(const my_Fp12 &x, const my_Fp12 &y)
+{
+    const auto tmp = x * y;
+    this->c0 = tmp.c0;
+    this->c1 = tmp.c1;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::Frobenius_map(unsigned long power) const
 {
     return Fp12_2over3over2_model<n,modulus>(c0.Frobenius_map(power),
@@ -163,10 +211,24 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::Frobenius_m
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::frobenius_map(const my_Fp12 &x, unsigned long power)
+{
+    this->c0 = x.c0.Frobenius_map(power);
+    this->c1 = Frobenius_coeffs_c1[power % 12] * x.c1.Frobenius_map(power);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::unitary_inverse() const
 {
-    return Fp12_2over3over2_model<n,modulus>(this->c0,
-                                             -this->c1);
+    return Fp12_2over3over2_model<n,modulus>(this->c0, -this->c1);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::conjugate(const my_Fp12 &x)
+{
+    this->c0 = x.c0;
+    this->c1 = -x.c1;   
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -235,6 +297,29 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic_
 
     return Fp12_2over3over2_model<n,modulus>(my_Fp6(z0,z4,z3),my_Fp6(z2,z1,z5));
 }
+
+
+
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::multiply_by_c014(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4)
+{
+    my_Fp6 aa;
+    my_Fp6 bb;
+    aa.multiply_by_c01(a.c0, c0, c1);
+    bb.multiply_by_c1(a.c1, c4);
+
+    Fp2_model<n, modulus> o = c1 + c4;
+
+    this->c1.add(a.c1, a.c0);
+    this->c1.multiply_by_c01(this->c1, c0, o);
+    this->c1.subtract(this->c1, aa);
+    this->c1.subtract(this->c1, bb);
+
+    this->c0.multiply_by_nonresidue(bb);
+    this->c0.add(this->c0, aa);
+}
+
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::mul_by_024(const Fp2_model<n, modulus> &ell_0,

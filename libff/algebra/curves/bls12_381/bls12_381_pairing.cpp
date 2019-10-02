@@ -6,536 +6,428 @@
 #include <libff/algebra/curves/bls12_381/bls12_381_pairing.hpp>
 #include <libff/common/profiling.hpp>
 
+
+typedef libff::bls12_381_G1 G1;
+typedef libff::bls12_381_G2 G2;
+typedef libff::bls12_381_Fq2 Fq2;
+typedef libff::bls12_381_Fq12 Fq12;
+
+
+struct MillerTriple {
+    Fq2 a;
+    Fq2 b;
+    Fq2 c;
+};
+
+
+/*
+ * There is no benefit to being constant time in the exponent, since
+ * "bls_x" is assumed to be publicly known.
+ */
+template <unsigned int right_shift, bool square_at_end>
+static inline void exp_by_x_restrict(Fq12& result, const Fq12& a) {
+    result = Fq12::one();
+
+    for (int i = (int)libff::bls12_381_x_highest_set_bit; i != (right_shift - 1); i--) {
+        std::cout << "..." << i << " " << right_shift << " " << (right_shift - 1) << std::endl;
+        result.square(result);
+        if (libff::bls12_381_x.test_bit(i)) {
+            result.multiply(result, a);
+        }
+    }
+
+    if (square_at_end) {
+        result.square(result);
+    }
+
+    if (libff::bls12_381_x_is_negative) {
+        result.conjugate(result);
+    }
+}
+
+
+static void final_exponentiation(Fq12& result, const Fq12& a)
+{
+    Fq12 f1;
+    f1.conjugate(a);
+
+    Fq12 f2;
+    f2.inverse(a);
+    Fq12 r;
+    r.multiply(f1, f2);
+    f2.copy(r);
+    r.frobenius_map(r, 2);
+    r.multiply(r, f2);
+
+    Fq12 y0;
+    y0.square(r);
+
+    Fq12& y1 = result;
+    exp_by_x_restrict<0, false>(y1, y0);
+
+    Fq12 y2;
+    exp_by_x_restrict<1, false>(y2, y1);
+
+    Fq12 y3;
+    y3.conjugate(r);
+    y1.multiply(y1, y3);
+    y1.conjugate(y1);
+    y1.multiply(y1, y2);
+    exp_by_x_restrict<1, true>(y2, y1);
+    exp_by_x_restrict<1, true>(y3, y2);
+    y1.conjugate(y1);
+    y3.multiply(y3, y1);
+    y1.conjugate(y1);
+    y1.frobenius_map(y1, 3);
+    y2.frobenius_map(y2, 2);
+    y1.multiply(y1, y2);
+    exp_by_x_restrict<1, true>(y2, y3);
+    y2.multiply(y2, y0);
+    y2.multiply(y2, r);
+    y1.multiply(y1, y2);
+    y2.frobenius_map(y3, 1);
+    y1.multiply(y1, y2);
+}
+
+
+static void miller_doubling_step(MillerTriple& result, G2& r)
+{
+    Fq2& tmp0 = result.a;
+    tmp0.square(r.X);
+
+    Fq2 tmp1;
+    tmp1.square(r.Y);
+
+    Fq2 tmp2;
+    tmp2.square(tmp1);
+
+    Fq2& tmp3 = result.b;
+    tmp3.add(tmp1, r.X);
+    tmp3.square(tmp3);
+    tmp3.subtract(tmp3, tmp0);
+    tmp3.subtract(tmp3, tmp2);
+    tmp3.multiply2(tmp3);
+
+    Fq2 tmp4;
+    tmp4.multiply2(tmp0);
+    tmp4.add(tmp4, tmp0);
+
+    Fq2& tmp6 = result.c;
+    tmp6.add(r.X, tmp4);
+
+    Fq2 tmp5;
+    tmp5.square(tmp4);
+
+    Fq2 zsquared;
+    zsquared.square(r.Z);
+
+    r.X.subtract(tmp5, tmp3);
+    r.X.subtract(r.X, tmp3);
+
+    r.Z.add(r.Z, r.Y);
+    r.Z.square(r.Z);
+    r.Z.subtract(r.Z, tmp1);
+    r.Z.subtract(r.Z, zsquared);
+
+    r.Y.subtract(tmp3, r.X);
+    r.Y.multiply(r.Y, tmp4);
+
+    tmp2.multiply2(tmp2);
+    tmp2.multiply2(tmp2);
+    tmp2.multiply2(tmp2);
+
+    r.Y.subtract(r.Y, tmp2);
+
+    // Calculate result.b
+    tmp3.multiply(tmp4, zsquared);
+    tmp3.multiply2(tmp3);
+    tmp3.negate(tmp3);
+
+    // Calculate result.c
+    tmp6.square(tmp6);
+    tmp6.subtract(tmp6, tmp0);
+    tmp6.subtract(tmp6, tmp5);
+
+    tmp1.multiply2(tmp1);
+    tmp1.multiply2(tmp1);
+
+    tmp6.subtract(tmp6, tmp1);
+
+    // Calculate result.a
+    tmp0.multiply(r.Z, zsquared);
+    tmp0.multiply2(tmp0);
+}
+
+
+static void miller_addition_step(MillerTriple& result, G2& r, const G2& g2) {
+    Fq2 zsquared;
+    zsquared.square(r.Z);
+
+    Fq2 ysquared;
+    ysquared.square(g2.Y);
+
+    Fq2 t0;
+    t0.multiply(zsquared, g2.X);
+
+    Fq2& t1 = result.b;
+    t1.add(g2.Y, r.Z);
+    t1.square(t1);
+    t1.subtract(t1, ysquared);
+    t1.subtract(t1, zsquared);
+    t1.multiply(t1, zsquared);
+
+    Fq2 t2;
+    t2.subtract(t0, r.X);
+
+    Fq2 t3;
+    t3.square(t2);
+
+    Fq2 t4;
+    t4.multiply2(t3);
+    t4.multiply2(t4);
+
+    Fq2 t5;
+    t5.multiply(t4, t2);
+
+    Fq2 t6;
+    t6.subtract(t1, r.Y);
+    t6.subtract(t6, r.Y);
+
+    Fq2& t9 = result.c;
+    t9.multiply(t6, g2.X);
+
+    Fq2 t7;
+    t7.multiply(t4, r.X);
+
+    r.X.square(t6);
+    r.X.subtract(r.X, t5);
+    r.X.subtract(r.X, t7);
+    r.X.subtract(r.X, t7);
+
+    r.Z.add(r.Z, t2);
+    r.Z.square(r.Z);
+    r.Z.subtract(r.Z, zsquared);
+    r.Z.subtract(r.Z, t3);
+
+    Fq2& t10 = result.a;
+    t10.add(g2.Y, r.Z);
+
+    Fq2 t8;
+    t8.subtract(t7, r.X);
+    t8.multiply(t8, t6);
+
+    t0.multiply(r.Y, t5);
+    t0.multiply2(t0);
+
+    r.Y.subtract(t8, t0);
+
+    t10.square(t10);
+    t10.subtract(t10, ysquared);
+
+    Fq2 ztsquared;
+    ztsquared.square(r.Z);
+
+    t10.subtract(t10, ztsquared);
+
+    t9.multiply2(t9);
+    t9.subtract(t9, t10);
+
+    t10.multiply2(r.Z);
+
+    t6.negate(t6);
+
+    t1.multiply2(t6);
+}
+
+
+/*
+ * NOTE: This structure is approximately 20 KiB in size, so use with
+ * caution.
+ */
+struct G2Prepared {
+    static constexpr unsigned int num_coeffs = libff::bls12_381_x_highest_set_bit + libff::bls12_381_x_num_set_bits - 1;
+
+    MillerTriple coeffs[num_coeffs];
+    bool infinity;
+
+    bool is_zero() const {
+        return this->infinity;
+    }
+
+    G2Prepared( const G2 &g2 )
+    {
+        prepare(g2);
+    }
+
+    void prepare(const G2& g2) {
+        G2 g2_copy = g2;
+        g2_copy.to_affine_coordinates();
+
+        G2 r = g2_copy;
+        int coeff_idx = 0;
+
+        /* Skips the least significant bit and most significant set bit. */
+        for (unsigned int i = libff::bls12_381_x_highest_set_bit - 1; i != 0; i--) {
+            miller_doubling_step(this->coeffs[coeff_idx++], r);
+            if (libff::bls12_381_x.test_bit(i)) {
+                miller_addition_step(this->coeffs[coeff_idx++], r, g2_copy);
+            }
+        }
+
+        miller_doubling_step(this->coeffs[coeff_idx], r);
+        this->infinity = g2_copy.is_zero();
+    }
+};
+
+
+struct AffinePair {
+    G1 g1;
+    G2 g2;
+    G2 r;   // private
+
+    AffinePair( const G1 &a, const G2 &b )
+    :
+        g1(a),
+        g2(b)
+    {
+        g1.to_affine_coordinates();
+        g2.to_affine_coordinates();
+    }
+};
+
+
+struct PreparedPair {
+    G1 g1;
+    G2Prepared g2;
+
+    PreparedPair( const G1 &a, const G2Prepared &b )
+    :
+        g1(a),
+        g2(b)
+    {
+        g1.to_affine_coordinates();
+    }
+
+    size_t coeff_idx;   // private
+};
+
+
+
+static void ell(Fq12& f, const MillerTriple& coeffs, const G1& g1)
+{
+    Fq2 c0;
+    Fq2 c1;
+
+    c0.c0 = coeffs.a.c0 * g1.Y;
+    c0.c1 = coeffs.a.c1 * g1.Y;
+
+    c1.c0 = coeffs.b.c0 * g1.X;
+    c1.c1 = coeffs.b.c1 * g1.X;
+
+    f.multiply_by_c014(f, coeffs.c, c1, c0);
+}
+
+
+
+static void miller_loop(Fq12& result, AffinePair* affine_pairs, size_t num_affine_pairs, PreparedPair* prepared_pairs, size_t num_prepared_pairs) {
+    MillerTriple coeffs;
+
+    result.copy(Fq12::one());
+
+    for (size_t j = 0; j != num_affine_pairs; j++) {
+        AffinePair& pair = affine_pairs[j];
+        pair.r = pair.g2;
+        pair.r.to_affine_coordinates();
+    }
+    for (size_t j = 0; j != num_prepared_pairs; j++) {
+        PreparedPair& pair = prepared_pairs[j];
+        pair.coeff_idx = 0;
+    }
+
+    /* Skips the least significant bit and most significant set bit. */
+    for (unsigned int i = libff::bls12_381_x_highest_set_bit - 1; i != 0; i--) {
+        for (size_t j = 0; j != num_affine_pairs; j++) {
+            AffinePair& pair = affine_pairs[j];
+            if (!pair.g1.is_zero() && !pair.g2.is_zero()) {
+                miller_doubling_step(coeffs, pair.r);
+                ell(result, coeffs, pair.g1);
+            }
+        }
+        for (size_t j = 0; j != num_prepared_pairs; j++) {
+            PreparedPair& pair = prepared_pairs[j];
+            if (!pair.g1.is_zero() && !pair.g2.is_zero()) {
+                ell(result, pair.g2.coeffs[pair.coeff_idx++], pair.g1);
+            }
+        }
+
+        if (libff::bls12_381_x.test_bit(i)) {
+            for (size_t j = 0; j != num_affine_pairs; j++) {
+                AffinePair& pair = affine_pairs[j];
+                if (!pair.g1.is_zero() && !pair.g2.is_zero()) {
+                    miller_addition_step(coeffs, pair.r, pair.g2);
+                    ell(result, coeffs, pair.g1);
+                }
+            }
+            for (size_t j = 0; j != num_prepared_pairs; j++) {
+                PreparedPair& pair = prepared_pairs[j];
+                if (!pair.g1.is_zero() && !pair.g2.is_zero()) {
+                    ell(result, pair.g2.coeffs[pair.coeff_idx++], pair.g1);
+                }
+            }
+        }
+
+        result.square(result);
+    }
+
+    for (size_t j = 0; j != num_affine_pairs; j++) {
+        AffinePair& pair = affine_pairs[j];
+        if (!pair.g1.is_zero() && !pair.g2.is_zero()) {
+            miller_doubling_step(coeffs, pair.r);
+            ell(result, coeffs, pair.g1);
+        }
+    }
+    for (size_t j = 0; j != num_prepared_pairs; j++) {
+        PreparedPair& pair = prepared_pairs[j];
+        if (!pair.g1.is_zero() && !pair.g2.is_zero()) {
+            ell(result, pair.g2.coeffs[pair.coeff_idx++], pair.g1);
+        }
+    }
+
+    if (libff::bls12_381_x_is_negative) {
+        result.conjugate(result);
+    }
+}
+
+
+void miller_loop(Fq12 &result, const G1 &g1, const G2 &g2) {
+    AffinePair pair(g1, g2);
+    miller_loop(result, &pair, 1, nullptr, 0);
+}
+
+
+void miller_loop(Fq12 &result, const G1 &g1, const G2Prepared &g2) {
+    PreparedPair pair(g1, g2);
+    miller_loop(result, nullptr, 0, &pair, 1);
+}
+
+
 namespace libff {
 
-bool bls12_381_ate_G1_precomp::operator==(const bls12_381_ate_G1_precomp &other) const
+
+bls12_381_Fq12 bls12_381_pairing(const bls12_381_G1& P, const bls12_381_G2 &Q)
 {
-    return (this->PX == other.PX &&
-            this->PY == other.PY);
-}
-
-std::ostream& operator<<(std::ostream &out, const bls12_381_ate_G1_precomp &prec_P)
-{
-    out << prec_P.PX << OUTPUT_SEPARATOR << prec_P.PY;
-
-    return out;
-}
-
-std::istream& operator>>(std::istream &in, bls12_381_ate_G1_precomp &prec_P)
-{
-    in >> prec_P.PX;
-    consume_OUTPUT_SEPARATOR(in);
-    in >> prec_P.PY;
-
-    return in;
-}
-
-bool  bls12_381_ate_ell_coeffs::operator==(const bls12_381_ate_ell_coeffs &other) const
-{
-    return (this->ell_0 == other.ell_0 &&
-            this->ell_VW == other.ell_VW &&
-            this->ell_VV == other.ell_VV);
-}
-
-std::ostream& operator<<(std::ostream &out, const bls12_381_ate_ell_coeffs &c)
-{
-    out << c.ell_0 << OUTPUT_SEPARATOR << c.ell_VW << OUTPUT_SEPARATOR << c.ell_VV;
-    return out;
-}
-
-std::istream& operator>>(std::istream &in, bls12_381_ate_ell_coeffs &c)
-{
-    in >> c.ell_0;
-    consume_OUTPUT_SEPARATOR(in);
-    in >> c.ell_VW;
-    consume_OUTPUT_SEPARATOR(in);
-    in >> c.ell_VV;
-
-    return in;
-}
-
-bool bls12_381_ate_G2_precomp::operator==(const bls12_381_ate_G2_precomp &other) const
-{
-    return (this->QX == other.QX &&
-            this->QY == other.QY &&
-            this->coeffs == other.coeffs);
-}
-
-std::ostream& operator<<(std::ostream& out, const bls12_381_ate_G2_precomp &prec_Q)
-{
-    out << prec_Q.QX << OUTPUT_SEPARATOR << prec_Q.QY << "\n";
-    out << prec_Q.coeffs.size() << "\n";
-    for (const bls12_381_ate_ell_coeffs &c : prec_Q.coeffs)
-    {
-        out << c << OUTPUT_NEWLINE;
-    }
-    return out;
-}
-
-std::istream& operator>>(std::istream& in, bls12_381_ate_G2_precomp &prec_Q)
-{
-    in >> prec_Q.QX;
-    consume_OUTPUT_SEPARATOR(in);
-    in >> prec_Q.QY;
-    consume_newline(in);
-
-    prec_Q.coeffs.clear();
-    size_t s;
-    in >> s;
-
-    consume_newline(in);
-
-    prec_Q.coeffs.reserve(s);
-
-    for (size_t i = 0; i < s; ++i)
-    {
-        bls12_381_ate_ell_coeffs c;
-        in >> c;
-        consume_OUTPUT_NEWLINE(in);
-        prec_Q.coeffs.emplace_back(c);
-    }
-
-    return in;
-}
-
-/* final exponentiations */
-
-bls12_381_Fq12 bls12_381_final_exponentiation_first_chunk(const bls12_381_Fq12 &elt)
-{
-    enter_block("Call to bls12_381_final_exponentiation_first_chunk");
-
-    /*
-      Computes result = elt^((q^6-1)*(q^2+1)).
-      Follows, e.g., Beuchat et al page 9, by computing result as follows:
-         elt^((q^6-1)*(q^2+1)) = (conj(elt) * elt^(-1))^(q^2+1)
-      More precisely:
-      A = conj(elt)
-      B = elt.inverse()
-      C = A * B
-      D = C.Frobenius_map(2)
-      result = D * C
-    */
-
-    const bls12_381_Fq12 A = bls12_381_Fq12(elt.c0,-elt.c1);
-    const bls12_381_Fq12 B = elt.inverse();
-    const bls12_381_Fq12 C = A * B;
-    const bls12_381_Fq12 D = C.Frobenius_map(2);
-    const bls12_381_Fq12 result = D * C;
-
-    leave_block("Call to bls12_381_final_exponentiation_first_chunk");
-
+    bls12_381_Fq12 result;
+    miller_loop(result, P, Q);
     return result;
 }
 
-bls12_381_Fq12 bls12_381_exp_by_neg_z(const bls12_381_Fq12 &elt)
+
+bls12_381_Fq12 bls12_381_reduced_pairing(const bls12_381_G1& P, const bls12_381_G2 &Q)
 {
-    enter_block("Call to bls12_381_exp_by_neg_z");
-
-    bls12_381_Fq12 result = elt.cyclotomic_exp(bls12_381_final_exponent_z);
-    if (!bls12_381_final_exponent_is_z_neg)
-    {
-        result = result.unitary_inverse();
-    }
-
-    leave_block("Call to bls12_381_exp_by_neg_z");
-
+    bls12_381_Fq12 result = bls12_381_pairing(P, Q);
+    final_exponentiation(result, result);
     return result;
 }
 
-bls12_381_Fq12 bls12_381_final_exponentiation_last_chunk(const bls12_381_Fq12 &elt)
-{
-    enter_block("Call to bls12_381_final_exponentiation_last_chunk");
 
-    /*
-      Follows Laura Fuentes-Castaneda et al. "Faster hashing to G2"
-      by computing:
-
-      result = elt^(q^3 * (12*z^3 + 6z^2 + 4z - 1) +
-                    q^2 * (12*z^3 + 6z^2 + 6z) +
-                    q   * (12*z^3 + 6z^2 + 4z) +
-                    1   * (12*z^3 + 12z^2 + 6z + 1))
-      which equals
-
-      result = elt^( 2z * ( 6z^2 + 3z + 1 ) * (q^4 - q^2 + 1)/r ).
-
-      Using the following addition chain:
-
-      A = exp_by_neg_z(elt)  // = elt^(-z)
-      B = A^2                // = elt^(-2*z)
-      C = B^2                // = elt^(-4*z)
-      D = C * B              // = elt^(-6*z)
-      E = exp_by_neg_z(D)    // = elt^(6*z^2)
-      F = E^2                // = elt^(12*z^2)
-      G = epx_by_neg_z(F)    // = elt^(-12*z^3)
-      H = conj(D)            // = elt^(6*z)
-      I = conj(G)            // = elt^(12*z^3)
-      J = I * E              // = elt^(12*z^3 + 6*z^2)
-      K = J * H              // = elt^(12*z^3 + 6*z^2 + 6*z)
-      L = K * B              // = elt^(12*z^3 + 6*z^2 + 4*z)
-      M = K * E              // = elt^(12*z^3 + 12*z^2 + 6*z)
-      N = M * elt            // = elt^(12*z^3 + 12*z^2 + 6*z + 1)
-      O = L.Frobenius_map(1) // = elt^(q*(12*z^3 + 6*z^2 + 4*z))
-      P = O * N              // = elt^(q*(12*z^3 + 6*z^2 + 4*z) * (12*z^3 + 12*z^2 + 6*z + 1))
-      Q = K.Frobenius_map(2) // = elt^(q^2 * (12*z^3 + 6*z^2 + 6*z))
-      R = Q * P              // = elt^(q^2 * (12*z^3 + 6*z^2 + 6*z) + q*(12*z^3 + 6*z^2 + 4*z) * (12*z^3 + 12*z^2 + 6*z + 1))
-      S = conj(elt)          // = elt^(-1)
-      T = S * L              // = elt^(12*z^3 + 6*z^2 + 4*z - 1)
-      U = T.Frobenius_map(3) // = elt^(q^3(12*z^3 + 6*z^2 + 4*z - 1))
-      V = U * R              // = elt^(q^3(12*z^3 + 6*z^2 + 4*z - 1) + q^2 * (12*z^3 + 6*z^2 + 6*z) + q*(12*z^3 + 6*z^2 + 4*z) * (12*z^3 + 12*z^2 + 6*z + 1))
-      result = V
-
-    */
-
-    const bls12_381_Fq12 A = bls12_381_exp_by_neg_z(elt);
-    const bls12_381_Fq12 B = A.cyclotomic_squared();
-    const bls12_381_Fq12 C = B.cyclotomic_squared();
-    const bls12_381_Fq12 D = C * B;
-    const bls12_381_Fq12 E = bls12_381_exp_by_neg_z(D);
-    const bls12_381_Fq12 F = E.cyclotomic_squared();
-    const bls12_381_Fq12 G = bls12_381_exp_by_neg_z(F);
-    const bls12_381_Fq12 H = D.unitary_inverse();
-    const bls12_381_Fq12 I = G.unitary_inverse();
-    const bls12_381_Fq12 J = I * E;
-    const bls12_381_Fq12 K = J * H;
-    const bls12_381_Fq12 L = K * B;
-    const bls12_381_Fq12 M = K * E;
-    const bls12_381_Fq12 N = M * elt;
-    const bls12_381_Fq12 O = L.Frobenius_map(1);
-    const bls12_381_Fq12 P = O * N;
-    const bls12_381_Fq12 Q = K.Frobenius_map(2);
-    const bls12_381_Fq12 R = Q * P;
-    const bls12_381_Fq12 S = elt.unitary_inverse();
-    const bls12_381_Fq12 T = S * L;
-    const bls12_381_Fq12 U = T.Frobenius_map(3);
-    const bls12_381_Fq12 V = U * R;
-
-    const bls12_381_Fq12 result = V;
-
-    leave_block("Call to bls12_381_final_exponentiation_last_chunk");
-
-    return result;
-}
-
-bls12_381_GT bls12_381_final_exponentiation(const bls12_381_Fq12 &elt)
-{
-    enter_block("Call to bls12_381_final_exponentiation");
-    /* OLD naive version:
-        bls12_381_GT result = elt^bls12_381_final_exponent;
-    */
-    bls12_381_Fq12 A = bls12_381_final_exponentiation_first_chunk(elt);
-    bls12_381_GT result = bls12_381_final_exponentiation_last_chunk(A);
-
-    leave_block("Call to bls12_381_final_exponentiation");
-    return result;
-}
-
-/* ate pairing */
-
-void doubling_step_for_flipped_miller_loop(const bls12_381_Fq two_inv,
-                                           bls12_381_G2 &current,
-                                           bls12_381_ate_ell_coeffs &c)
-{
-    const bls12_381_Fq2 X = current.X, Y = current.Y, Z = current.Z;
-
-    const bls12_381_Fq2 A = two_inv * (X * Y);                     // A = X1 * Y1 / 2
-    const bls12_381_Fq2 B = Y.squared();                           // B = Y1^2
-    const bls12_381_Fq2 C = Z.squared();                           // C = Z1^2
-    const bls12_381_Fq2 D = C+C+C;                                 // D = 3 * C
-    const bls12_381_Fq2 E = bls12_381_twist_coeff_b * D;             // E = twist_b * D
-    const bls12_381_Fq2 F = E+E+E;                                 // F = 3 * E
-    const bls12_381_Fq2 G = two_inv * (B+F);                       // G = (B+F)/2
-    const bls12_381_Fq2 H = (Y+Z).squared() - (B+C);               // H = (Y1+Z1)^2-(B+C)
-    const bls12_381_Fq2 I = E-B;                                   // I = E-B
-    const bls12_381_Fq2 J = X.squared();                           // J = X1^2
-    const bls12_381_Fq2 E_squared = E.squared();                   // E_squared = E^2
-
-    current.X = A * (B-F);                                       // X3 = A * (B-F)
-    current.Y = G.squared() - (E_squared+E_squared+E_squared);   // Y3 = G^2 - 3*E^2
-    current.Z = B * H;                                           // Z3 = B * H
-    c.ell_0 = bls12_381_twist * I;                                 // ell_0 = xi * I
-    c.ell_VW = -H;                                               // ell_VW = - H (later: * yP)
-    c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
-}
-
-void mixed_addition_step_for_flipped_miller_loop(const bls12_381_G2 base,
-                                                 bls12_381_G2 &current,
-                                                 bls12_381_ate_ell_coeffs &c)
-{
-    const bls12_381_Fq2 X1 = current.X, Y1 = current.Y, Z1 = current.Z;
-    const bls12_381_Fq2 &x2 = base.X, &y2 = base.Y;
-
-    const bls12_381_Fq2 D = X1 - x2 * Z1;          // D = X1 - X2*Z1
-    const bls12_381_Fq2 E = Y1 - y2 * Z1;          // E = Y1 - Y2*Z1
-    const bls12_381_Fq2 F = D.squared();           // F = D^2
-    const bls12_381_Fq2 G = E.squared();           // G = E^2
-    const bls12_381_Fq2 H = D*F;                   // H = D*F
-    const bls12_381_Fq2 I = X1 * F;                // I = X1 * F
-    const bls12_381_Fq2 J = H + Z1*G - (I+I);      // J = H + Z1*G - (I+I)
-
-    current.X = D * J;                           // X3 = D*J
-    current.Y = E * (I-J)-(H * Y1);              // Y3 = E*(I-J)-(H*Y1)
-    current.Z = Z1 * H;                          // Z3 = Z1*H
-    c.ell_0 = bls12_381_twist * (E * x2 - D * y2); // ell_0 = xi * (E * X2 - D * Y2)
-    c.ell_VV = - E;                              // ell_VV = - E (later: * xP)
-    c.ell_VW = D;                                // ell_VW = D (later: * yP    )
-}
-
-bls12_381_ate_G1_precomp bls12_381_ate_precompute_G1(const bls12_381_G1& P)
-{
-    enter_block("Call to bls12_381_ate_precompute_G1");
-
-    bls12_381_G1 Pcopy = P;
-    Pcopy.to_affine_coordinates();
-
-    bls12_381_ate_G1_precomp result;
-    result.PX = Pcopy.X;
-    result.PY = Pcopy.Y;
-
-    leave_block("Call to bls12_381_ate_precompute_G1");
-    return result;
-}
-
-bls12_381_ate_G2_precomp bls12_381_ate_precompute_G2(const bls12_381_G2& Q)
-{
-    enter_block("Call to bls12_381_ate_precompute_G2");
-
-    bls12_381_G2 Qcopy(Q);
-    Qcopy.to_affine_coordinates();
-
-    bls12_381_Fq two_inv = (bls12_381_Fq("2").inverse()); // could add to global params if needed
-
-    bls12_381_ate_G2_precomp result;
-    result.QX = Qcopy.X;
-    result.QY = Qcopy.Y;
-
-    bls12_381_G2 R;
-    R.X = Qcopy.X;
-    R.Y = Qcopy.Y;
-    R.Z = bls12_381_Fq2::one();
-
-    const bigint<bls12_381_Fq::num_limbs> &loop_count = bls12_381_ate_loop_count;
-    bool found_one = false;
-    bls12_381_ate_ell_coeffs c;
-
-    for (long i = loop_count.max_bits(); i >= 0; --i)
-    {
-        const bool bit = loop_count.test_bit(i);
-        if (!found_one)
-        {
-            /* this skips the MSB itself */
-            found_one |= bit;
-            continue;
-        }
-
-        doubling_step_for_flipped_miller_loop(two_inv, R, c);
-        result.coeffs.push_back(c);
-
-        if (bit)
-        {
-            mixed_addition_step_for_flipped_miller_loop(Qcopy, R, c);
-            result.coeffs.push_back(c);
-        }
-    }
-
-    bls12_381_G2 Q1 = Qcopy.mul_by_q();
-    assert(Q1.Z == bls12_381_Fq2::one());
-    bls12_381_G2 Q2 = Q1.mul_by_q();
-    assert(Q2.Z == bls12_381_Fq2::one());
-
-    if (bls12_381_ate_is_loop_count_neg)
-    {
-        R.Y = - R.Y;
-    }
-    Q2.Y = - Q2.Y;
-
-    mixed_addition_step_for_flipped_miller_loop(Q1, R, c);
-    result.coeffs.push_back(c);
-
-    mixed_addition_step_for_flipped_miller_loop(Q2, R, c);
-    result.coeffs.push_back(c);
-
-    leave_block("Call to bls12_381_ate_precompute_G2");
-    return result;
-}
-
-bls12_381_Fq12 bls12_381_ate_miller_loop(const bls12_381_ate_G1_precomp &prec_P,
-                                     const bls12_381_ate_G2_precomp &prec_Q)
-{
-    enter_block("Call to bls12_381_ate_miller_loop");
-
-    bls12_381_Fq12 f = bls12_381_Fq12::one();
-
-    bool found_one = false;
-    size_t idx = 0;
-
-    const bigint<bls12_381_Fq::num_limbs> &loop_count = bls12_381_ate_loop_count;
-    bls12_381_ate_ell_coeffs c;
-
-    for (long i = loop_count.max_bits(); i >= 0; --i)
-    {
-        const bool bit = loop_count.test_bit(i);
-        if (!found_one)
-        {
-            /* this skips the MSB itself */
-            found_one |= bit;
-            continue;
-        }
-
-        /* code below gets executed for all bits (EXCEPT the MSB itself) of
-           bls12_381_param_p (skipping leading zeros) in MSB to LSB
-           order */
-
-        c = prec_Q.coeffs[idx++];
-        f = f.squared();
-        f = f.mul_by_024(c.ell_0, prec_P.PY * c.ell_VW, prec_P.PX * c.ell_VV);
-
-        if (bit)
-        {
-            c = prec_Q.coeffs[idx++];
-            f = f.mul_by_024(c.ell_0, prec_P.PY * c.ell_VW, prec_P.PX * c.ell_VV);
-        }
-
-    }
-
-    if (bls12_381_ate_is_loop_count_neg)
-    {
-    	f = f.inverse();
-    }
-
-    c = prec_Q.coeffs[idx++];
-    f = f.mul_by_024(c.ell_0,prec_P.PY * c.ell_VW,prec_P.PX * c.ell_VV);
-
-    c = prec_Q.coeffs[idx++];
-    f = f.mul_by_024(c.ell_0,prec_P.PY * c.ell_VW,prec_P.PX * c.ell_VV);
-
-    leave_block("Call to bls12_381_ate_miller_loop");
-    return f;
-}
-
-bls12_381_Fq12 bls12_381_ate_double_miller_loop(const bls12_381_ate_G1_precomp &prec_P1,
-                                     const bls12_381_ate_G2_precomp &prec_Q1,
-                                     const bls12_381_ate_G1_precomp &prec_P2,
-                                     const bls12_381_ate_G2_precomp &prec_Q2)
-{
-    enter_block("Call to bls12_381_ate_double_miller_loop");
-
-    bls12_381_Fq12 f = bls12_381_Fq12::one();
-
-    bool found_one = false;
-    size_t idx = 0;
-
-    const bigint<bls12_381_Fq::num_limbs> &loop_count = bls12_381_ate_loop_count;
-    for (long i = loop_count.max_bits(); i >= 0; --i)
-    {
-        const bool bit = loop_count.test_bit(i);
-        if (!found_one)
-        {
-            /* this skips the MSB itself */
-            found_one |= bit;
-            continue;
-        }
-
-        /* code below gets executed for all bits (EXCEPT the MSB itself) of
-           bls12_381_param_p (skipping leading zeros) in MSB to LSB
-           order */
-
-        bls12_381_ate_ell_coeffs c1 = prec_Q1.coeffs[idx];
-        bls12_381_ate_ell_coeffs c2 = prec_Q2.coeffs[idx];
-        ++idx;
-
-        f = f.squared();
-
-        f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-        f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
-
-        if (bit)
-        {
-            bls12_381_ate_ell_coeffs c1 = prec_Q1.coeffs[idx];
-            bls12_381_ate_ell_coeffs c2 = prec_Q2.coeffs[idx];
-            ++idx;
-
-            f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-            f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
-        }
-    }
-
-    if (bls12_381_ate_is_loop_count_neg)
-    {
-    	f = f.inverse();
-    }
-
-    bls12_381_ate_ell_coeffs c1 = prec_Q1.coeffs[idx];
-    bls12_381_ate_ell_coeffs c2 = prec_Q2.coeffs[idx];
-    ++idx;
-    f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-    f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
-
-    c1 = prec_Q1.coeffs[idx];
-    c2 = prec_Q2.coeffs[idx];
-    ++idx;
-    f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-    f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
-
-    leave_block("Call to bls12_381_ate_double_miller_loop");
-
-    return f;
-}
-
-bls12_381_Fq12 bls12_381_ate_pairing(const bls12_381_G1& P, const bls12_381_G2 &Q)
-{
-    enter_block("Call to bls12_381_ate_pairing");
-    bls12_381_ate_G1_precomp prec_P = bls12_381_ate_precompute_G1(P);
-    bls12_381_ate_G2_precomp prec_Q = bls12_381_ate_precompute_G2(Q);
-    bls12_381_Fq12 result = bls12_381_ate_miller_loop(prec_P, prec_Q);
-    leave_block("Call to bls12_381_ate_pairing");
-    return result;
-}
-
-bls12_381_GT bls12_381_ate_reduced_pairing(const bls12_381_G1 &P, const bls12_381_G2 &Q)
-{
-    enter_block("Call to bls12_381_ate_reduced_pairing");
-    const bls12_381_Fq12 f = bls12_381_ate_pairing(P, Q);
-    f.print();
-    const bls12_381_GT result = bls12_381_final_exponentiation(f);
-    leave_block("Call to bls12_381_ate_reduced_pairing");
-    return result;
-}
-
-/* choice of pairing */
-
-bls12_381_G1_precomp bls12_381_precompute_G1(const bls12_381_G1& P)
-{
-    return bls12_381_ate_precompute_G1(P);
-}
-
-bls12_381_G2_precomp bls12_381_precompute_G2(const bls12_381_G2& Q)
-{
-    return bls12_381_ate_precompute_G2(Q);
-}
-
-bls12_381_Fq12 bls12_381_miller_loop(const bls12_381_G1_precomp &prec_P,
-                          const bls12_381_G2_precomp &prec_Q)
-{
-    return bls12_381_ate_miller_loop(prec_P, prec_Q);
-}
-
-bls12_381_Fq12 bls12_381_double_miller_loop(const bls12_381_G1_precomp &prec_P1,
-                                 const bls12_381_G2_precomp &prec_Q1,
-                                 const bls12_381_G1_precomp &prec_P2,
-                                 const bls12_381_G2_precomp &prec_Q2)
-{
-    return bls12_381_ate_double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
-}
-
-bls12_381_Fq12 bls12_381_pairing(const bls12_381_G1& P,
-                      const bls12_381_G2 &Q)
-{
-    return bls12_381_ate_pairing(P, Q);
-}
-
-bls12_381_GT bls12_381_reduced_pairing(const bls12_381_G1 &P,
-                             const bls12_381_G2 &Q)
-{
-    return bls12_381_ate_reduced_pairing(P, Q);
-}
 } // libff

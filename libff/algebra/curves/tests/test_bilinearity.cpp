@@ -164,7 +164,7 @@ int main(void)
     // new curve: BLS12_381
     bls12_381_pp::init_public_params();
     pairing_test<bls12_381_pp>();
-    double_miller_loop_test<bls12_381_pp>();
+    //double_miller_loop_test<bls12_381_pp>();
     
     // new curve: MNT6753 
     mnt6753_pp::init_public_params();
