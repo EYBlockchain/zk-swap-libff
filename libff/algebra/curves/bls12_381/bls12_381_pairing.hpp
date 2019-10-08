@@ -13,11 +13,18 @@
 
 namespace libff {
 
-static const bigint<bls12_381_r_limbs> bls12_381_x("15132376222941642752");
+static constexpr uint64_t bls12_381_x = 0xd201000000010000;
 static constexpr unsigned int bls12_381_x_num_set_bits = 6;
 static constexpr unsigned int bls12_381_x_highest_set_bit = 63;
 static constexpr bool bls12_381_x_is_negative = true;
 
+
+
+
+enum BlsTwistType {
+    M,  // Multiply at twist
+    D   // Divide at twist
+};
 
 /*
 // final exponentiation

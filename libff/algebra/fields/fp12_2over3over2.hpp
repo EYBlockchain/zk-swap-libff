@@ -50,7 +50,12 @@ public:
     Fp12_2over3over2_model(const my_Fp6& c0, const my_Fp6& c1) : c0(c0), c1(c1) {};
 
     void clear() { c0.clear(); c1.clear(); }
-    void print() const { printf("c0/c1:\n"); c0.print(); c1.print(); }
+    void print(int indent = 0, const bool as_hex=false) const {
+        std::cout << std::string(indent, '\t') << "Fp12_2over3over2.c0:\n";
+        c0.print(indent + 1, as_hex);
+        std::cout << std::string(indent, '\t') << "Fp12_2over3over2.c1:\n";
+        c1.print(indent + 1, as_hex);
+    }
 
     static Fp12_2over3over2_model<n, modulus> zero();
     static Fp12_2over3over2_model<n, modulus> one();
@@ -81,6 +86,7 @@ public:
     void conjugate(const my_Fp12 &x);
     Fp12_2over3over2_model cyclotomic_squared() const;
 
+    void multiply_by_c034(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4);
     void multiply_by_c014(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4);
     Fp12_2over3over2_model mul_by_024(const my_Fp2 &ell_0, const my_Fp2 &ell_VW, const my_Fp2 &ell_VV) const;
 

@@ -26,6 +26,7 @@ void pairing_test()
     GT_one.print();
     // printf("GT_random:\n");
     // GT_random.print();
+
     G1<ppT> G1_one = G1<ppT>::one();
     printf("G1_one:\n");
     G1_one.print();
@@ -34,10 +35,13 @@ void pairing_test()
     G2_one.print();
 
     printf("Running bilinearity tests:\n");
-    G1<ppT> P = (Fr<ppT>::random_element()) * G1_one;
-    //G1<ppT> P = Fr<ppT>("2") * G1<ppT>::one();
-    G2<ppT> Q = (Fr<ppT>::random_element()) * G2_one;
-    //G2<ppT> Q = Fr<ppT>("3") * G2<ppT>::one();
+    //G1<ppT> P = (Fr<ppT>::random_element()) * G1_one;
+    G1<ppT> P = Fr<ppT>("2") * G1<ppT>::one();
+    //G2<ppT> Q = (Fr<ppT>::random_element()) * G2_one;
+    G2<ppT> Q = Fr<ppT>("3") * G2<ppT>::one();
+
+    P.to_affine_coordinates();
+    Q.to_affine_coordinates();
 
     printf("P:\n");
     P.print();
@@ -47,8 +51,8 @@ void pairing_test()
     Q.print_coordinates();
     printf("\n\n");
 
-    Fr<ppT> s = Fr<ppT>::random_element();
-    //Fr<ppT> s = Fr<ppT>("2");
+    //Fr<ppT> s = Fr<ppT>::random_element();
+    Fr<ppT> s = Fr<ppT>("2");
     G1<ppT> sP = s * P;
     G2<ppT> sQ = s * Q;
 
@@ -129,6 +133,7 @@ int main(void)
 {
     start_profiling();
 
+    /*
     // EDWARDS
     edwards_pp::init_public_params();
     pairing_test<edwards_pp>();
@@ -150,7 +155,14 @@ int main(void)
     alt_bn128_pp::init_public_params();
     pairing_test<alt_bn128_pp>();
     double_miller_loop_test<alt_bn128_pp>();
+    */
     
+    // new curve: BLS12_381
+    bls12_381_pp::init_public_params();
+    pairing_test<bls12_381_pp>();
+    //double_miller_loop_test<bls12_381_pp>();
+
+    /*
     // new curve: BLS12_377
     bls12_377_pp::init_public_params();
     pairing_test<bls12_377_pp>();
@@ -161,10 +173,6 @@ int main(void)
     pairing_test<sw6_pp>();
     double_miller_loop_test<sw6_pp>();
 
-    // new curve: BLS12_381
-    bls12_381_pp::init_public_params();
-    pairing_test<bls12_381_pp>();
-    //double_miller_loop_test<bls12_381_pp>();
     
     // new curve: MNT6753 
     mnt6753_pp::init_public_params();
@@ -185,7 +193,7 @@ int main(void)
     pendulum_pp::init_public_params();
     pairing_test<pendulum_pp>();
     double_miller_loop_test<pendulum_pp>();
-
+    */
 
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled

@@ -49,7 +49,14 @@ public:
     Fp6_3over2_model(const my_Fp2& c0, const my_Fp2& c1, const my_Fp2& c2) : c0(c0), c1(c1), c2(c2) {};
 
     void clear() { c0.clear(); c1.clear(); c2.clear(); }
-    void print() const { printf("c0/c1/c2:\n"); c0.print(); c1.print(); c2.print(); }
+    void print(int indent = 0, const bool as_hex=false) const {
+        std::cout << std::string(indent, '\t') << "Fp6_3over2.c0:\n";
+        c0.print(indent + 1, as_hex);
+        std::cout << std::string(indent, '\t') << "Fp6_3over2.c1:\n";
+        c1.print(indent + 1, as_hex);
+        std::cout << std::string(indent, '\t') << "Fp6_3over2.c2:\n";
+        c2.print(indent + 1, as_hex);
+    }
 
     static Fp6_3over2_model<n, modulus> zero();
     static Fp6_3over2_model<n, modulus> one();

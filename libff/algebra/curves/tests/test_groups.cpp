@@ -26,25 +26,6 @@
 
 using namespace libff;
 
-// Used to verify field implementations work correctly
-template<typename GroupT>
-void test_field_operations()
-{
-#if 0
-    const auto one = GroupT::one();
-    auto z = one.X + one.Y;
-    std::cout << "G.x + G.y = ";
-    z.print();
-
-    z = one.X * one.Y;
-    std::cout << "G.x * G.y = ";
-    z.print();
-
-    z = one.X * one.X;
-    std::cout << "G.x * G.x = ";
-    z.print();
-#endif
-}
 
 
 template<typename GroupT>
@@ -214,7 +195,7 @@ void test_known_points()
     auto f = b + b;
     f.to_affine_coordinates();
 
-    const auto result = ppT::pairing(c, d);
+    const auto result = ppT::reduced_pairing(c, d);
 
     std::cout << "G1*42 = ";
     c.print();
@@ -237,8 +218,6 @@ template<typename ppT>
 void standard_tests(const char *name) {
     std::cout << name << std::endl;
     ppT::init_public_params();
-    test_field_operations<G1<ppT>>();
-    test_field_operations<G2<ppT>>();
     test_known_points<ppT>();
     test_group<G1<ppT> >();
     test_output<G1<ppT> >();

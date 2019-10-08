@@ -57,15 +57,14 @@ bigint<n>::bigint(const mpz_t r) /// Initialize from MPZ element
 }
 
 template<mp_size_t n>
-void bigint<n>::print() const
+void bigint<n>::print(const bool as_hex) const
 {
-    gmp_printf("%Nd\n", this->data, n);
-}
-
-template<mp_size_t n>
-void bigint<n>::print_hex() const
-{
-    gmp_printf("%Nx\n", this->data, n);
+    if( as_hex ) {
+        gmp_printf("%Nx\n", this->data, n);
+    }
+    else {
+        gmp_printf("%Nd\n", this->data, n);
+    }
 }
 
 template<mp_size_t n>

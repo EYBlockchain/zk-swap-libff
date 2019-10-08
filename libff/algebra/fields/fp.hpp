@@ -88,7 +88,7 @@ public:
     bool operator!=(const Fp_model& other) const;
     bool is_zero() const;
 
-    void print() const;
+    void print(const bool as_hex=false) const;
 
     Fp_model& operator+=(const Fp_model& other);
     Fp_model& operator-=(const Fp_model& other);
@@ -106,6 +106,7 @@ public:
     Fp_model& invert();
     Fp_model inverse() const;
     Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
+    Fp_model multiply2() const;
 
     Fp_model operator^(const unsigned long pow) const;
     template<mp_size_t m>

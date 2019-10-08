@@ -127,6 +127,12 @@ void Fp2_model<n,modulus>::copy(const my_Fp2 &x)
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus> Fp2_model<n,modulus>::multiply2() const
+{
+    return *this + *this;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 void Fp2_model<n,modulus>::multiply2(const my_Fp2 &x)
 {
     copy(x + x);

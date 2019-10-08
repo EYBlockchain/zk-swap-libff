@@ -300,24 +300,44 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic_
 
 
 
-
+// https://github.com/zkcrypto/bls12_381/blob/master/src/fp12.rs#L102
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp12_2over3over2_model<n,modulus>::multiply_by_c014(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4)
 {
-    my_Fp6 aa;
-    my_Fp6 bb;
-    aa.multiply_by_c01(a.c0, c0, c1);
-    bb.multiply_by_c1(a.c1, c4);
+    auto aa = a.c0;                                 // let mut aa = self.c0;
+    aa.multiply_by_c01(aa, c0, c1);                 // aa.mul_by_01(c0, c1);
+    auto bb = a.c1;                                 // let mut bb = self.c1;
+    bb.multiply_by_c1(bb, c4);                      // bb.mul_by_1(c4);
 
-    Fp2_model<n, modulus> o = c1 + c4;
 
-    this->c1.add(a.c1, a.c0);
-    this->c1.multiply_by_c01(this->c1, c0, o);
-    this->c1.subtract(this->c1, aa);
-    this->c1.subtract(this->c1, bb);
+    const auto o = c1 + c4;                         // let mut o = *c1;
+                                                    // o.add_assign(c4);
+    this->c1 = this->c1 + this->c0;                 // self.c1.add_assign(&self.c0);
+    this->c1.multiply_by_c01(this->c1, c0, o);      // self.c1.mul_by_01(c0, &o);
+    this->c1 = this->c1 - aa - bb;                  // self.c1.sub_assign(&aa);
+                                                    // self.c1.sub_assign(&bb);
 
-    this->c0.multiply_by_nonresidue(bb);
-    this->c0.add(this->c0, aa);
+                                                    // self.c0 = bb;
+    this->c0 = mul_by_non_residue(bb) + aa;         // self.c0 = Self::mul_fp6_by_nonresidue(&self.c0);
+                                                    // self.c0.add_assign(&aa);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::multiply_by_c034(const my_Fp12 &x, const my_Fp2 &c0, const my_Fp2 &c3, const my_Fp2 &c4)
+{
+    const auto a0 = x.c0.c0 * c0;           // let a0 = self.c0.c0 * c0;
+    const auto a1 = x.c0.c1 * c0;           // let a1 = self.c0.c1 * c0;
+    const auto a2 = x.c0.c2 * c0;           // let a2 = self.c0.c2 * c0;
+    const auto a = my_Fp6(a0, a1, a2);      // let a = Fp6::new(a0, a1, a2);    
+    auto b = x.c1;                          // let mut b = self.c1;    
+    b.multiply_by_c01(b, c3, c4);           // b.mul_by_01(&c3, &c4);
+    const auto new_c0 = c0 + c3;            // let c0 = *c0 + c3;
+    const auto new_c1 = c4;                 // let c1 = c4;
+    auto e = x.c0 + x.c1;                   // let mut e = self.c0 + &self.c1;
+    e.multiply_by_c01(e, new_c0, new_c1);   // e.mul_by_01(&c0, &c1);
+    this->c1 = e - (a + b);                 // self.c1 = e - &(a + &b);
+    this->c0 = a + mul_by_non_residue(b);   // self.c0 = a + &Self::mul_fp6_by_nonresidue(&b);
 }
 
 

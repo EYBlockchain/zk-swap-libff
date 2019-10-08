@@ -13,6 +13,25 @@
 #include <libff/algebra/curves/bls12_381/bls12_381_pairing.hpp>
 #include <libff/algebra/curves/public_params.hpp>
 
+template <uint64_t x>
+struct CountOnes {
+    static constexpr unsigned int n = (x & 1) + CountOnes<(x>>1)>::n;
+};
+template <>
+struct CountOnes<0> {
+    static constexpr unsigned int n = 0;
+};
+
+template<uint64_t N, uint64_t B=std::numeric_limits<uint64_t>::digits-1>
+struct FindMSB {
+    static constexpr unsigned int MSB = (N&(1ul<<B)) ? B: FindMSB<N,B-1>::MSB;
+};
+template<uint64_t N>
+struct FindMSB<N,0> {
+    static constexpr unsigned int MSB = (N==0) ? -1 : 0;
+};
+
+
 namespace libff {
 
 class bls12_381_pp {
@@ -28,6 +47,19 @@ public:
     typedef bls12_381_GT GT_type;
 
     static const bool has_affine_pairing = false;
+
+    /*
+    static constexpr unsigned int bls12_381_x_num_set_bits = 6;
+    static constexpr unsigned int bls12_381_x_highest_set_bit = 63;
+    */
+
+    static constexpr BlsTwistType TWIST_TYPE = BlsTwistType::M;
+    static constexpr uint64_t X = 0xd201000000010000;
+    static constexpr auto X_HIGHEST_BIT = FindMSB<X>::MSB;
+    static constexpr auto X_NUM_BITS = CountOnes<X>::n;
+    static constexpr bool X_IS_NEG = true;
+
+    static Fqe_type TWIST_COEFF_B;
 
     static void init_public_params();
     /*

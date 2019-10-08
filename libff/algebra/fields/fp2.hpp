@@ -52,7 +52,12 @@ public:
     Fp2_model(const my_Fp& c0, const my_Fp& c1) : c0(c0), c1(c1) {};
 
     void clear() { c0.clear(); c1.clear(); }
-    void print() const { printf("c0/c1:\n"); c0.print(); c1.print(); }
+    void print(int indent = 0, const bool as_hex=false) const {
+        std::cout << std::string(indent, '\t') << "Fp2.c0 = ";
+        c0.print(as_hex);
+        std::cout << std::string(indent, '\t') << "Fp2.c1 = ";
+        c1.print(as_hex);
+    }
 
     static Fp2_model<n, modulus> zero();
     static Fp2_model<n, modulus> one();
@@ -78,6 +83,7 @@ public:
 
     void copy(const my_Fp2 &x);
     void negate(const my_Fp2 &x);
+    Fp2_model multiply2() const;
     void multiply2(const my_Fp2 &x);
     void square(const my_Fp2 &x);
     void multiply(const my_Fp2 &x, const my_Fp2 &y);

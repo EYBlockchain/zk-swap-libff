@@ -262,13 +262,13 @@ bool Fp_model<n,modulus>::is_zero() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-void Fp_model<n,modulus>::print() const
+void Fp_model<n,modulus>::print(const bool as_hex) const
 {
     Fp_model<n,modulus> tmp;
     tmp.mont_repr.data[0] = 1;
     tmp.mul_reduce(this->mont_repr);
 
-    tmp.mont_repr.print();
+    tmp.mont_repr.print(as_hex);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -718,6 +718,12 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
     while (mpn_cmp(r.mont_repr.data, modulus.data, n) >= 0);
 
     return r;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus> Fp_model<n,modulus>::multiply2() const
+{
+    return *this + *this;
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

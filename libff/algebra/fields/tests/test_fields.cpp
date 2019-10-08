@@ -249,18 +249,19 @@ int main(void)
     test_field<bls12_377_Fq6>();
     test_Frobenius<bls12_377_Fq6>();
     test_all_fields<bls12_377_pp>();
-    
+        
+    // new curve: BLS12_381 
+    bls12_381_pp::init_public_params();
+    test_field<bls12_381_Fq6>();
+    test_all_fields<bls12_381_pp>();
+    test_Frobenius<bls12_381_Fq6>();
+
+    /*
     // new curve: SW6
     sw6_pp::init_public_params();
     test_field<sw6_Fq6>();
     test_Frobenius<sw6_Fq6>();
     test_all_fields<sw6_pp>();
-    
-    // new curve: BLS12_381 
-    bls12_381_pp::init_public_params();
-    test_field<bls12_381_Fq6>();
-    test_Frobenius<bls12_381_Fq6>();
-    test_all_fields<bls12_381_pp>();
 
     // new curve: MNT6753
     mnt6753_pp::init_public_params();
@@ -285,6 +286,7 @@ int main(void)
     test_field<pendulum_Fq6>();
     test_Frobenius<pendulum_Fq6>();
     test_all_fields<pendulum_pp>();
+    */
     
     // new curve: JUBJUB 
     // jubjub_pp::init_public_params();
