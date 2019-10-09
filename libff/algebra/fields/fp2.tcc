@@ -133,6 +133,12 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::multiply2() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus> Fp2_model<n,modulus>::multiply3() const
+{
+    return *this + *this + *this;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 void Fp2_model<n,modulus>::multiply2(const my_Fp2 &x)
 {
     copy(x + x);
@@ -170,16 +176,18 @@ void Fp2_model<n,modulus>::subtract(const my_Fp2 &x, const my_Fp2 &y)
 
 
 template<mp_size_t n, const bigint<n>& modulus>
-void Fp2_model<n,modulus>::multiply_by_nonresidue() {
-    multiply_by_nonresidue(this);
+Fp2_model<n,modulus> Fp2_model<n,modulus>::multiply_by_nonresidue() const {
+    Fp2_model<n,modulus> res;
+    res.multiply_by_nonresidue(*this);
+    return res;
 }
 
 
 template<mp_size_t n, const bigint<n>& modulus>
-void Fp2_model<n,modulus>::multiply_by_nonresidue(const Fp2_model<n,modulus> &a) {
-    const my_Fp t0 = a.c0;
-    this->c0 = (a.c0 - a.c1);
-    this->c1 = (a.c1 + t0);
+void Fp2_model<n,modulus>::multiply_by_nonresidue(const Fp2_model<n,modulus> &a)
+{
+    // TODO: use faster implementation customised for specific Fq2 and Fq non-residues
+    copy(a * nqr);
 }
 
 

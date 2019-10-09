@@ -7,6 +7,8 @@
 
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
 
+#include <libff/algebra/curves/bls12.tcc>
+
 namespace libff {
 
 void bls12_377_pp::init_public_params()
@@ -14,6 +16,7 @@ void bls12_377_pp::init_public_params()
     init_bls12_377_params();
 }
 
+/*
 bls12_377_GT bls12_377_pp::final_exponentiation(const bls12_377_Fq12 &elt)
 {
     return bls12_377_final_exponentiation(elt);
@@ -42,17 +45,25 @@ bls12_377_Fq12 bls12_377_pp::double_miller_loop(const bls12_377_G1_precomp &prec
 {
     return bls12_377_double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
 }
+*/
+
+
+bls12_377_Fq12 bls12_377_pp::final_exponentiation(const bls12_377_Fq12 &elt)
+{
+    return bls12::final_exponentiation<libff::bls12_377_pp>(elt);
+}
 
 bls12_377_Fq12 bls12_377_pp::pairing(const bls12_377_G1 &P,
                                      const bls12_377_G2 &Q)
 {
-    return bls12_377_pairing(P, Q);
+    return bls12::miller_loop<libff::bls12_377_pp>(P, Q);
 }
 
 bls12_377_Fq12 bls12_377_pp::reduced_pairing(const bls12_377_G1 &P,
                                              const bls12_377_G2 &Q)
 {
-    return bls12_377_reduced_pairing(P, Q);
+    return final_exponentiation(pairing(P, Q));
 }
+
 
 } // libff

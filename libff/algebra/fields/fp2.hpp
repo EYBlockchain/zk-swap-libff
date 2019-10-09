@@ -67,7 +67,7 @@ public:
     bool operator==(const Fp2_model &other) const;
     bool operator!=(const Fp2_model &other) const;
 
-    void multiply_by_nonresidue();
+    Fp2_model<n,modulus> multiply_by_nonresidue() const;
     void multiply_by_nonresidue(const Fp2_model<n,modulus> &a);
 
     Fp2_model operator+(const Fp2_model &other) const;
@@ -83,7 +83,8 @@ public:
 
     void copy(const my_Fp2 &x);
     void negate(const my_Fp2 &x);
-    Fp2_model multiply2() const;
+    inline Fp2_model multiply2() const;
+    inline Fp2_model multiply3() const;
     void multiply2(const my_Fp2 &x);
     void square(const my_Fp2 &x);
     void multiply(const my_Fp2 &x, const my_Fp2 &y);

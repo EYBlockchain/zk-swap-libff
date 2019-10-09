@@ -71,11 +71,10 @@ void bls12_381_G2::to_affine_coordinates()
     }
     else
     {
-        bls12_381_Fq2 Z_inv = Z.inverse();
-        bls12_381_Fq2 Z2_inv = Z_inv.squared();
-        bls12_381_Fq2 Z3_inv = Z2_inv * Z_inv;
+        const bls12_381_Fq2 Z_inv = Z.inverse();
+        const bls12_381_Fq2 Z2_inv = Z_inv.squared();
         this->X = this->X * Z2_inv;
-        this->Y = this->Y * Z3_inv;
+        this->Y = this->Y * Z2_inv * Z_inv;
         this->Z = bls12_381_Fq2::one();
     }
 }
@@ -358,12 +357,6 @@ bls12_381_G2 bls12_381_G2::dbl() const
     return bls12_381_G2(X3, Y3, Z3);
 }
 
-bls12_381_G2 bls12_381_G2::mul_by_q() const
-{
-    return bls12_381_G2(bls12_381_twist_mul_by_q_X * (this->X).Frobenius_map(1),
-                        bls12_381_twist_mul_by_q_Y * (this->Y).Frobenius_map(1),
-                        (this->Z).Frobenius_map(1));
-}
 
 bool bls12_381_G2::is_well_formed() const
 {

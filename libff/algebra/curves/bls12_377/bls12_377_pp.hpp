@@ -10,7 +10,7 @@
 #include <libff/algebra/curves/bls12_377/bls12_377_g1.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_g2.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_init.hpp>
-#include <libff/algebra/curves/bls12_377/bls12_377_pairing.hpp>
+#include <libff/algebra/curves/bls12.hpp>
 #include <libff/algebra/curves/public_params.hpp>
 
 namespace libff {
@@ -20,8 +20,8 @@ public:
     typedef bls12_377_Fr Fp_type;
     typedef bls12_377_G1 G1_type;
     typedef bls12_377_G2 G2_type;
-    typedef bls12_377_G1_precomp G1_precomp_type;
-    typedef bls12_377_G2_precomp G2_precomp_type;
+    //typedef bls12_377_G1_precomp G1_precomp_type;
+    //typedef bls12_377_G2_precomp G2_precomp_type;
     typedef bls12_377_Fq Fq_type;
     typedef bls12_377_Fq2 Fqe_type;
     typedef bls12_377_Fq12 Fqk_type;
@@ -29,8 +29,22 @@ public:
 
     static const bool has_affine_pairing = false;
 
+    /* 
+     * https://eprint.iacr.org/2017/1174.pdf
+     * ate_loop_count=t where t in the value chosen in q(t) and r(t) parameterization of BLS curve.
+     * for BLS12_377 t=3·2^46·(7·13·499)+1 s.t. t=1 (mod 3·2^46) to have a high 2-adicity for q and r. 
+    */
+    static constexpr bls12::TwistType TWIST_TYPE = bls12::TwistType::D;
+    static constexpr uint64_t X = 0x8508c00000000001;
+    static constexpr auto X_HIGHEST_BIT = bls12::FindMSB<X>::MSB;
+    static constexpr auto X_NUM_ONES = bls12::CountOnes<X>::n;
+    static constexpr bool X_IS_NEG = false;
+
+    static Fqe_type TWIST_COEFF_B;
+
     static void init_public_params();
-    static bls12_377_GT final_exponentiation(const bls12_377_Fq12 &elt);
+
+    /*
     static bls12_377_G1_precomp precompute_G1(const bls12_377_G1 &P);
     static bls12_377_G2_precomp precompute_G2(const bls12_377_G2 &Q);
     static bls12_377_Fq12 miller_loop(const bls12_377_G1_precomp &prec_P,
@@ -39,10 +53,11 @@ public:
                                              const bls12_377_G2_precomp &prec_Q1,
                                              const bls12_377_G1_precomp &prec_P2,
                                              const bls12_377_G2_precomp &prec_Q2);
-    static bls12_377_Fq12 pairing(const bls12_377_G1 &P,
-                                  const bls12_377_G2 &Q);
-    static bls12_377_Fq12 reduced_pairing(const bls12_377_G1 &P,
-                                          const bls12_377_G2 &Q);
+    */
+
+    static bls12_377_GT final_exponentiation(const bls12_377_Fq12 &elt);
+    static bls12_377_Fq12 pairing(const bls12_377_G1 &P, const bls12_377_G2 &Q);
+    static bls12_377_Fq12 reduced_pairing(const bls12_377_G1 &P, const bls12_377_G2 &Q);
 };
 
 } // libff

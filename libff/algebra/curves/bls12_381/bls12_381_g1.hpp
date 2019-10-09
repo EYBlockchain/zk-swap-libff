@@ -2,7 +2,7 @@
 #define BLS12_381_G1_HPP_
 #include <vector>
 
-#include <libff/algebra/curves/bls12_381/bls12_381_init.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/curve_utils.hpp>
 
 namespace libff {

@@ -9,7 +9,7 @@
 #define BLS12_381_G2_HPP_
 #include <vector>
 
-#include <libff/algebra/curves/bls12_381/bls12_381_init.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/curve_utils.hpp>
 
 namespace libff {
@@ -60,7 +60,6 @@ public:
     bls12_381_G2 add(const bls12_381_G2 &other) const;
     bls12_381_G2 mixed_add(const bls12_381_G2 &other) const;
     bls12_381_G2 dbl() const;
-    bls12_381_G2 mul_by_q() const;
 
     bool is_well_formed() const;
 

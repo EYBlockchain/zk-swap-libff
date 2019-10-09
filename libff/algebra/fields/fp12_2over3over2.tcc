@@ -324,20 +324,18 @@ void Fp12_2over3over2_model<n,modulus>::multiply_by_c014(const my_Fp12 &a, const
 
 
 template<mp_size_t n, const bigint<n>& modulus>
-void Fp12_2over3over2_model<n,modulus>::multiply_by_c034(const my_Fp12 &x, const my_Fp2 &c0, const my_Fp2 &c3, const my_Fp2 &c4)
+void Fp12_2over3over2_model<n,modulus>::multiply_by_c034(const my_Fp12 &x, const my_Fp2 &c0, const my_Fp2 &d0, const my_Fp2 &d1)
 {
-    const auto a0 = x.c0.c0 * c0;           // let a0 = self.c0.c0 * c0;
-    const auto a1 = x.c0.c1 * c0;           // let a1 = self.c0.c1 * c0;
-    const auto a2 = x.c0.c2 * c0;           // let a2 = self.c0.c2 * c0;
-    const auto a = my_Fp6(a0, a1, a2);      // let a = Fp6::new(a0, a1, a2);    
-    auto b = x.c1;                          // let mut b = self.c1;    
-    b.multiply_by_c01(b, c3, c4);           // b.mul_by_01(&c3, &c4);
-    const auto new_c0 = c0 + c3;            // let c0 = *c0 + c3;
-    const auto new_c1 = c4;                 // let c1 = c4;
-    auto e = x.c0 + x.c1;                   // let mut e = self.c0 + &self.c1;
-    e.multiply_by_c01(e, new_c0, new_c1);   // e.mul_by_01(&c0, &c1);
-    this->c1 = e - (a + b);                 // self.c1 = e - &(a + &b);
-    this->c0 = a + mul_by_non_residue(b);   // self.c0 = a + &Self::mul_fp6_by_nonresidue(&b);
+    const auto a = c0 * x.c0;
+
+    auto b = x.c1;
+    b.multiply_by_c01(b, d0, d1);
+
+    auto e = x.c0 + x.c1;
+    e.multiply_by_c01(e, c0 + d0, d1);
+
+    this->c1 = e - a - b;
+    this->c0 = a + mul_by_non_residue(b);
 }
 
 

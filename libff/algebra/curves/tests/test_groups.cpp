@@ -223,7 +223,7 @@ void standard_tests(const char *name) {
     test_output<G1<ppT> >();
     test_group<G2<ppT> >();
     test_output<G2<ppT> >();
-    test_mul_by_q<G2<ppT> >();
+    //test_mul_by_q<G2<ppT> >();
     std::cout << std::endl << std::endl;
 }
 

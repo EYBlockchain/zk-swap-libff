@@ -162,10 +162,10 @@ int main(void)
     pairing_test<bls12_381_pp>();
     //double_miller_loop_test<bls12_381_pp>();
 
-    /*
     // new curve: BLS12_377
     bls12_377_pp::init_public_params();
     pairing_test<bls12_377_pp>();
+    /*
     double_miller_loop_test<bls12_377_pp>();
     
     // new curve: SW6
