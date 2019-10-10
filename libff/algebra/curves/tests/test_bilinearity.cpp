@@ -79,19 +79,19 @@ void pairing_test()
 template<typename ppT>
 void double_miller_loop_test()
 {
-    const G1<ppT> P1 = (Fr<ppT>::random_element()) * G1<ppT>::one();
-    const G1<ppT> P2 = (Fr<ppT>::random_element()) * G1<ppT>::one();
-    const G2<ppT> Q1 = (Fr<ppT>::random_element()) * G2<ppT>::one();
-    const G2<ppT> Q2 = (Fr<ppT>::random_element()) * G2<ppT>::one();
+    const auto P1 = (Fr<ppT>::random_element()) * G1<ppT>::one();
+    const auto P2 = (Fr<ppT>::random_element()) * G1<ppT>::one();
+    const auto Q1 = (Fr<ppT>::random_element()) * G2<ppT>::one();
+    const auto Q2 = (Fr<ppT>::random_element()) * G2<ppT>::one();
 
-    const G1_precomp<ppT> prec_P1 = ppT::precompute_G1(P1);
-    const G1_precomp<ppT> prec_P2 = ppT::precompute_G1(P2);
-    const G2_precomp<ppT> prec_Q1 = ppT::precompute_G2(Q1);
-    const G2_precomp<ppT> prec_Q2 = ppT::precompute_G2(Q2);
+    const auto prec_P1 = ppT::precompute_G1(P1);
+    const auto prec_P2 = ppT::precompute_G1(P2);
+    const auto prec_Q1 = ppT::precompute_G2(Q1);
+    const auto prec_Q2 = ppT::precompute_G2(Q2);
 
-    const Fqk<ppT> ans_1 = ppT::miller_loop(prec_P1, prec_Q1);
-    const Fqk<ppT> ans_2 = ppT::miller_loop(prec_P2, prec_Q2);
-    const Fqk<ppT> ans_12 = ppT::double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
+    const auto ans_1 = ppT::miller_loop(prec_P1, prec_Q1);
+    const auto ans_2 = ppT::miller_loop(prec_P2, prec_Q2);
+    const auto ans_12 = ppT::double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
     assert(ans_1 * ans_2 == ans_12);
 }
 
@@ -165,8 +165,8 @@ int main(void)
     // new curve: BLS12_377
     bls12_377_pp::init_public_params();
     pairing_test<bls12_377_pp>();
-    /*
     double_miller_loop_test<bls12_377_pp>();
+    /*
     
     // new curve: SW6
     sw6_pp::init_public_params();

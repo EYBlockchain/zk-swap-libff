@@ -5,14 +5,6 @@ namespace libff {
 namespace bls12 {
 
 
-template<typename ppT>
-struct MillerTriple {
-    typename ppT::Fqe_type a;
-    typename ppT::Fqe_type b;
-    typename ppT::Fqe_type c;
-};
-
-
 template<typename ppT, typename Fqk_type>
 static inline Fqk_type exp_by_x(const Fqk_type &a)
 {
@@ -21,7 +13,7 @@ static inline Fqk_type exp_by_x(const Fqk_type &a)
     for( int i = 63; i >= 0; i-- )
     {
         if( found_one ) {
-            res = res.squared();
+            res = res.cyclotomic_squared();
         }
 
         if( ppT::X & (1ul<<i) ) {
@@ -116,52 +108,40 @@ static void miller_addition_step(MillerTriple<ppT> &result, typename ppT::G2_typ
 }
 
 
-/* NOTE: This structure is approximately 20 KiB in size, so use with caution. */
 template<typename ppT>
-struct G2Prepared
+G2Prepared<ppT>::G2Prepared( const G2_type &g2 )
+:
+    infinity(g2.is_zero())
 {
-    static constexpr unsigned int num_coeffs = ppT::X_HIGHEST_BIT + ppT::X_NUM_ONES - 1;
-    using G2_type = typename ppT::G2_type;
-
-    std::array<MillerTriple<ppT>, num_coeffs> coeffs;
-    const bool infinity;
-
-    bool is_zero() const {
-        return this->infinity;
+    if( ! infinity ) {
+        _prepare(g2);
     }
+}
 
-    G2Prepared( const G2_type &g2 )
-    :
-        infinity(g2.is_zero())
+
+template<typename ppT>
+void G2Prepared<ppT>::_prepare(const G2_type &input_point)
+{
+    G2_type q = input_point;
+    q.to_affine_coordinates();
+
+    G2_type r = q;
+    int coeff_idx = 0;
+
+    // TODO: pre-compute two_inv... rather than every time it's prepared
+    const auto two_inv = ppT::Fq_type::one().multiply2().inverse();
+
+    // Skip the 1st bit
+    for (int i = 62; i >= 0; i--)
     {
-        if( ! infinity ) {
-            _prepare(g2);
-        }
-    }
+        miller_doubling_step(this->coeffs[coeff_idx++], r, two_inv);
 
-    void _prepare(const G2_type &input_point)
-    {
-        G2_type q = input_point;
-        q.to_affine_coordinates();
-
-        G2_type r = q;
-        int coeff_idx = 0;
-
-        // TODO: pre-compute two_inv... rather than every time it's prepared
-        const auto two_inv = ppT::Fq_type::one().multiply2().inverse();
-
-        // Skip the 1st bit
-        for (int i = 62; i >= 0; i--)
+        if ( ppT::X & (1ul<<i) )
         {
-            miller_doubling_step(this->coeffs[coeff_idx++], r, two_inv);
-
-            if ( ppT::X & (1ul<<i) )
-            {
-                miller_addition_step(this->coeffs[coeff_idx++], r, q);
-            }
+            miller_addition_step(this->coeffs[coeff_idx++], r, q);
         }
     }
-};
+}
 
 
 template<typename ppT>
@@ -192,9 +172,8 @@ static inline void ell(typename ppT::Fqk_type &f, const MillerTriple<ppT> &coeff
 
 
 template<typename ppT>
-static typename ppT::Fqk_type miller_loop( const typename ppT::G1_type &P, const typename ppT::G2_type &Q )
+static typename ppT::Fqk_type miller_loop( const std::vector<PreparedPair<ppT>> &pairs )
 {
-    const PreparedPair<ppT> pair(P, Q);
     int coeff_idx = 0;
     auto f = ppT::Fqk_type::one();
 
@@ -202,11 +181,17 @@ static typename ppT::Fqk_type miller_loop( const typename ppT::G1_type &P, const
     {
         f.square(f);
 
-        ell<ppT>(f, pair.g2.coeffs[coeff_idx++], pair.g1);
+        for( const auto &p : pairs ) {
+            ell<ppT>(f, p.g2.coeffs[coeff_idx], p.g1);
+        }
+        coeff_idx += 1;
 
         if ( ppT::X & (1ul<<i) )
         {
-            ell<ppT>(f, pair.g2.coeffs[coeff_idx++], pair.g1);
+            for( const auto &p : pairs ) {
+                ell<ppT>(f, p.g2.coeffs[coeff_idx], p.g1);
+            }
+            coeff_idx += 1;
         }
     }
 
@@ -215,6 +200,13 @@ static typename ppT::Fqk_type miller_loop( const typename ppT::G1_type &P, const
     }
 
     return f;
+}
+
+
+template<typename ppT>
+static inline typename ppT::Fqk_type miller_loop( const typename ppT::G1_type &P, const typename ppT::G2_type &Q )
+{
+    return miller_loop<ppT>({PreparedPair<ppT>(P, Q)});
 }
 
 

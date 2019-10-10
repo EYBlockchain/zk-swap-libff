@@ -20,8 +20,8 @@ public:
     typedef bls12_377_Fr Fp_type;
     typedef bls12_377_G1 G1_type;
     typedef bls12_377_G2 G2_type;
-    //typedef bls12_377_G1_precomp G1_precomp_type;
-    //typedef bls12_377_G2_precomp G2_precomp_type;
+    typedef G1_type G1_precomp_type;
+    typedef bls12::G2Prepared<bls12_377_pp> G2_precomp_type;
     typedef bls12_377_Fq Fq_type;
     typedef bls12_377_Fq2 Fqe_type;
     typedef bls12_377_Fq12 Fqk_type;
@@ -44,20 +44,17 @@ public:
 
     static void init_public_params();
 
-    /*
-    static bls12_377_G1_precomp precompute_G1(const bls12_377_G1 &P);
-    static bls12_377_G2_precomp precompute_G2(const bls12_377_G2 &Q);
-    static bls12_377_Fq12 miller_loop(const bls12_377_G1_precomp &prec_P,
-                                      const bls12_377_G2_precomp &prec_Q);
-    static bls12_377_Fq12 double_miller_loop(const bls12_377_G1_precomp &prec_P1,
-                                             const bls12_377_G2_precomp &prec_Q1,
-                                             const bls12_377_G1_precomp &prec_P2,
-                                             const bls12_377_G2_precomp &prec_Q2);
-    */
-
-    static bls12_377_GT final_exponentiation(const bls12_377_Fq12 &elt);
-    static bls12_377_Fq12 pairing(const bls12_377_G1 &P, const bls12_377_G2 &Q);
-    static bls12_377_Fq12 reduced_pairing(const bls12_377_G1 &P, const bls12_377_G2 &Q);
+    static G1_precomp_type precompute_G1(const G1_type &P);
+    static G2_precomp_type precompute_G2(const G2_type &Q);
+    static Fqk_type miller_loop(const G1_precomp_type &prec_P,
+                                const G2_precomp_type &prec_Q);
+    static Fqk_type double_miller_loop(const G1_precomp_type &prec_P1,
+                                       const G2_precomp_type &prec_Q1,
+                                       const G1_precomp_type &prec_P2,
+                                       const G2_precomp_type &prec_Q2);
+    static Fqk_type final_exponentiation(const Fqk_type &elt);
+    static Fqk_type pairing(const G1_type &P, const G2_type &Q);
+    static Fqk_type reduced_pairing(const G1_type &P, const G2_type &Q);
 };
 
 } // libff

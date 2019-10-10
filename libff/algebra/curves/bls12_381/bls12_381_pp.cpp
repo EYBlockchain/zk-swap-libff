@@ -281,16 +281,15 @@ void bls12_381_pp::init_public_params()
     //bls12_381_final_exponent_is_z_neg = true;
 }
 
-bls12_381_Fq12 bls12_381_pp::pairing(const bls12_381_G1 &P,
-                                     const bls12_381_G2 &Q)
+bls12_381_Fq12 bls12_381_pp::pairing(const bls12_381_G1 &P, const bls12_381_G2 &Q)
 {
-    return bls12::miller_loop<libff::bls12_381_pp>(P, Q);
+    return bls12::miller_loop<bls12_381_pp>(P, Q);
 }
 
-bls12_381_Fq12 bls12_381_pp::reduced_pairing(const bls12_381_G1 &P,
-                                             const bls12_381_G2 &Q)
+bls12_381_Fq12 bls12_381_pp::reduced_pairing(const bls12_381_G1 &P, const bls12_381_G2 &Q)
 {
-    return bls12::final_exponentiation<libff::bls12_381_pp>(pairing(P, Q));
+    return bls12::final_exponentiation<bls12_381_pp>(pairing(P, Q));
 }
+
 
 } // libff
