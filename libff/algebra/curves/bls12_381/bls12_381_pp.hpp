@@ -48,6 +48,8 @@ public:
     typedef bls12_381_Fr Fp_type;
     typedef bls12_381_G1 G1_type;
     typedef bls12_381_G2 G2_type;
+    typedef G1_type G1_precomp_type;
+    typedef bls12::G2Prepared<bls12_381_pp> G2_precomp_type;
     typedef bls12_381_Fq Fq_type;
     typedef bls12_381_Fq2 Fqe_type;
     typedef bls12_381_Fq12 Fqk_type;
@@ -62,8 +64,17 @@ public:
     static Fqe_type TWIST_COEFF_B;
 
     static void init_public_params();
-    static bls12_381_Fq12 pairing(const bls12_381_G1 &P, const bls12_381_G2 &Q);
-    static bls12_381_Fq12 reduced_pairing(const bls12_381_G1 &P, const bls12_381_G2 &Q);
+    static G1_precomp_type precompute_G1(const G1_type &P);
+    static G2_precomp_type precompute_G2(const G2_type &Q);
+    static Fqk_type miller_loop(const G1_precomp_type &prec_P,
+                                const G2_precomp_type &prec_Q);
+    static Fqk_type double_miller_loop(const G1_precomp_type &prec_P1,
+                                       const G2_precomp_type &prec_Q1,
+                                       const G1_precomp_type &prec_P2,
+                                       const G2_precomp_type &prec_Q2);
+    static Fqk_type final_exponentiation(const Fqk_type &elt);
+    static Fqk_type pairing(const G1_type &P, const G2_type &Q);
+    static Fqk_type reduced_pairing(const G1_type &P, const G2_type &Q);
 };
 
 } // libff

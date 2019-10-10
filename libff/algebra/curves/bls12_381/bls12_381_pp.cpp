@@ -281,14 +281,57 @@ void bls12_381_pp::init_public_params()
     //bls12_381_final_exponent_is_z_neg = true;
 }
 
-bls12_381_Fq12 bls12_381_pp::pairing(const bls12_381_G1 &P, const bls12_381_G2 &Q)
+
+bls12_381_pp::G1_precomp_type bls12_381_pp::precompute_G1(const G1_type &P)
+{
+    return P;
+}
+
+
+bls12_381_pp::G2_precomp_type bls12_381_pp::precompute_G2(const G2_type &Q)
+{
+    return bls12::G2Prepared<bls12_381_pp>(Q);
+}
+
+
+bls12_381_Fq12 bls12_381_pp::miller_loop(const G1_precomp_type &prec_P,
+                                         const G2_precomp_type &prec_Q)
+{
+    return bls12::miller_loop<bls12_381_pp>({
+        bls12::PreparedPair<bls12_381_pp>(prec_P, prec_Q)
+    });
+}
+
+
+bls12_381_Fq12 bls12_381_pp::double_miller_loop(const G1_precomp_type &prec_P1,
+                                                const G2_precomp_type &prec_Q1,
+                                                const G1_precomp_type &prec_P2,
+                                                const G2_precomp_type &prec_Q2)
+{
+    return bls12::miller_loop<bls12_381_pp>({
+        bls12::PreparedPair<bls12_381_pp>(prec_P1, prec_Q1),
+        bls12::PreparedPair<bls12_381_pp>(prec_P2, prec_Q2)
+    });
+}
+
+
+bls12_381_Fq12 bls12_381_pp::final_exponentiation(const bls12_381_Fq12 &elt)
+{
+    return bls12::final_exponentiation<bls12_381_pp>(elt);
+}
+
+
+bls12_381_Fq12 bls12_381_pp::pairing(const G1_type &P,
+                                     const G2_type &Q)
 {
     return bls12::miller_loop<bls12_381_pp>(P, Q);
 }
 
-bls12_381_Fq12 bls12_381_pp::reduced_pairing(const bls12_381_G1 &P, const bls12_381_G2 &Q)
+
+bls12_381_Fq12 bls12_381_pp::reduced_pairing(const G1_type &P,
+                                             const G2_type &Q)
 {
-    return bls12::final_exponentiation<bls12_381_pp>(pairing(P, Q));
+    return final_exponentiation(pairing(P, Q));
 }
 
 

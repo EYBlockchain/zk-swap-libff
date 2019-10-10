@@ -133,11 +133,12 @@ int main(void)
 {
     start_profiling();
 
-    /*
     // EDWARDS
+    /*
     edwards_pp::init_public_params();
     pairing_test<edwards_pp>();
     double_miller_loop_test<edwards_pp>();
+    */
 
     // MNT6
     mnt6_pp::init_public_params();
@@ -155,24 +156,16 @@ int main(void)
     alt_bn128_pp::init_public_params();
     pairing_test<alt_bn128_pp>();
     double_miller_loop_test<alt_bn128_pp>();
-    */
     
     // new curve: BLS12_381
     bls12_381_pp::init_public_params();
     pairing_test<bls12_381_pp>();
-    //double_miller_loop_test<bls12_381_pp>();
+    double_miller_loop_test<bls12_381_pp>();
 
     // new curve: BLS12_377
     bls12_377_pp::init_public_params();
     pairing_test<bls12_377_pp>();
     double_miller_loop_test<bls12_377_pp>();
-    /*
-    
-    // new curve: SW6
-    sw6_pp::init_public_params();
-    pairing_test<sw6_pp>();
-    double_miller_loop_test<sw6_pp>();
-
     
     // new curve: MNT6753 
     mnt6753_pp::init_public_params();
@@ -183,6 +176,12 @@ int main(void)
     mnt4753_pp::init_public_params();
     pairing_test<mnt4753_pp>();
     double_miller_loop_test<mnt4753_pp>();
+
+    /*
+    // new curve: SW6
+    sw6_pp::init_public_params();
+    pairing_test<sw6_pp>();
+    double_miller_loop_test<sw6_pp>();
     
     // new curve: SW6_BIS
     sw6_bis_pp::init_public_params();

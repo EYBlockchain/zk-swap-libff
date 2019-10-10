@@ -9,15 +9,11 @@ template<typename ppT, typename Fqk_type>
 static inline Fqk_type exp_by_x(const Fqk_type &a)
 {
     auto res = Fqk_type::one();
-    bool found_one = false;
-    for( int i = 63; i >= 0; i-- )
+    for( int i = ppT::X_HIGHEST_BIT; i >= 0; i-- )
     {
-        if( found_one ) {
-            res = res.cyclotomic_squared();
-        }
+        res = res.cyclotomic_squared();
 
         if( ppT::X & (1ul<<i) ) {
-            found_one = true;
             res = res * a;
         }
     }
@@ -132,7 +128,7 @@ void G2Prepared<ppT>::_prepare(const G2_type &input_point)
     const auto two_inv = ppT::Fq_type::one().multiply2().inverse();
 
     // Skip the 1st bit
-    for (int i = 62; i >= 0; i--)
+    for (int i = (ppT::X_HIGHEST_BIT-1); i >= 0; i--)
     {
         miller_doubling_step(this->coeffs[coeff_idx++], r, two_inv);
 
@@ -177,7 +173,7 @@ static typename ppT::Fqk_type miller_loop( const std::vector<PreparedPair<ppT>> 
     int coeff_idx = 0;
     auto f = ppT::Fqk_type::one();
 
-    for( int i = 62; i >= 0; i-- )
+    for( int i = (ppT::X_HIGHEST_BIT-1); i >= 0; i-- )
     {
         f.square(f);
 
