@@ -119,21 +119,21 @@ int main(void)
 {
     start_profiling();
 
-    printf("sw6_bis:\n");
-    sw6_bis_pp::init_public_params();
-    pairing_test<sw6_bis_pp>();
-    double_miller_loop_test<sw6_bis_pp>();
-/*
-    printf("sw6:\n");
-    sw6_pp::init_public_params();
-    pairing_test<sw6_pp>();
-    double_miller_loop_test<sw6_pp>();
-
     printf("pendulum:\n");
     pendulum_pp::init_public_params();
     pairing_test<pendulum_pp>();
     double_miller_loop_test<pendulum_pp>();
 
+    printf("sw6:\n");
+    sw6_pp::init_public_params();
+    pairing_test<sw6_pp>();
+    double_miller_loop_test<sw6_pp>();
+
+    printf("sw6_bis:\n");
+    sw6_bis_pp::init_public_params();
+    pairing_test<sw6_bis_pp>();
+    double_miller_loop_test<sw6_bis_pp>();
+/*
     printf("edwards:\n");
     edwards_pp::init_public_params();
     pairing_test<edwards_pp>();

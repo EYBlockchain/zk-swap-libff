@@ -262,22 +262,21 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
-    printf("sw6_bis:\n");
-    sw6_bis_pp::init_public_params();
-    test_all_fields<sw6_bis_pp>();
-    test_cyclotomic_squaring<Fqk<sw6_bis_pp> >();
-
-/*
-    printf("sw6:\n");
-    sw6_pp::init_public_params();
-    test_all_fields<sw6_pp>();
-    test_cyclotomic_squaring<Fqk<sw6_pp> >();
-
     printf("pendulum:\n");
     pendulum_pp::init_public_params();
     test_all_fields<pendulum_pp>();
     test_cyclotomic_squaring<Fqk<pendulum_pp> >();
 
+    printf("sw6:\n");
+    sw6_pp::init_public_params();
+    test_all_fields<sw6_pp>();
+    test_cyclotomic_squaring<Fqk<sw6_pp> >();
+
+    printf("sw6_bis:\n");
+    sw6_bis_pp::init_public_params();
+    test_all_fields<sw6_bis_pp>();
+    test_cyclotomic_squaring<Fqk<sw6_bis_pp> >();
+/*
     printf("edwards:\n");
     edwards_pp::init_public_params();
     test_all_fields<edwards_pp>();
