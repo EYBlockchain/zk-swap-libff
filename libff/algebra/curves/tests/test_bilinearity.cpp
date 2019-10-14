@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/common/profiling.hpp>
@@ -117,6 +118,11 @@ int main(void)
 {
     start_profiling();
 
+    printf("sw6:\n");
+    sw6_pp::init_public_params();
+    pairing_test<sw6_pp>();
+    double_miller_loop_test<sw6_pp>();
+
     printf("pendulum:\n");
     pendulum_pp::init_public_params();
     pairing_test<pendulum_pp>();
@@ -158,11 +164,11 @@ int main(void)
     bls12_381_pp::init_public_params();
     pairing_test<bls12_381_pp>();
     double_miller_loop_test<bls12_381_pp>();
-*/
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
 #endif
+*/
 }

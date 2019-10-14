@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
@@ -141,6 +142,18 @@ void test_cyclotomic_squaring<Fqk<pendulum_pp> >()
 }
 
 template<>
+void test_cyclotomic_squaring<Fqk<sw6_pp> >()
+{
+    typedef Fqk<sw6_pp> FieldT;
+    assert(FieldT::extension_degree() % 2 == 0);
+    FieldT a = FieldT::random_element();
+    FieldT a_unitary = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
+    // beta = a^((q^(k/2)-1)*(q+1))
+    FieldT beta = a_unitary.Frobenius_map(1) * a_unitary;
+    assert(beta.cyclotomic_squared() == beta.squared());
+}
+
+template<>
 void test_cyclotomic_squaring<Fqk<mnt6_pp> >()
 {
     typedef Fqk<mnt6_pp> FieldT;
@@ -236,6 +249,11 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
+    printf("sw6:\n");
+    sw6_pp::init_public_params();
+    test_all_fields<sw6_pp>();
+    test_cyclotomic_squaring<Fqk<sw6_pp> >();
+
     printf("pendulum:\n");
     pendulum_pp::init_public_params();
     test_all_fields<pendulum_pp>();

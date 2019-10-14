@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
@@ -134,6 +135,7 @@ void test_output()
 
     for (size_t i = 0; i < 100; ++i)
     {
+        printf("g: ");
         std::stringstream ss;
         ss << g;
         GroupT gg;
@@ -146,13 +148,22 @@ void test_output()
 
 int main(void)
 {
-    printf("pendulum: \n");
+    /*printf("pendulum: \n");
     pendulum_pp::init_public_params();
     test_group<G1<pendulum_pp> >();
     test_output<G1<pendulum_pp> >();
     test_group<G2<pendulum_pp> >();
     test_output<G2<pendulum_pp> >();
     test_mul_by_q<G2<pendulum_pp> >();
+    */
+
+    printf("sw6: \n");
+    sw6_pp::init_public_params();
+    test_group<G1<sw6_pp> >();
+    test_output<G1<sw6_pp> >();
+    test_group<G2<sw6_pp> >();
+    test_output<G2<sw6_pp> >();
+    test_mul_by_q<G2<sw6_pp> >();
 
 
 /*

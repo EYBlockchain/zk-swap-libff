@@ -12,7 +12,7 @@ set(
   "BN128"
   CACHE
   STRING
-  "Default curve: one of ALT_BN128, BN128, EDWARDS, MNT4, MNT6, BLS12_377, MNT6753, MNT4753, TOY_CURVE, BLS12_381, PENDULUM"
+  "Default curve: one of ALT_BN128, BN128, EDWARDS, MNT4, MNT6, BLS12_377, MNT6753, MNT4753, TOY_CURVE, BLS12_381, PENDULUM, SW6"
 )
 
 option(
@@ -43,7 +43,7 @@ option(
 option(
   USE_PT_COMPRESSION
   "Use point compression"
-  ON
+  OFF
 )
 option(
   PROFILE_OP_COUNTS
