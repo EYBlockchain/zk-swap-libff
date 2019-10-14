@@ -5,6 +5,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
+#include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
@@ -164,6 +165,14 @@ int main(void)
     test_group<G2<sw6_pp> >();
     test_output<G2<sw6_pp> >();
     test_mul_by_q<G2<sw6_pp> >();
+
+    printf("sw6_bis: \n");
+    sw6_bis_pp::init_public_params();
+    test_group<G1<sw6_bis_pp> >();
+    test_output<G1<sw6_bis_pp> >();
+    test_group<G2<sw6_bis_pp> >();
+    test_output<G2<sw6_bis_pp> >();
+    test_mul_by_q<G2<sw6_bis_pp> >();
 
 
 /*
