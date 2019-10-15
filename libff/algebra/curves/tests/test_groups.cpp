@@ -176,7 +176,6 @@ int main(void)
     test_output<G2<sw6_bis_pp> >();
     test_mul_by_q<G2<sw6_bis_pp> >();
 
-/*
     printf("edwards: \n");
     edwards_pp::init_public_params();
     test_group<G1<edwards_pp> >();
@@ -201,6 +200,22 @@ int main(void)
     test_output<G2<mnt6_pp> >();
     test_mul_by_q<G2<mnt6_pp> >();
 
+    printf("mnt6753: \n");
+    mnt6753_pp::init_public_params();
+    test_group<G1<mnt6753_pp> >();
+    test_output<G1<mnt6753_pp> >();
+    test_group<G2<mnt6753_pp> >();
+    test_output<G2<mnt6753_pp> >();
+    test_mul_by_q<G2<mnt6753_pp> >();
+
+    printf("mnt4753: \n");
+    mnt4753_pp::init_public_params();
+    test_group<G1<mnt4753_pp> >();
+    test_output<G1<mnt4753_pp> >();
+    test_group<G2<mnt4753_pp> >();
+    test_output<G2<mnt4753_pp> >();
+    test_mul_by_q<G2<mnt4753_pp> >();
+
     printf("alt_bn128: \n");
     alt_bn128_pp::init_public_params();
     test_group<G1<alt_bn128_pp> >();
@@ -209,6 +224,7 @@ int main(void)
     test_output<G2<alt_bn128_pp> >();
     test_mul_by_q<G2<alt_bn128_pp> >();
 
+/*
     printf("bls12_381: \n");
     bls12_381_pp::init_public_params();
     test_group<G1<bls12_381_pp> >();
@@ -224,6 +240,7 @@ int main(void)
     test_group<G2<bls12_377_pp> >();
     test_output<G2<bls12_377_pp> >();
     test_mul_by_q<G2<bls12_377_pp> >();
+*/
 
     printf("toy_curve: \n");
     toy_curve_pp::init_public_params();
@@ -240,5 +257,4 @@ int main(void)
     test_group<G2<bn128_pp> >();
     test_output<G2<bn128_pp> >();
 #endif
-*/
 }
