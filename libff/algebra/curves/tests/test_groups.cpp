@@ -103,8 +103,8 @@ void test_group()
 
     assert(a.dbl() == a + a);
     assert(b.dbl() == b + b);
-    assert(one.add(two) == three);
-    assert(two.add(one) == three);
+    assert(one + two == three);
+    assert(two + one == three);
     assert(a + b == b + a);
     assert(a - a == zero);
     assert(a - b == a + (-b));

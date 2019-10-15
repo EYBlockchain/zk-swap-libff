@@ -13,8 +13,6 @@
 
 namespace libff {
 
-class bls12_381_G1;
-class bls12_381_G2;
 
 const mp_size_t bls12_381_r_bitcount = 255;
 const mp_size_t bls12_381_q_bitcount = 381;
@@ -42,6 +40,8 @@ extern bls12_381_Fq bls12_381_twist_mul_by_b_c1;
 extern bls12_381_Fq2 bls12_381_twist_mul_by_q_X;
 extern bls12_381_Fq2 bls12_381_twist_mul_by_q_Y;
 
+class bls12_381_G1;
+class bls12_381_G2;
 
 class bls12_381_pp {
 public:
