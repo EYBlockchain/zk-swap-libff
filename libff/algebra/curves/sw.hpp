@@ -8,7 +8,7 @@ namespace libff {
 namespace sw {
 
 
-template<typename ppT, typename FqT, typename FrT, const FqT &coeff_b, typename PointT>
+template<typename ppT, typename FqT, typename FrT, typename PointT>
 class SWJacobianPoint {
 public:
     typedef FqT base_field;
@@ -16,7 +16,8 @@ public:
 
     FqT X, Y, Z;
 
-    SWJacobianPoint() {
+    SWJacobianPoint()
+    {
         *this = zero();
     }
 
@@ -38,12 +39,6 @@ public:
             printf(", ");
             copy.Y.print();
             printf(")");
-
-            /*
-            gmp_printf("(%Nd , %Nd)\n",
-                       copy.X.as_bigint().data, FqT::num_limbs,
-                       copy.Y.as_bigint().data, FqT::num_limbs);
-            */
         }
     }
 
@@ -62,13 +57,6 @@ public:
             printf(" : ");
             Z.print();
             printf(")");
-
-            /*
-            gmp_printf("(%Nd : %Nd : %Nd)\n",
-                       this->X.as_bigint().data, FqT::num_limbs,
-                       this->Y.as_bigint().data, FqT::num_limbs,
-                       this->Z.as_bigint().data, FqT::num_limbs);
-            */
         }
     }
 
@@ -76,6 +64,7 @@ public:
     {
         if (this->is_zero())
         {
+            // XXX: replace with: *this = zero();
             this->X = FqT::zero();
             this->Y = FqT::one();
             this->Z = FqT::zero();
@@ -329,7 +318,7 @@ public:
         const FqT X3 = this->X * this->X.squared();
         const FqT Z6 = (this->Z * this->Z.squared()).squared();
 
-        return (Y2 == X3 + coeff_b * Z6);
+        return (Y2 == X3 + PointT::coeff_b * Z6);
     }
 
     static PointT zero()
@@ -351,12 +340,6 @@ public:
     static size_t size_in_bits() {
         return FqT::size_in_bits() + 1;
     }
-
-    /*
-    static bigint<FqT::num_limbs> base_field_char() {
-        return FqT::field_char();
-    }
-    */
 
     static bigint<FrT::num_limbs> order() {
         return FrT::field_char();
@@ -434,15 +417,8 @@ public:
         if (!is_zero)
         {
             FqT tX2 = tX.squared();
-            FqT tY2 = tX2*tX + coeff_b;
+            FqT tY2 = tX2*tX + PointT::coeff_b;
             tY = tY2.sqrt();
-
-            /*
-            if (tY.sign_bit() != Y_lsb)
-            {
-                tY = -tY;
-            }
-            */
         }
 #endif
         // using Jacobian coordinates

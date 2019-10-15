@@ -54,7 +54,7 @@ static void miller_doubling_step(MillerTriple<ppT> &result, typename ppT::G2_typ
     // Formula for line function when working with homogeneous projective coordinates.
     const auto b = r.Y.squared();
     const auto c = r.Z.squared();
-    const auto e = ppT::TWIST_COEFF_B * c.multiply3();
+    const auto e = ppT::G2_type::coeff_b * c.multiply3();
     const auto f = e.multiply3();
     const auto h = (r.Y + r.Z).squared() - (b + c);
 

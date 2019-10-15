@@ -39,9 +39,8 @@ add_library(
   algebra/curves/mnt753/mnt4753/mnt4753_init.cpp
   algebra/curves/mnt753/mnt4753/mnt4753_pairing.cpp
   algebra/curves/mnt753/mnt4753/mnt4753_pp.cpp
-  algebra/curves/bls12_381/bls12_381_g1.cpp
-  algebra/curves/bls12_381/bls12_381_g2.cpp
   algebra/curves/bls12_381/bls12_381_pp.cpp
+  algebra/curves/bls12_377/bls12_377_pp.cpp
   algebra/curves/sw6_bis/sw6_bis_g1.cpp
   algebra/curves/sw6_bis/sw6_bis_g2.cpp
   algebra/curves/sw6_bis/sw6_bis_init.cpp
@@ -52,10 +51,6 @@ add_library(
   algebra/curves/sw6/sw6_init.cpp
   algebra/curves/sw6/sw6_pairing.cpp
   algebra/curves/sw6/sw6_pp.cpp
-  algebra/curves/bls12_377/bls12_377_g1.cpp
-  algebra/curves/bls12_377/bls12_377_g2.cpp
-  algebra/curves/bls12_377/bls12_377_init.cpp
-  algebra/curves/bls12_377/bls12_377_pp.cpp
   algebra/curves/alt_bn128/alt_bn128_g1.cpp
   algebra/curves/alt_bn128/alt_bn128_g2.cpp
   algebra/curves/alt_bn128/alt_bn128_init.cpp
