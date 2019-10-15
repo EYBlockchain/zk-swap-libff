@@ -50,9 +50,14 @@ struct G2Prepared
     using G2_type = typename ppT::G2_type;
 
     std::array<MillerTriple<ppT>, num_coeffs> coeffs;
-    const bool infinity;
+    bool infinity;
 
     bool is_zero() const;
+
+    G2Prepared( )
+    :
+        infinity(false)
+    {}
 
     G2Prepared( const G2_type &g2 );
 
