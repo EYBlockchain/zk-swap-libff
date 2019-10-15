@@ -218,11 +218,11 @@ pendulum_Fq6 pendulum_final_exponentiation_first_chunk(const pendulum_Fq6 &elt, 
 pendulum_GT pendulum_final_exponentiation(const pendulum_Fq6 &elt)
 {
     enter_block("Call to pendulum_final_exponentiation");
-    // const pendulum_Fq6 elt_inv = elt.inverse();
-    // const pendulum_Fq6 elt_to_first_chunk = pendulum_final_exponentiation_first_chunk(elt, elt_inv);
-    // const pendulum_Fq6 elt_inv_to_first_chunk = pendulum_final_exponentiation_first_chunk(elt_inv, elt);
-    // pendulum_GT result = pendulum_final_exponentiation_last_chunk(elt_to_first_chunk, elt_inv_to_first_chunk);
-    pendulum_GT result = elt^pendulum_final_exponent;
+    const pendulum_Fq6 elt_inv = elt.inverse();
+    const pendulum_Fq6 elt_to_first_chunk = pendulum_final_exponentiation_first_chunk(elt, elt_inv);
+    const pendulum_Fq6 elt_inv_to_first_chunk = pendulum_final_exponentiation_first_chunk(elt_inv, elt);
+    pendulum_GT result = pendulum_final_exponentiation_last_chunk(elt_to_first_chunk, elt_inv_to_first_chunk);
+    // pendulum_GT result = elt^pendulum_final_exponent;
     leave_block("Call to pendulum_final_exponentiation");
 
     return result;
