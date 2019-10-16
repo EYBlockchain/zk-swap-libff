@@ -21,15 +21,16 @@ static inline Fqk_type exp_by_x(const Fqk_type &a)
     if constexpr(ppT::X_IS_NEG) {
         return res.unitary_inverse();
     }
-
-    return res;
+    else {
+        return res;
+    }
 }
 
 
 template<typename ppT, typename Fqk_type>
-static Fqk_type final_exponentiation(const Fqk_type &f)
+static inline Fqk_type final_exponentiation(const Fqk_type &f)
 {
-    Fqk_type r = f.Frobenius_map(6) * f.inverse();
+    auto r = f.Frobenius_map(6) * f.inverse();
     r = r.Frobenius_map(2) * r;
     // Hard part of the final exponentation is below:
     // From https://eprint.iacr.org/2016/130.pdf, Table 1
@@ -49,34 +50,34 @@ static Fqk_type final_exponentiation(const Fqk_type &f)
 
 
 template<typename ppT>
-static void miller_doubling_step(MillerTriple<ppT> &result, typename ppT::G2_type &r, const typename ppT::Fq_type &two_inv)
+static inline void miller_doubling_step(MillerTriple<ppT> &result, typename ppT::G2_type &r, const typename ppT::Fq_type &two_inv)
 {
     // Formula for line function when working with homogeneous projective coordinates.
     const auto b = r.Y.squared();
     const auto c = r.Z.squared();
-    const auto e = ppT::G2_type::coeff_b * c.multiply3();
-    const auto f = e.multiply3();
+    const auto e = ppT::G2_type::coeff_b * c.times3();
+    const auto f = e.times3();
     const auto h = (r.Y + r.Z).squared() - (b + c);
 
     if constexpr( ppT::TWIST_TYPE == TwistType::M ) {
         result.a = e - b;
-        result.b = r.X.squared().multiply3();
+        result.b = r.X.squared().times3();
         result.c = -h;
     }
     else {
         result.a = -h;
-        result.b = r.X.squared().multiply3();
+        result.b = r.X.squared().times3();
         result.c = e - b;
     }
 
     r.X = ((two_inv * r.X) * r.Y) * (b - f);
-    r.Y = (two_inv * (b + f)).squared() - e.squared().multiply3();
+    r.Y = (two_inv * (b + f)).squared() - e.squared().times3();
     r.Z = b * h;
 }
 
 
 template<typename ppT>
-static void miller_addition_step(MillerTriple<ppT> &result, typename ppT::G2_type &r, const typename ppT::G2_type &q)
+static inline void miller_addition_step(MillerTriple<ppT> &result, typename ppT::G2_type &r, const typename ppT::G2_type &q)
 {
     // Formula for line function when working with homogeneous projective coordinates.
     const auto theta = r.Y - (q.Y * r.Z);
@@ -84,22 +85,21 @@ static void miller_addition_step(MillerTriple<ppT> &result, typename ppT::G2_typ
     const auto d = lambda.squared();
     const auto e = lambda * d;
     const auto g = r.X * d;
-    const auto h = e + (r.Z * theta.squared()) - g.multiply2();
-    const auto j = (theta * q.X) - (lambda * q.Y);
+    const auto h = e + (r.Z * theta.squared()) - g.times2();
 
     r.X = lambda * h;
     r.Y = theta * (g - h) - (e * r.Y);
     r.Z = r.Z * e;
 
     if constexpr( ppT::TWIST_TYPE == TwistType::M ) {
-        result.a = j;
+        result.a = (theta * q.X) - (lambda * q.Y);
         result.b = -theta;
         result.c = lambda;
     }
     else {
         result.a = lambda;
         result.b = -theta;
-        result.c = j;
+        result.c = (theta * q.X) - (lambda * q.Y);
     }
 }
 
@@ -118,14 +118,14 @@ G2Prepared<ppT>::G2Prepared( const G2_type &g2 )
 template<typename ppT>
 void G2Prepared<ppT>::_prepare(const G2_type &input_point)
 {
-    G2_type q = input_point;
+    auto q = input_point;
     q.to_affine_coordinates();
 
-    G2_type r = q;
+    auto r = q;
     int coeff_idx = 0;
 
-    // TODO: pre-compute two_inv... rather than every time it's prepared
-    const auto two_inv = ppT::Fq_type::one().multiply2().inverse();
+    // TODO: pre-compute two_inv... rather than every time a point is prepared
+    const auto two_inv = ppT::Fq_type::one().times2().inverse();
 
     // Skip the 1st bit
     for (int i = (ppT::X_HIGHEST_BIT-1); i >= 0; i--)

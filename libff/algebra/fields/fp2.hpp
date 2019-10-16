@@ -83,9 +83,9 @@ public:
 
     void copy(const my_Fp2 &x);
     void negate(const my_Fp2 &x);
-    inline Fp2_model multiply2() const;
-    inline Fp2_model multiply3() const;
-    void multiply2(const my_Fp2 &x);
+    inline Fp2_model times2() const;
+    inline Fp2_model times3() const;
+    void times2(const my_Fp2 &x);
     void square(const my_Fp2 &x);
     void multiply(const my_Fp2 &x, const my_Fp2 &y);
     void add(const my_Fp2 &x, const my_Fp2 &y);

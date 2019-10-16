@@ -69,7 +69,7 @@ public:
 };
 
 
-using bls12_381_G1_base = sw::SWJacobianPoint<bls12_381_pp, bls12_381_pp::Fq_type, bls12_381_pp::Fp_type, bls12_381_G1>;
+using bls12_381_G1_base = sw::SWJacobianPoint<bls12_381_pp, bls12_381_Fq, bls12_381_Fr, bls12_381_G1>;
 
 class bls12_381_G1 : public bls12_381_G1_base
 {
@@ -88,12 +88,12 @@ public:
     static base_field coeff_b;
     static std::vector<size_t> wnaf_window_table;
     static std::vector<size_t> fixed_base_exp_window_table;
-    static bls12_381_G1 _zero;
-    static bls12_381_G1 _one;
+    static PointT _zero;
+    static PointT _one;
 };
 
 
-using bls12_381_G2_base = sw::SWJacobianPoint<bls12_381_pp, bls12_381_pp::Fqe_type, bls12_381_pp::Fp_type, bls12_381_G2>;
+using bls12_381_G2_base = sw::SWJacobianPoint<bls12_381_pp, bls12_381_Fq2, bls12_381_Fr, bls12_381_G2>;
 
 class bls12_381_G2 : public bls12_381_G2_base
 {
@@ -112,8 +112,8 @@ public:
     static base_field coeff_b;
     static std::vector<size_t> wnaf_window_table;
     static std::vector<size_t> fixed_base_exp_window_table;
-    static bls12_381_G2 _zero;
-    static bls12_381_G2 _one;
+    static PointT _zero;
+    static PointT _one;
 };
 
 

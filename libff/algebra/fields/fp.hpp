@@ -106,7 +106,7 @@ public:
     Fp_model& invert();
     Fp_model inverse() const;
     Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
-    Fp_model multiply2() const;
+    Fp_model times2() const;
 
     Fp_model operator^(const unsigned long pow) const;
     template<mp_size_t m>

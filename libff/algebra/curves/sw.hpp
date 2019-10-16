@@ -8,11 +8,12 @@ namespace libff {
 namespace sw {
 
 
-template<typename ppT, typename FqT, typename FrT, typename PointT>
+template<typename ppT, typename FqT, typename FrT, typename _PointT>
 class SWJacobianPoint {
 public:
     typedef FqT base_field;
     typedef FrT scalar_field;
+    typedef _PointT PointT;
 
     FqT X, Y, Z;
 
@@ -21,7 +22,8 @@ public:
         *this = zero();
     }
 
-    SWJacobianPoint(const FqT &X, const FqT &Y, const FqT &Z) : X(X), Y(Y), Z(Z) {};
+    SWJacobianPoint(const FqT &X, const FqT &Y, const FqT &Z)
+    : X(X), Y(Y), Z(Z) {}
 
     void print() const
     {
@@ -134,9 +136,7 @@ public:
 
     PointT mixed_add(const PointT &other) const
     {
-    #ifdef DEBUG
         assert(other.is_special());
-    #endif
 
         // handle special cases having to do with O
         if (this->is_zero())

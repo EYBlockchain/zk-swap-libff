@@ -721,7 +721,7 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-Fp_model<n,modulus> Fp_model<n,modulus>::multiply2() const
+Fp_model<n,modulus> Fp_model<n,modulus>::times2() const
 {
     return *this + *this;
 }
