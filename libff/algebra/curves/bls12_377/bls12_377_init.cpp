@@ -143,59 +143,59 @@ void init_bls12_377_params()
                                     bls12_377_Fq("241266749859715473739788878240585681733927191168601896383759122102112907357779751001206799952863815012735208165030"),
                                     bls12_377_Fq::one());
 
-    // // TODO: wNAF window table
-    // bls12_377_G1::wnaf_window_table.resize(0);
-    // bls12_377_G1::wnaf_window_table.push_back(11);
-    // bls12_377_G1::wnaf_window_table.push_back(24);
-    // bls12_377_G1::wnaf_window_table.push_back(60);
-    // bls12_377_G1::wnaf_window_table.push_back(127);
+    // TODO: wNAF window table
+    bls12_377_G1::wnaf_window_table.resize(0);
+    bls12_377_G1::wnaf_window_table.push_back(11);
+    bls12_377_G1::wnaf_window_table.push_back(24);
+    bls12_377_G1::wnaf_window_table.push_back(60);
+    bls12_377_G1::wnaf_window_table.push_back(127);
 
-    // // TODO: fixed-base exponentiation table
-    // bls12_377_G1::fixed_base_exp_window_table.resize(0);
-    // // window 1 is unbeaten in [-inf, 4.99]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(1);
-    // // window 2 is unbeaten in [4.99, 10.99]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(5);
-    // // window 3 is unbeaten in [10.99, 32.29]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(11);
-    // // window 4 is unbeaten in [32.29, 55.23]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(32);
-    // // window 5 is unbeaten in [55.23, 162.03]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(55);
-    // // window 6 is unbeaten in [162.03, 360.15]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(162);
-    // // window 7 is unbeaten in [360.15, 815.44]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(360);
-    // // window 8 is unbeaten in [815.44, 2373.07]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(815);
-    // // window 9 is unbeaten in [2373.07, 6977.75]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(2373);
-    // // window 10 is unbeaten in [6977.75, 7122.23]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(6978);
-    // // window 11 is unbeaten in [7122.23, 57818.46]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(7122);
-    // // window 12 is never the best
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 13 is unbeaten in [57818.46, 169679.14]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(57818);
-    // // window 14 is never the best
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 15 is unbeaten in [169679.14, 439758.91]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(169679);
-    // // window 16 is unbeaten in [439758.91, 936073.41]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(439759);
-    // // window 17 is unbeaten in [936073.41, 4666554.74]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(936073);
-    // // window 18 is never the best
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 19 is unbeaten in [4666554.74, 7580404.42]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(4666555);
-    // // window 20 is unbeaten in [7580404.42, 34552892.20]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(7580404);
-    // // window 21 is never the best
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(0);
-    // // window 22 is unbeaten in [34552892.20, inf]
-    // bls12_377_G1::fixed_base_exp_window_table.push_back(34552892);
+    // TODO: fixed-base exponentiation table
+    bls12_377_G1::fixed_base_exp_window_table.resize(0);
+    // window 1 is unbeaten in [-inf, 4.99]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(1);
+    // window 2 is unbeaten in [4.99, 10.99]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(5);
+    // window 3 is unbeaten in [10.99, 32.29]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(11);
+    // window 4 is unbeaten in [32.29, 55.23]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(32);
+    // window 5 is unbeaten in [55.23, 162.03]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(55);
+    // window 6 is unbeaten in [162.03, 360.15]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(162);
+    // window 7 is unbeaten in [360.15, 815.44]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(360);
+    // window 8 is unbeaten in [815.44, 2373.07]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(815);
+    // window 9 is unbeaten in [2373.07, 6977.75]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(2373);
+    // window 10 is unbeaten in [6977.75, 7122.23]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(6978);
+    // window 11 is unbeaten in [7122.23, 57818.46]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(7122);
+    // window 12 is never the best
+    bls12_377_G1::fixed_base_exp_window_table.push_back(0);
+    // window 13 is unbeaten in [57818.46, 169679.14]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(57818);
+    // window 14 is never the best
+    bls12_377_G1::fixed_base_exp_window_table.push_back(0);
+    // window 15 is unbeaten in [169679.14, 439758.91]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(169679);
+    // window 16 is unbeaten in [439758.91, 936073.41]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(439759);
+    // window 17 is unbeaten in [936073.41, 4666554.74]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(936073);
+    // window 18 is never the best
+    bls12_377_G1::fixed_base_exp_window_table.push_back(0);
+    // window 19 is unbeaten in [4666554.74, 7580404.42]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(4666555);
+    // window 20 is unbeaten in [7580404.42, 34552892.20]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(7580404);
+    // window 21 is never the best
+    bls12_377_G1::fixed_base_exp_window_table.push_back(0);
+    // window 22 is unbeaten in [34552892.20, inf]
+    bls12_377_G1::fixed_base_exp_window_table.push_back(34552892);
 
 
     /* choice of group G2 */
@@ -211,70 +211,68 @@ void init_bls12_377_params()
                                         bls12_377_Fq2::one());
 
 
-    // // TODO: wNAF window table
-    // bls12_377_G2::wnaf_window_table.resize(0);
-    // bls12_377_G2::wnaf_window_table.push_back(5);
-    // bls12_377_G2::wnaf_window_table.push_back(15);
-    // bls12_377_G2::wnaf_window_table.push_back(39);
-    // bls12_377_G2::wnaf_window_table.push_back(109);
+    // TODO: wNAF window table
+    bls12_377_G2::wnaf_window_table.resize(0);
+    bls12_377_G2::wnaf_window_table.push_back(5);
+    bls12_377_G2::wnaf_window_table.push_back(15);
+    bls12_377_G2::wnaf_window_table.push_back(39);
+    bls12_377_G2::wnaf_window_table.push_back(109);
 
-    // // TODO: fixed-base exponentiation table 
-    // bls12_377_G2::fixed_base_exp_window_table.resize(0);
-    // // window 1 is unbeaten in [-inf, 5.10]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(1);
-    // // window 2 is unbeaten in [5.10, 10.43]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(5);
-    // // window 3 is unbeaten in [10.43, 25.28]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(10);
-    // // window 4 is unbeaten in [25.28, 59.00]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(25);
-    // // window 5 is unbeaten in [59.00, 154.03]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(59);
-    // // window 6 is unbeaten in [154.03, 334.25]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(154);
-    // // window 7 is unbeaten in [334.25, 742.58]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(334);
-    // // window 8 is unbeaten in [742.58, 2034.40]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(743);
-    // // window 9 is unbeaten in [2034.40, 4987.56]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(2034);
-    // // window 10 is unbeaten in [4987.56, 8888.27]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(4988);
-    // // window 11 is unbeaten in [8888.27, 26271.13]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(8888);
-    // // window 12 is unbeaten in [26271.13, 39768.20]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(26271);
-    // // window 13 is unbeaten in [39768.20, 106275.75]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(39768);
-    // // window 14 is unbeaten in [106275.75, 141703.40]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(106276);
-    // // window 15 is unbeaten in [141703.40, 462422.97]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(141703);
-    // // window 16 is unbeaten in [462422.97, 926871.84]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(462423);
-    // // window 17 is unbeaten in [926871.84, 4873049.17]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(926872);
-    // // window 18 is never the best
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(0);
-    // // window 19 is unbeaten in [4873049.17, 5706707.88]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(4873049);
-    // // window 20 is unbeaten in [5706707.88, 31673814.95]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(5706708);
-    // // window 21 is never the best
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(0);
-    // // window 22 is unbeaten in [31673814.95, inf]
-    // bls12_377_G2::fixed_base_exp_window_table.push_back(31673815);
+    // TODO: fixed-base exponentiation table 
+    bls12_377_G2::fixed_base_exp_window_table.resize(0);
+    // window 1 is unbeaten in [-inf, 5.10]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(1);
+    // window 2 is unbeaten in [5.10, 10.43]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(5);
+    // window 3 is unbeaten in [10.43, 25.28]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(10);
+    // window 4 is unbeaten in [25.28, 59.00]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(25);
+    // window 5 is unbeaten in [59.00, 154.03]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(59);
+    // window 6 is unbeaten in [154.03, 334.25]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(154);
+    // window 7 is unbeaten in [334.25, 742.58]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(334);
+    // window 8 is unbeaten in [742.58, 2034.40]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(743);
+    // window 9 is unbeaten in [2034.40, 4987.56]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(2034);
+    // window 10 is unbeaten in [4987.56, 8888.27]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(4988);
+    // window 11 is unbeaten in [8888.27, 26271.13]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(8888);
+    // window 12 is unbeaten in [26271.13, 39768.20]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(26271);
+    // window 13 is unbeaten in [39768.20, 106275.75]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(39768);
+    // window 14 is unbeaten in [106275.75, 141703.40]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(106276);
+    // window 15 is unbeaten in [141703.40, 462422.97]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(141703);
+    // window 16 is unbeaten in [462422.97, 926871.84]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(462423);
+    // window 17 is unbeaten in [926871.84, 4873049.17]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(926872);
+    // window 18 is never the best
+    bls12_377_G2::fixed_base_exp_window_table.push_back(0);
+    // window 19 is unbeaten in [4873049.17, 5706707.88]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(4873049);
+    // window 20 is unbeaten in [5706707.88, 31673814.95]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(5706708);
+    // window 21 is never the best
+    bls12_377_G2::fixed_base_exp_window_table.push_back(0);
+    // window 22 is unbeaten in [31673814.95, inf]
+    bls12_377_G2::fixed_base_exp_window_table.push_back(31673815);
 
 
 
     /* pairing parameters */
     /* 
-     * https://eprint.iacr.org/2017/1174.pdf
-     * Normally, ate_loop_count=t where t in the value chosen in q(t) and r(t) parameterization of BLS curve.
-     * for BLS12_377 t=3·2^46·(7·13·499)+1 s.t. t=1 (mod 3·2^46) to have a high 2-adicity for q and r. 
-     * But, to get the ate pairing implementation to work, we take ate_loop_count=6t+2 as in BN 
+     * ate_loop_count=u (equal to trace-1) where u in the value chosen in q(u) and r(u) parameterization of BLS curve.
+     * for BLS12_377 u=3·2^46·(7·13·499)+1 s.t. u=1 (mod 3·2^46) to have a high 2-adicity for q and r. 
     */
-    bls12_377_ate_loop_count = bigint_q("57516737478543802376"); // 9586122913090633729
+    bls12_377_ate_loop_count = bigint_q("9586122913090633729");
     bls12_377_ate_is_loop_count_neg = false;
     bls12_377_final_exponent = bigint<12*bls12_377_q_limbs>("10623521018019860488254031663707568428798032905123811199571213965079129114663661236359849629341526275899063345613340067081670062620727617884137487754739150147491204559514205186492385590272208934467461444944652711005169371168250068790820776124772095630237102189827733019989835063334551453893534663070786533932633573962932272563471643288531959637300817070265537429506484880990981069041269405383502889677357082012807298529931118124428569059822346289745077401570134157444973271520981774047146918354408632568723153146248333028827919406785654402107153546667815607201488590832478225403444136409349877481268154817904541340614173261949772403060924324366861723245182619859389254985008236007465814273361497134138868945580557938161335670207544906643574043606819537336472235809927599628123275314288006170804044560238676463931639339711913111080974582593228138704154320599775683095604041309000197025419968125718018311805959315220036948621879242495199408833915486421612374480018459896018440926235261824654956932384859260479372776022979736734221629097297890154692194441528462770218811795624471108972377573690833913231260547835550851256817740247389770320334698430697237343583761719223414894063451411431859122738488311580005412765070251810159991897110936324943232526870280724876946523218213525646968094720");
     bls12_377_final_exponent_z = bigint_q("9586122913090633729");

@@ -18,7 +18,7 @@ set(
 option(
   DEBUG
   "Enable debugging mode"
-  ON
+  OFF
 )
 option(
   LOWMEM
@@ -65,7 +65,7 @@ option(
 option(
   CPPDEBUG
   "Enable debugging of C++ STL (does not imply DEBUG)"
-  ON
+  OFF
 )
 
 option(

@@ -239,7 +239,7 @@ bls12_377_GT bls12_377_final_exponentiation(const bls12_377_Fq12 &elt)
 
 /* ate pairing */
 
-void doubling_step_for_flipped_miller_loop(const bls12_377_Fq two_inv,
+void doubling_step_for_miller_loop(const bls12_377_Fq two_inv,
                                            bls12_377_G2 &current,
                                            bls12_377_ate_ell_coeffs &c)
 {
@@ -265,7 +265,7 @@ void doubling_step_for_flipped_miller_loop(const bls12_377_Fq two_inv,
     c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
 }
 
-void mixed_addition_step_for_flipped_miller_loop(const bls12_377_G2 base,
+void mixed_addition_step_for_miller_loop(const bls12_377_G2 base,
                                                  bls12_377_G2 &current,
                                                  bls12_377_ate_ell_coeffs &c)
 {
@@ -335,32 +335,15 @@ bls12_377_ate_G2_precomp bls12_377_ate_precompute_G2(const bls12_377_G2& Q)
             continue;
         }
 
-        doubling_step_for_flipped_miller_loop(two_inv, R, c);
+        doubling_step_for_miller_loop(two_inv, R, c);
         result.coeffs.push_back(c);
 
         if (bit)
         {
-            mixed_addition_step_for_flipped_miller_loop(Qcopy, R, c);
+            mixed_addition_step_for_miller_loop(Qcopy, R, c);
             result.coeffs.push_back(c);
         }
     }
-
-    bls12_377_G2 Q1 = Qcopy.mul_by_q();
-    assert(Q1.Z == bls12_377_Fq2::one());
-    bls12_377_G2 Q2 = Q1.mul_by_q();
-    assert(Q2.Z == bls12_377_Fq2::one());
-
-    if (bls12_377_ate_is_loop_count_neg)
-    {
-        R.Y = - R.Y;
-    }
-    Q2.Y = - Q2.Y;
-
-    mixed_addition_step_for_flipped_miller_loop(Q1, R, c);
-    result.coeffs.push_back(c);
-
-    mixed_addition_step_for_flipped_miller_loop(Q2, R, c);
-    result.coeffs.push_back(c);
 
     leave_block("Call to bls12_377_ate_precompute_G2");
     return result;
@@ -410,11 +393,13 @@ bls12_377_Fq12 bls12_377_ate_miller_loop(const bls12_377_ate_G1_precomp &prec_P,
     	f = f.inverse();
     }
 
+    /*
     c = prec_Q.coeffs[idx++];
     f = f.mul_by_024(c.ell_0,prec_P.PY * c.ell_VW,prec_P.PX * c.ell_VV);
 
     c = prec_Q.coeffs[idx++];
     f = f.mul_by_024(c.ell_0,prec_P.PY * c.ell_VW,prec_P.PX * c.ell_VV);
+    */
 
     leave_block("Call to bls12_377_ate_miller_loop");
     return f;
@@ -472,6 +457,7 @@ bls12_377_Fq12 bls12_377_ate_double_miller_loop(const bls12_377_ate_G1_precomp &
     	f = f.inverse();
     }
 
+    /*
     bls12_377_ate_ell_coeffs c1 = prec_Q1.coeffs[idx];
     bls12_377_ate_ell_coeffs c2 = prec_Q2.coeffs[idx];
     ++idx;
@@ -483,6 +469,7 @@ bls12_377_Fq12 bls12_377_ate_double_miller_loop(const bls12_377_ate_G1_precomp &
     ++idx;
     f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
     f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+    */
 
     leave_block("Call to bls12_377_ate_double_miller_loop");
 
