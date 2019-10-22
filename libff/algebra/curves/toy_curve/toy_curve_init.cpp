@@ -128,11 +128,11 @@ void init_toy_curve_params()
     toy_curve_twist = toy_curve_Fq2(toy_curve_Fq("2"), toy_curve_Fq("1"));
     toy_curve_twist_coeff_b = toy_curve_coeff_b * toy_curve_twist.inverse();
     // toy_curve_twist_coeff_b = toy_curve_Fq2(toy_curve_Fq("726724827309403623633153"), toy_curve_Fq("242241609103134537431915"));
-    
+
     // TODO
     toy_curve_twist_mul_by_b_c0 = toy_curve_coeff_b * toy_curve_Fq2::non_residue;
     toy_curve_twist_mul_by_b_c1 = toy_curve_coeff_b * toy_curve_Fq2::non_residue;
-    
+
     // (238034680536228445107023*z + 1199867752729316448016774 , 328515184787529717232823*z + 769861615151601207864903)
     toy_curve_twist_mul_by_q_X = toy_curve_Fq2(toy_curve_Fq("1199867752729316448016774"),
                                                toy_curve_Fq("238034680536228445107023"));
