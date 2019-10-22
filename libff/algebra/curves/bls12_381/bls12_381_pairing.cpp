@@ -1,3 +1,10 @@
+/** @file
+ *****************************************************************************
+ * @author     This file is part of libff, developed by SCIPR Lab
+ *             and contributors (see AUTHORS).
+ * @copyright  MIT license (see LICENSE file)
+ *****************************************************************************/
+
 #include <cassert>
 
 #include <libff/algebra/curves/bls12_381/bls12_381_g1.hpp>
@@ -127,17 +134,17 @@ bls12_381_Fq12 bls12_381_final_exponentiation_first_chunk(const bls12_381_Fq12 &
     return result;
 }
 
-bls12_381_Fq12 bls12_381_exp_by_neg_z(const bls12_381_Fq12 &elt)
+bls12_381_Fq12 bls12_381_exp_by_z(const bls12_381_Fq12 &elt)
 {
-    enter_block("Call to bls12_381_exp_by_neg_z");
+    enter_block("Call to bls12_381_exp_by_z");
 
     bls12_381_Fq12 result = elt.cyclotomic_exp(bls12_381_final_exponent_z);
-    if (!bls12_381_final_exponent_is_z_neg)
+    if (bls12_381_final_exponent_is_z_neg)
     {
         result = result.unitary_inverse();
     }
 
-    leave_block("Call to bls12_381_exp_by_neg_z");
+    leave_block("Call to bls12_381_exp_by_z");
 
     return result;
 }
@@ -146,70 +153,31 @@ bls12_381_Fq12 bls12_381_final_exponentiation_last_chunk(const bls12_381_Fq12 &e
 {
     enter_block("Call to bls12_381_final_exponentiation_last_chunk");
 
-    /*
-      Follows Laura Fuentes-Castaneda et al. "Faster hashing to G2"
-      by computing:
+    const bls12_381_Fq12 A = elt.cyclotomic_squared();   // elt^2 
+    const bls12_381_Fq12 B = A.unitary_inverse();        // elt^(-2)
+    const bls12_381_Fq12 C = bls12_381_exp_by_z(elt);    // elt^z
+    const bls12_381_Fq12 D = C.cyclotomic_squared();     // elt^(2z)
+    const bls12_381_Fq12 E = B * C;                      // elt^(z-2)
+    const bls12_381_Fq12 F = bls12_381_exp_by_z(E);      // elt^(z^2-2z)
+    const bls12_381_Fq12 G = bls12_381_exp_by_z(F);      // elt^(z^3-2z^2)
+    const bls12_381_Fq12 H = bls12_381_exp_by_z(G);      // elt^(z^4-2z^3) 
+    const bls12_381_Fq12 I = H * D;                      // elt^(z^4-2z^3+2z)
+    const bls12_381_Fq12 J = bls12_381_exp_by_z(I);      // elt^(z^5-2z^4+2z^2)
+    const bls12_381_Fq12 K = E.unitary_inverse();        // elt^(-z+2) 
+    const bls12_381_Fq12 L = K * J;                      // elt^(z^5-2z^4+2z^2) * elt^(-z+2)
+    const bls12_381_Fq12 M = elt * L;                    // elt^(z^5-2z^4+2z^2) * elt^(-z+2) * elt
+    const bls12_381_Fq12 N = elt.unitary_inverse();      // elt^(-1)
+    const bls12_381_Fq12 O = F * elt;                    // elt^(z^2-2z) * elt
+    const bls12_381_Fq12 P = O.Frobenius_map(3);         // (elt^(z^2-2z) * elt)^(q^3)
+    const bls12_381_Fq12 Q = I * N;                      // elt^(z^4-2z^3+2z) * elt^(-1) 
+    const bls12_381_Fq12 R = Q.Frobenius_map(1);         // (elt^(z^4-2z^3+2z) * elt^(-1))^q 
+    const bls12_381_Fq12 S = C * G;                      // elt^(z^3-2z^2) * elt^z 
+    const bls12_381_Fq12 T = S.Frobenius_map(2);         // (elt^(z^3-2z^2) * elt^z)^(q^2)
+    const bls12_381_Fq12 U = T * P;                      // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2)
+    const bls12_381_Fq12 V = U * R;                      // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2) * (elt^(z^4-2z^3+2z) * elt^(-1))^q
+    const bls12_381_Fq12 W = V * M;                      // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2) * (elt^(z^4-2z^3+2z) * elt^(-1))^q * elt^(z^5-2z^4+2z^2) * elt^(-z+2) * elt
 
-      result = elt^(q^3 * (12*z^3 + 6z^2 + 4z - 1) +
-                    q^2 * (12*z^3 + 6z^2 + 6z) +
-                    q   * (12*z^3 + 6z^2 + 4z) +
-                    1   * (12*z^3 + 12z^2 + 6z + 1))
-      which equals
-
-      result = elt^( 2z * ( 6z^2 + 3z + 1 ) * (q^4 - q^2 + 1)/r ).
-
-      Using the following addition chain:
-
-      A = exp_by_neg_z(elt)  // = elt^(-z)
-      B = A^2                // = elt^(-2*z)
-      C = B^2                // = elt^(-4*z)
-      D = C * B              // = elt^(-6*z)
-      E = exp_by_neg_z(D)    // = elt^(6*z^2)
-      F = E^2                // = elt^(12*z^2)
-      G = epx_by_neg_z(F)    // = elt^(-12*z^3)
-      H = conj(D)            // = elt^(6*z)
-      I = conj(G)            // = elt^(12*z^3)
-      J = I * E              // = elt^(12*z^3 + 6*z^2)
-      K = J * H              // = elt^(12*z^3 + 6*z^2 + 6*z)
-      L = K * B              // = elt^(12*z^3 + 6*z^2 + 4*z)
-      M = K * E              // = elt^(12*z^3 + 12*z^2 + 6*z)
-      N = M * elt            // = elt^(12*z^3 + 12*z^2 + 6*z + 1)
-      O = L.Frobenius_map(1) // = elt^(q*(12*z^3 + 6*z^2 + 4*z))
-      P = O * N              // = elt^(q*(12*z^3 + 6*z^2 + 4*z) * (12*z^3 + 12*z^2 + 6*z + 1))
-      Q = K.Frobenius_map(2) // = elt^(q^2 * (12*z^3 + 6*z^2 + 6*z))
-      R = Q * P              // = elt^(q^2 * (12*z^3 + 6*z^2 + 6*z) + q*(12*z^3 + 6*z^2 + 4*z) * (12*z^3 + 12*z^2 + 6*z + 1))
-      S = conj(elt)          // = elt^(-1)
-      T = S * L              // = elt^(12*z^3 + 6*z^2 + 4*z - 1)
-      U = T.Frobenius_map(3) // = elt^(q^3(12*z^3 + 6*z^2 + 4*z - 1))
-      V = U * R              // = elt^(q^3(12*z^3 + 6*z^2 + 4*z - 1) + q^2 * (12*z^3 + 6*z^2 + 6*z) + q*(12*z^3 + 6*z^2 + 4*z) * (12*z^3 + 12*z^2 + 6*z + 1))
-      result = V
-
-    */
-
-    const bls12_381_Fq12 A = bls12_381_exp_by_neg_z(elt);
-    const bls12_381_Fq12 B = A.cyclotomic_squared();
-    const bls12_381_Fq12 C = B.cyclotomic_squared();
-    const bls12_381_Fq12 D = C * B;
-    const bls12_381_Fq12 E = bls12_381_exp_by_neg_z(D);
-    const bls12_381_Fq12 F = E.cyclotomic_squared();
-    const bls12_381_Fq12 G = bls12_381_exp_by_neg_z(F);
-    const bls12_381_Fq12 H = D.unitary_inverse();
-    const bls12_381_Fq12 I = G.unitary_inverse();
-    const bls12_381_Fq12 J = I * E;
-    const bls12_381_Fq12 K = J * H;
-    const bls12_381_Fq12 L = K * B;
-    const bls12_381_Fq12 M = K * E;
-    const bls12_381_Fq12 N = M * elt;
-    const bls12_381_Fq12 O = L.Frobenius_map(1);
-    const bls12_381_Fq12 P = O * N;
-    const bls12_381_Fq12 Q = K.Frobenius_map(2);
-    const bls12_381_Fq12 R = Q * P;
-    const bls12_381_Fq12 S = elt.unitary_inverse();
-    const bls12_381_Fq12 T = S * L;
-    const bls12_381_Fq12 U = T.Frobenius_map(3);
-    const bls12_381_Fq12 V = U * R;
-
-    const bls12_381_Fq12 result = V;
+    const bls12_381_Fq12 result = W;                           
 
     leave_block("Call to bls12_381_final_exponentiation_last_chunk");
 
@@ -231,7 +199,7 @@ bls12_381_GT bls12_381_final_exponentiation(const bls12_381_Fq12 &elt)
 
 /* ate pairing */
 
-void doubling_step_for_flipped_miller_loop(const bls12_381_Fq two_inv,
+void doubling_step_for_miller_loop(const bls12_381_Fq two_inv,
                                            bls12_381_G2 &current,
                                            bls12_381_ate_ell_coeffs &c)
 {
@@ -241,7 +209,7 @@ void doubling_step_for_flipped_miller_loop(const bls12_381_Fq two_inv,
     const bls12_381_Fq2 B = Y.squared();                           // B = Y1^2
     const bls12_381_Fq2 C = Z.squared();                           // C = Z1^2
     const bls12_381_Fq2 D = C+C+C;                                 // D = 3 * C
-    const bls12_381_Fq2 E = bls12_381_twist_coeff_b * D;             // E = twist_b * D
+    const bls12_381_Fq2 E = bls12_381_twist_coeff_b * D;           // E = twist_b * D
     const bls12_381_Fq2 F = E+E+E;                                 // F = 3 * E
     const bls12_381_Fq2 G = two_inv * (B+F);                       // G = (B+F)/2
     const bls12_381_Fq2 H = (Y+Z).squared() - (B+C);               // H = (Y1+Z1)^2-(B+C)
@@ -249,35 +217,35 @@ void doubling_step_for_flipped_miller_loop(const bls12_381_Fq two_inv,
     const bls12_381_Fq2 J = X.squared();                           // J = X1^2
     const bls12_381_Fq2 E_squared = E.squared();                   // E_squared = E^2
 
-    current.X = A * (B-F);                                       // X3 = A * (B-F)
-    current.Y = G.squared() - (E_squared+E_squared+E_squared);   // Y3 = G^2 - 3*E^2
-    current.Z = B * H;                                           // Z3 = B * H
-    c.ell_0 = bls12_381_twist * I;                                 // ell_0 = xi * I
-    c.ell_VW = -H;                                               // ell_VW = - H (later: * yP)
-    c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
+    current.X = A * (B-F);                                         // X3 = A * (B-F)
+    current.Y = G.squared() - (E_squared+E_squared+E_squared);     // Y3 = G^2 - 3*E^2
+    current.Z = B * H;                                             // Z3 = B * H
+    c.ell_VW = bls12_381_twist * I;                                // ell_VW = xi * I
+    c.ell_VV = J+J+J;                                              // ell_VV = 3*J (later: * xP)
+    c.ell_0 = -H;                                                  // ell_0 = - H (later: * yP)
 }
 
-void mixed_addition_step_for_flipped_miller_loop(const bls12_381_G2 base,
+void mixed_addition_step_for_miller_loop(const bls12_381_G2 base,
                                                  bls12_381_G2 &current,
                                                  bls12_381_ate_ell_coeffs &c)
 {
     const bls12_381_Fq2 X1 = current.X, Y1 = current.Y, Z1 = current.Z;
     const bls12_381_Fq2 &x2 = base.X, &y2 = base.Y;
 
-    const bls12_381_Fq2 D = X1 - x2 * Z1;          // D = X1 - X2*Z1
-    const bls12_381_Fq2 E = Y1 - y2 * Z1;          // E = Y1 - Y2*Z1
-    const bls12_381_Fq2 F = D.squared();           // F = D^2
-    const bls12_381_Fq2 G = E.squared();           // G = E^2
-    const bls12_381_Fq2 H = D*F;                   // H = D*F
-    const bls12_381_Fq2 I = X1 * F;                // I = X1 * F
-    const bls12_381_Fq2 J = H + Z1*G - (I+I);      // J = H + Z1*G - (I+I)
+    const bls12_381_Fq2 D = X1 - x2 * Z1;             // D = X1 - X2*Z1
+    const bls12_381_Fq2 E = Y1 - y2 * Z1;             // E = Y1 - Y2*Z1
+    const bls12_381_Fq2 F = D.squared();              // F = D^2
+    const bls12_381_Fq2 G = E.squared();              // G = E^2
+    const bls12_381_Fq2 H = D*F;                      // H = D*F
+    const bls12_381_Fq2 I = X1 * F;                   // I = X1 * F
+    const bls12_381_Fq2 J = H + Z1*G - (I+I);         // J = H + Z1*G - (I+I)
 
-    current.X = D * J;                           // X3 = D*J
-    current.Y = E * (I-J)-(H * Y1);              // Y3 = E*(I-J)-(H*Y1)
-    current.Z = Z1 * H;                          // Z3 = Z1*H
-    c.ell_0 = bls12_381_twist * (E * x2 - D * y2); // ell_0 = xi * (E * X2 - D * Y2)
-    c.ell_VV = - E;                              // ell_VV = - E (later: * xP)
-    c.ell_VW = D;                                // ell_VW = D (later: * yP    )
+    current.X = D * J;                                // X3 = D*J
+    current.Y = E * (I-J)-(H * Y1);                   // Y3 = E*(I-J)-(H*Y1)
+    current.Z = Z1 * H;                               // Z3 = Z1*H
+    c.ell_VW = bls12_381_twist * (E * x2 - D * y2);   // ell_0 = xi * (E * X2 - D * Y2)
+    c.ell_VV = -E;                                   // ell_VV = - E (later: * xP)
+    c.ell_0 = D;                                      // ell_VW = D (later: * yP    )
 }
 
 bls12_381_ate_G1_precomp bls12_381_ate_precompute_G1(const bls12_381_G1& P)
@@ -327,32 +295,15 @@ bls12_381_ate_G2_precomp bls12_381_ate_precompute_G2(const bls12_381_G2& Q)
             continue;
         }
 
-        doubling_step_for_flipped_miller_loop(two_inv, R, c);
+        doubling_step_for_miller_loop(two_inv, R, c);
         result.coeffs.push_back(c);
 
         if (bit)
         {
-            mixed_addition_step_for_flipped_miller_loop(Qcopy, R, c);
+            mixed_addition_step_for_miller_loop(Qcopy, R, c);
             result.coeffs.push_back(c);
         }
     }
-
-    bls12_381_G2 Q1 = Qcopy.mul_by_q();
-    assert(Q1.Z == bls12_381_Fq2::one());
-    bls12_381_G2 Q2 = Q1.mul_by_q();
-    assert(Q2.Z == bls12_381_Fq2::one());
-
-    if (bls12_381_ate_is_loop_count_neg)
-    {
-        R.Y = - R.Y;
-    }
-    Q2.Y = - Q2.Y;
-
-    mixed_addition_step_for_flipped_miller_loop(Q1, R, c);
-    result.coeffs.push_back(c);
-
-    mixed_addition_step_for_flipped_miller_loop(Q2, R, c);
-    result.coeffs.push_back(c);
 
     leave_block("Call to bls12_381_ate_precompute_G2");
     return result;
@@ -401,12 +352,6 @@ bls12_381_Fq12 bls12_381_ate_miller_loop(const bls12_381_ate_G1_precomp &prec_P,
     {
     	f = f.inverse();
     }
-
-    c = prec_Q.coeffs[idx++];
-    f = f.mul_by_024(c.ell_0,prec_P.PY * c.ell_VW,prec_P.PX * c.ell_VV);
-
-    c = prec_Q.coeffs[idx++];
-    f = f.mul_by_024(c.ell_0,prec_P.PY * c.ell_VW,prec_P.PX * c.ell_VV);
 
     leave_block("Call to bls12_381_ate_miller_loop");
     return f;
@@ -464,18 +409,6 @@ bls12_381_Fq12 bls12_381_ate_double_miller_loop(const bls12_381_ate_G1_precomp &
     	f = f.inverse();
     }
 
-    bls12_381_ate_ell_coeffs c1 = prec_Q1.coeffs[idx];
-    bls12_381_ate_ell_coeffs c2 = prec_Q2.coeffs[idx];
-    ++idx;
-    f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-    f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
-
-    c1 = prec_Q1.coeffs[idx];
-    c2 = prec_Q2.coeffs[idx];
-    ++idx;
-    f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-    f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
-
     leave_block("Call to bls12_381_ate_double_miller_loop");
 
     return f;
@@ -495,7 +428,6 @@ bls12_381_GT bls12_381_ate_reduced_pairing(const bls12_381_G1 &P, const bls12_38
 {
     enter_block("Call to bls12_381_ate_reduced_pairing");
     const bls12_381_Fq12 f = bls12_381_ate_pairing(P, Q);
-    f.print();
     const bls12_381_GT result = bls12_381_final_exponentiation(f);
     leave_block("Call to bls12_381_ate_reduced_pairing");
     return result;

@@ -18,7 +18,6 @@
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
-#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/fields/fp12_2over3over2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
@@ -324,7 +323,6 @@ int main(void)
 
     printf("mnt4753:\n");
     mnt4753_pp::init_public_params();
-    // test_all_fields<mnt4753_pp>();
 
     printf("alt_bn128:\n");
     alt_bn128_pp::init_public_params();
@@ -338,23 +336,15 @@ int main(void)
     test_Frobenius<toy_curve_Fq6>();
     test_all_fields<toy_curve_pp>();
 
-/*
     printf("bls12_377:\n");
     bls12_377_pp::init_public_params();
     test_field<bls12_377_Fq6>();
     test_Frobenius<bls12_377_Fq6>();
     test_all_fields<bls12_377_pp>();
 
-    printf("bls12_381:\n");
-    bls12_381_pp::init_public_params();
-    test_field<bls12_381_Fq6>();
-    test_Frobenius<bls12_381_Fq6>();
-    test_all_fields<bls12_381_pp>();
-*/
-
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
-    // bn128_pp::init_public_params();
-    // test_field<Fr<bn128_pp> >();
-    // test_field<Fq<bn128_pp> >();
+    bn128_pp::init_public_params();
+    test_field<Fr<bn128_pp> >();
+    test_field<Fq<bn128_pp> >();
 #endif
 }

@@ -1,5 +1,5 @@
 # Curve MNT6753 
-Coda MNT6753 pairing-friendly curve (embedding degree `k=6`). I form a cycle with MNT4753.
+Coda MNT6753 pairing-friendly curve (embedding degree `k=6`). It forms a cycle with MNT4753.
 
 ### Progress:
 - [x] mnt6753_g1.cpp  
@@ -21,7 +21,7 @@ Coda MNT6753 pairing-friendly curve (embedding degree `k=6`). I form a cycle wit
 ## TODO:
 In `mnt6753_init.hpp`:
 
-* fill in `wnaf_window_table` for G1 and G2 
+* recompute optimal `wnaf_window_table` for G1 and G2 
 
-* fill in `fixed_base_exp_window_table` in G1 and G2
+* recompute optimal `fixed_base_exp_window_table` in G1 and G2
 

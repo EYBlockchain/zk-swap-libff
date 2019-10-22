@@ -390,9 +390,7 @@ std::ostream& operator<<(std::ostream &out, const pendulum_G1 &g)
 {
     pendulum_G1 copy(g);
     copy.to_affine_coordinates();
-    printf("copy.X_: ");
     copy.X_.print();
-    printf("copy.Y_: ");
     copy.Y_.print();
 
     out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
@@ -408,7 +406,6 @@ std::ostream& operator<<(std::ostream &out, const pendulum_G1 &g)
 
 std::istream& operator>>(std::istream &in, pendulum_G1 &g)
 {
-    printf("inside >>\n");
     char is_zero;
     pendulum_Fq tX, tY;
 
@@ -429,7 +426,6 @@ std::istream& operator>>(std::istream &in, pendulum_G1 &g)
     // y = +/- sqrt(x^3 + a*x + b)
     if (is_zero)
     {
-        printf("inside is_zero\n");
         pendulum_Fq tX2 = tX.squared();
         pendulum_Fq tY2 = (tX2 + pendulum_G1::coeff_a) * tX + pendulum_G1::coeff_b;
         tY = tY2.sqrt();

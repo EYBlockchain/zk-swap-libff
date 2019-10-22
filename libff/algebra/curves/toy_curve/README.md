@@ -8,26 +8,20 @@ A toy example of a Barreto-Naehrig pairing friendly-elliptic curve (embedding de
 - [x] TOY_CURVE_g2.hpp  
 - [x] TOY_CURVE_init.cpp  
 - [x] TOY_CURVE_init.hpp  
-- [ ] TOY_CURVE_pairing.cpp  
+- [x] TOY_CURVE_pairing.cpp  
 - [x] TOY_CURVE_pairing.hpp  
 - [x] TOY_CURVE_pp.cpp  
 - [x] TOY_CURVE_pp.hpp
 
 ## TODO:
-For optimal result change values in `TOY_CURVE_init.hpp` for:
+In `TOY_CURVE_init.hpp`:
 
-* `wnaf_window_table` for G1 and G2 
+* recompute optimal `wnaf_window_table` for G1 and G2 
 
-* `fixed_base_exp_window_table` in G1 and G2
-
-Implement ate pairing for the curve:
-
-* doubling step in miller loop
-
-* mixed addition step in miller loop
+* recompute optimal `fixed_base_exp_window_table` in G1 and G2
 
 ## Tests:
 - [x] algebra_field_test
 - [x] algebra_group_test
-- [ ] algebra_bilinearity_test
+- [x] algebra_bilinearity_test
 

@@ -21,9 +21,6 @@ A pairing-friendly curve (embedding degree `k=6`), constructed over MNT6 via Coc
 ## TODO:
 In `pendulum_init.hpp`:
 
-* fill in `wnaf_window_table` for G1 and G2 
+* recompute optimal `wnaf_window_table` for G1 and G2 
 
-* fill in `fixed_base_exp_window_table` in G1 and G2
-
-* double chek pairing parameters 
-
+* recompute optimal `fixed_base_exp_window_table` in G1 and G2

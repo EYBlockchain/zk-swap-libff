@@ -21,7 +21,6 @@
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
-#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 
 using namespace libff;
 
@@ -126,7 +125,7 @@ void test_mul_by_q()
     GroupT a = GroupT::random_element();
     GroupT b = GroupT::base_field_char()*a;
     GroupT c = a.mul_by_q();
-    assert( b == c);
+    assert(b == c);
 }
 
 template<typename GroupT>
@@ -137,13 +136,9 @@ void test_output()
     for (size_t i = 0; i < 100; ++i)
     {
         std::stringstream ss;
-        printf("g: ");
-        g.print();
         ss << g;
         GroupT gg;
         ss >> gg;
-        printf("gg: ");
-        gg.print();
         assert(g == gg);
         /* use a random point in next iteration */
         g = GroupT::random_element();
@@ -155,7 +150,6 @@ int main(void)
     printf("pendulum: \n");
     pendulum_pp::init_public_params();
     test_group<G1<pendulum_pp> >();
-    // test_output<G1<pendulum_pp> >();
     test_group<G2<pendulum_pp> >();
     test_output<G2<pendulum_pp> >();
     test_mul_by_q<G2<pendulum_pp> >();
@@ -163,7 +157,6 @@ int main(void)
     printf("sw6: \n");
     sw6_pp::init_public_params();
     test_group<G1<sw6_pp> >();
-    // test_output<G1<sw6_pp> >();
     test_group<G2<sw6_pp> >();
     test_output<G2<sw6_pp> >();
     test_mul_by_q<G2<sw6_pp> >();
@@ -171,7 +164,6 @@ int main(void)
     printf("sw6_bis: \n");
     sw6_bis_pp::init_public_params();
     test_group<G1<sw6_bis_pp> >();
-    // test_output<G1<sw6_bis_pp> >();
     test_group<G2<sw6_bis_pp> >();
     test_output<G2<sw6_bis_pp> >();
     test_mul_by_q<G2<sw6_bis_pp> >();
@@ -224,15 +216,6 @@ int main(void)
     test_output<G2<alt_bn128_pp> >();
     test_mul_by_q<G2<alt_bn128_pp> >();
 
-/*
-    printf("bls12_381: \n");
-    bls12_381_pp::init_public_params();
-    test_group<G1<bls12_381_pp> >();
-    test_output<G1<bls12_381_pp> >();
-    test_group<G2<bls12_381_pp> >();
-    test_output<G2<bls12_381_pp> >();
-    test_mul_by_q<G2<bls12_381_pp> >();
-
     printf("bls12_377: \n");
     bls12_377_pp::init_public_params();
     test_group<G1<bls12_377_pp> >();
@@ -240,7 +223,6 @@ int main(void)
     test_group<G2<bls12_377_pp> >();
     test_output<G2<bls12_377_pp> >();
     test_mul_by_q<G2<bls12_377_pp> >();
-*/
 
     printf("toy_curve: \n");
     toy_curve_pp::init_public_params();

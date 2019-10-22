@@ -1,5 +1,5 @@
 # Curve BLS12_377 
-Zexe ground pairing-friendly curve (embedding degree `k=12`).
+Zexe inner pairing-friendly curve (embedding degree `k=12`) that highli 2-adic w.r.t. both the subgroup order and the field characteristic.
 
 ### Progress:
 - [x] BLS12_377_g1.cpp  
@@ -16,9 +16,9 @@ Zexe ground pairing-friendly curve (embedding degree `k=12`).
 ## TODO:
 In `BLS12_377_init.hpp`:
 
-* fill in `wnaf_window_table` for G1 and G2 
+* recompute optimal `wnaf_window_table` for G1 and G2 
 
-* fill in `fixed_base_exp_window_table` in G1 and G2
+* recompute optimal `fixed_base_exp_window_table` in G1 and G2
 
 ## Tests:
 - [x] algebra_field_test
