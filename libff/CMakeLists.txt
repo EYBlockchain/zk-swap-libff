@@ -24,30 +24,79 @@ add_library(
   ff
   STATIC
 
+  common/double.cpp
+  common/profiling.cpp
+  common/utils.cpp
+
+  algebra/curves/toy_curve/toy_curve_g1.cpp
+  algebra/curves/toy_curve/toy_curve_g2.cpp
+  algebra/curves/toy_curve/toy_curve_init.cpp
+  algebra/curves/toy_curve/toy_curve_pairing.cpp
+  algebra/curves/toy_curve/toy_curve_pp.cpp
+
   algebra/curves/alt_bn128/alt_bn128_g1.cpp
   algebra/curves/alt_bn128/alt_bn128_g2.cpp
   algebra/curves/alt_bn128/alt_bn128_init.cpp
   algebra/curves/alt_bn128/alt_bn128_pairing.cpp
   algebra/curves/alt_bn128/alt_bn128_pp.cpp
+
   algebra/curves/edwards/edwards_g1.cpp
   algebra/curves/edwards/edwards_g2.cpp
   algebra/curves/edwards/edwards_init.cpp
   algebra/curves/edwards/edwards_pairing.cpp
   algebra/curves/edwards/edwards_pp.cpp
+
+  algebra/curves/mnt/mnt46_common.cpp
+
   algebra/curves/mnt/mnt4/mnt4_g1.cpp
   algebra/curves/mnt/mnt4/mnt4_g2.cpp
   algebra/curves/mnt/mnt4/mnt4_init.cpp
   algebra/curves/mnt/mnt4/mnt4_pairing.cpp
   algebra/curves/mnt/mnt4/mnt4_pp.cpp
-  algebra/curves/mnt/mnt46_common.cpp
+
   algebra/curves/mnt/mnt6/mnt6_g1.cpp
   algebra/curves/mnt/mnt6/mnt6_g2.cpp
   algebra/curves/mnt/mnt6/mnt6_init.cpp
   algebra/curves/mnt/mnt6/mnt6_pairing.cpp
   algebra/curves/mnt/mnt6/mnt6_pp.cpp
-  common/double.cpp
-  common/profiling.cpp
-  common/utils.cpp
+
+  algebra/curves/mnt753/mnt46753_common.cpp
+
+  algebra/curves/mnt753/mnt6753/mnt6753_g1.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_g2.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_init.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_pairing.cpp
+  algebra/curves/mnt753/mnt6753/mnt6753_pp.cpp
+
+  algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_g2.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_init.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_pairing.cpp
+  algebra/curves/mnt753/mnt4753/mnt4753_pp.cpp
+
+  algebra/curves/pendulum/pendulum_g1.cpp
+  algebra/curves/pendulum/pendulum_g2.cpp
+  algebra/curves/pendulum/pendulum_init.cpp
+  algebra/curves/pendulum/pendulum_pairing.cpp
+  algebra/curves/pendulum/pendulum_pp.cpp
+
+  algebra/curves/bls12_377/bls12_377_g1.cpp
+  algebra/curves/bls12_377/bls12_377_g2.cpp
+  algebra/curves/bls12_377/bls12_377_init.cpp
+  algebra/curves/bls12_377/bls12_377_pairing.cpp
+  algebra/curves/bls12_377/bls12_377_pp.cpp
+
+  algebra/curves/sw6/sw6_g1.cpp
+  algebra/curves/sw6/sw6_g2.cpp
+  algebra/curves/sw6/sw6_init.cpp
+  algebra/curves/sw6/sw6_pairing.cpp
+  algebra/curves/sw6/sw6_pp.cpp
+
+  algebra/curves/sw6_bis/sw6_bis_g1.cpp
+  algebra/curves/sw6_bis/sw6_bis_g2.cpp
+  algebra/curves/sw6_bis/sw6_bis_init.cpp
+  algebra/curves/sw6_bis/sw6_bis_pairing.cpp
+  algebra/curves/sw6_bis/sw6_bis_pp.cpp
 
   ${FF_EXTRASRCS}
 )
@@ -131,6 +180,7 @@ if ("${IS_LIBFF_PARENT}")
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_fields_test)
+  add_dependencies(check time_test)
 
   add_executable(
     multiexp_profile

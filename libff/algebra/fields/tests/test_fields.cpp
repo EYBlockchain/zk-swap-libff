@@ -4,14 +4,21 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/sw6/sw6_pp.hpp>
+#include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
+#include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
+#include <libff/algebra/curves/mnt753/mnt4753/mnt4753_pp.hpp>
 #include <libff/common/profiling.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+#include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
+#include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/fields/fp12_2over3over2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
 
@@ -123,6 +130,66 @@ void test_cyclotomic_squaring<Fqk<mnt4_pp> >()
 }
 
 template<>
+void test_cyclotomic_squaring<Fqk<mnt6753_pp> >()
+{
+    typedef Fqk<mnt6753_pp> FieldT;
+    assert(FieldT::extension_degree() % 2 == 0);
+    FieldT a = FieldT::random_element();
+    FieldT a_unitary = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
+    // beta = a^(q^(k/2)-1)
+    FieldT beta = a_unitary;
+    assert(beta.cyclotomic_squared() == beta.squared());
+}
+
+template<>
+void test_cyclotomic_squaring<Fqk<mnt4753_pp> >()
+{
+    typedef Fqk<mnt4753_pp> FieldT;
+    assert(FieldT::extension_degree() % 2 == 0);
+    FieldT a = FieldT::random_element();
+    FieldT a_unitary = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
+    // beta = a^(q^(k/2)-1)
+    FieldT beta = a_unitary;
+    assert(beta.cyclotomic_squared() == beta.squared());
+}
+
+template<>
+void test_cyclotomic_squaring<Fqk<pendulum_pp> >()
+{
+    typedef Fqk<pendulum_pp> FieldT;
+    assert(FieldT::extension_degree() % 2 == 0);
+    FieldT a = FieldT::random_element();
+    FieldT a_unitary = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
+    // beta = a^((q^(k/2)-1)*(q+1))
+    FieldT beta = a_unitary.Frobenius_map(1) * a_unitary;
+    assert(beta.cyclotomic_squared() == beta.squared());
+}
+
+template<>
+void test_cyclotomic_squaring<Fqk<sw6_bis_pp> >()
+{
+    typedef Fqk<sw6_bis_pp> FieldT;
+    assert(FieldT::extension_degree() % 2 == 0);
+    FieldT a = FieldT::random_element();
+    FieldT a_unitary = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
+    // beta = a^((q^(k/2)-1)*(q+1))
+    FieldT beta = a_unitary.Frobenius_map(1) * a_unitary;
+    assert(beta.cyclotomic_squared() == beta.squared());
+}
+
+template<>
+void test_cyclotomic_squaring<Fqk<sw6_pp> >()
+{
+    typedef Fqk<sw6_pp> FieldT;
+    assert(FieldT::extension_degree() % 2 == 0);
+    FieldT a = FieldT::random_element();
+    FieldT a_unitary = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
+    // beta = a^((q^(k/2)-1)*(q+1))
+    FieldT beta = a_unitary.Frobenius_map(1) * a_unitary;
+    assert(beta.cyclotomic_squared() == beta.squared());
+}
+
+template<>
 void test_cyclotomic_squaring<Fqk<mnt6_pp> >()
 {
     typedef Fqk<mnt6_pp> FieldT;
@@ -218,24 +285,62 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
+    printf("pendulum:\n");
+    pendulum_pp::init_public_params();
+    test_all_fields<pendulum_pp>();
+    test_cyclotomic_squaring<Fqk<pendulum_pp> >();
+
+    printf("sw6:\n");
+    sw6_pp::init_public_params();
+    test_all_fields<sw6_pp>();
+    test_cyclotomic_squaring<Fqk<sw6_pp> >();
+
+    printf("sw6_bis:\n");
+    sw6_bis_pp::init_public_params();
+    test_all_fields<sw6_bis_pp>();
+    test_cyclotomic_squaring<Fqk<sw6_bis_pp> >();
+
+    printf("edwards:\n");
     edwards_pp::init_public_params();
     test_all_fields<edwards_pp>();
     test_cyclotomic_squaring<Fqk<edwards_pp> >();
 
+    printf("mnt4:\n");
     mnt4_pp::init_public_params();
     test_all_fields<mnt4_pp>();
     test_Fp4_tom_cook<mnt4_Fq4>();
     test_two_squarings<Fqe<mnt4_pp> >();
     test_cyclotomic_squaring<Fqk<mnt4_pp> >();
 
+    printf("mnt6:\n");
     mnt6_pp::init_public_params();
     test_all_fields<mnt6_pp>();
     test_cyclotomic_squaring<Fqk<mnt6_pp> >();
 
+    printf("mnt6753:\n");
+    mnt6753_pp::init_public_params();
+    test_all_fields<mnt6753_pp>();
+
+    printf("mnt4753:\n");
+    mnt4753_pp::init_public_params();
+
+    printf("alt_bn128:\n");
     alt_bn128_pp::init_public_params();
     test_field<alt_bn128_Fq6>();
     test_Frobenius<alt_bn128_Fq6>();
     test_all_fields<alt_bn128_pp>();
+
+    printf("toy_curve:\n");
+    toy_curve_pp::init_public_params();
+    test_field<toy_curve_Fq6>();
+    test_Frobenius<toy_curve_Fq6>();
+    test_all_fields<toy_curve_pp>();
+
+    printf("bls12_377:\n");
+    bls12_377_pp::init_public_params();
+    test_field<bls12_377_Fq6>();
+    test_Frobenius<bls12_377_Fq6>();
+    test_all_fields<bls12_377_pp>();
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();
