@@ -363,7 +363,7 @@ toy_curve_G2 toy_curve_G2::mul_by_q() const
                       toy_curve_twist_mul_by_q_Y * (this->Y).Frobenius_map(1),
                       (this->Z).Frobenius_map(1));
 }
- 
+
 bool toy_curve_G2::is_well_formed() const
 {
     if (this->is_zero())

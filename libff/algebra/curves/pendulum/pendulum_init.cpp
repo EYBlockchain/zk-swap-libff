@@ -54,12 +54,12 @@ void init_pendulum_params()
     }
     pendulum_Fr::num_bits = 298;
     pendulum_Fr::euler = bigint_r("237961143084630662876674624826524225772562439276411757776633867869582323653704245279981568");
-    pendulum_Fr::s = 34; 
+    pendulum_Fr::s = 34;
     pendulum_Fr::t = bigint_r("27702323054502562488973446286577291993024111641153199339359284829066871159442729");
     pendulum_Fr::t_minus_1_over_2 = bigint_r("13851161527251281244486723143288645996512055820576599669679642414533435579721364");
     pendulum_Fr::multiplicative_generator = pendulum_Fr("10");
     pendulum_Fr::root_of_unity = pendulum_Fr("120638817826913173458768829485690099845377008030891618010109772937363554409782252579816313");
-    pendulum_Fr::nqr = pendulum_Fr("5"); 
+    pendulum_Fr::nqr = pendulum_Fr("5");
     pendulum_Fr::nqr_to_t = pendulum_Fr("406220604243090401056429458730298145937262552508985450684842547562990900634752279902740880");
 
      /* pendulum Fq parameters */
@@ -80,12 +80,12 @@ void init_pendulum_params()
     }
     pendulum_Fq::num_bits = 613;
     pendulum_Fq::euler = bigint_q("9525011398658945800469632452462467328208947540560817028093122024381905834792992016092014314740322130147061921911791308932935346736786095482862853852156410772988482538810743397461207143");
-    pendulum_Fq::s = 1; 
+    pendulum_Fq::s = 1;
     pendulum_Fq::t = bigint_q("9525011398658945800469632452462467328208947540560817028093122024381905834792992016092014314740322130147061921911791308932935346736786095482862853852156410772988482538810743397461207143");
     pendulum_Fq::t_minus_1_over_2 = bigint_q("4762505699329472900234816226231233664104473770280408514046561012190952917396496008046007157370161065073530960955895654466467673368393047741431426926078205386494241269405371698730603571");
     pendulum_Fq::multiplicative_generator = pendulum_Fq("3");
     pendulum_Fq::root_of_unity = pendulum_Fq("19050022797317891600939264904924934656417895081121634056186244048763811669585984032184028629480644260294123843823582617865870693473572190965725707704312821545976965077621486794922414286");
-    pendulum_Fq::nqr = pendulum_Fq("3"); 
+    pendulum_Fq::nqr = pendulum_Fq("3");
     pendulum_Fq::nqr_to_t = pendulum_Fq("19050022797317891600939264904924934656417895081121634056186244048763811669585984032184028629480644260294123843823582617865870693473572190965725707704312821545976965077621486794922414286");
 
     /* parameters for twist field Fq3 */
@@ -117,9 +117,9 @@ void init_pendulum_params()
     /* choice of short Weierstrass curve and its twist */
     pendulum_coeff_a = pendulum_Fq("0");
     pendulum_coeff_b = pendulum_Fq("3779136");
-    pendulum_G1::coeff_a = pendulum_coeff_a; 
+    pendulum_G1::coeff_a = pendulum_coeff_a;
     pendulum_G1::coeff_b = pendulum_coeff_b;
-    pendulum_twist = pendulum_Fq3(pendulum_Fq::zero(), pendulum_Fq::one(), pendulum_Fq::zero()); 
+    pendulum_twist = pendulum_Fq3(pendulum_Fq::zero(), pendulum_Fq::one(), pendulum_Fq::zero());
     pendulum_twist_coeff_a = pendulum_Fq3(pendulum_Fq::zero(), pendulum_Fq::zero(), pendulum_G1::coeff_a);
     pendulum_twist_coeff_b = pendulum_Fq3(pendulum_G1::coeff_b * pendulum_Fq3::non_residue, pendulum_Fq::zero(), pendulum_Fq::zero());
     pendulum_G2::twist = pendulum_twist;
@@ -224,7 +224,7 @@ void init_pendulum_params()
     pendulum_G2::wnaf_window_table.push_back(39);
     pendulum_G2::wnaf_window_table.push_back(109);
 
-    // TODO: fixed-base exponentiation table 
+    // TODO: fixed-base exponentiation table
     pendulum_G2::fixed_base_exp_window_table.resize(0);
     // window 1 is unbeaten in [-inf, 5.10]
     pendulum_G2::fixed_base_exp_window_table.push_back(1);

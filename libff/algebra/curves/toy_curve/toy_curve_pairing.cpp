@@ -156,7 +156,7 @@ toy_curve_Fq12 toy_curve_final_exponentiation_last_chunk(const toy_curve_Fq12 &e
       which equals
 
       result = elt^( 2z * ( 6z^2 + 3z + 1 ) * (q^4 - q^2 + 1)/r ).
- 
+
       Using the following addition chain:
 
       A = exp_by_neg_z(elt)  // = elt^(-z)

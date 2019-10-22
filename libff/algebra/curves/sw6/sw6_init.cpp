@@ -62,7 +62,7 @@ void init_sw6_params()
     sw6_Fr::nqr = sw6_Fr("5");
     sw6_Fr::nqr_to_t = sw6_Fr("33774956008227656219775876656288133547078610493828613777258829345740556592044969439504850374928261397247202212840");
     // Done with Fr
-    
+
     /* parameters for base field Fq */
     sw6_modulus_q = bigint_q("22369874298875696930346742206501054934775599465297184582183496627646774052458024540232479018147881220178054575403841904557897715222633333372134756426301062487682326574958588001132586331462553235407484089304633076250782629492557320825577");
     assert(sw6_Fq::modulus_is_valid());
@@ -219,7 +219,7 @@ void init_sw6_params()
     sw6_G2::wnaf_window_table.push_back(39);
     sw6_G2::wnaf_window_table.push_back(109);
 
-    // TODO: fixed-base exponentiation table 
+    // TODO: fixed-base exponentiation table
     sw6_G2::fixed_base_exp_window_table.resize(0);
     // window 1 is unbeaten in [-inf, 5.10]
     sw6_G2::fixed_base_exp_window_table.push_back(1);
