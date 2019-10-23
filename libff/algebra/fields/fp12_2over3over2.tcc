@@ -319,6 +319,44 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::mul_by_024(
 
 }
 
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::multiply_by_c014(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4)
+{
+    auto aa = a.c0;                                 // let mut aa = self.c0;
+    aa.multiply_by_c01(aa, c0, c1);                 // aa.mul_by_01(c0, c1);
+    auto bb = a.c1;                                 // let mut bb = self.c1;
+    bb.multiply_by_c1(bb, c4);                      // bb.mul_by_1(c4);
+
+
+    const auto o = c1 + c4;                         // let mut o = *c1;
+                                                    // o.add_assign(c4);
+    this->c1 = this->c1 + this->c0;                 // self.c1.add_assign(&self.c0);
+    this->c1.multiply_by_c01(this->c1, c0, o);      // self.c1.mul_by_01(c0, &o);
+    this->c1 = this->c1 - aa - bb;                  // self.c1.sub_assign(&aa);
+                                                    // self.c1.sub_assign(&bb);
+
+                                                    // self.c0 = bb;
+    this->c0 = mul_by_non_residue(bb) + aa;         // self.c0 = Self::mul_fp6_by_nonresidue(&self.c0);
+                                                    // self.c0.add_assign(&aa);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::multiply_by_c034(const my_Fp12 &x, const my_Fp2 &c0, const my_Fp2 &d0, const my_Fp2 &d1)
+{
+    const auto a = c0 * x.c0;
+
+    auto b = x.c1;
+    b.multiply_by_c01(b, d0, d1);
+
+    auto e = x.c0 + x.c1;
+    e.multiply_by_c01(e, c0 + d0, d1);
+
+    this->c1 = e - a - b;
+    this->c0 = a + mul_by_non_residue(b);
+}
+
+
 template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
 Fp12_2over3over2_model<n, modulus> operator^(const Fp12_2over3over2_model<n, modulus> &self, const bigint<m> &exponent)
 {

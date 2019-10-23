@@ -157,6 +157,32 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::Frobenius_map(unsigned 
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::multiply_by_c1(const Fp6_3over2_model<n,modulus> &a, const my_Fp2 &c1)
+{
+    my_Fp2 tmp1 = a.c1 + a.c2;
+    my_Fp2 tmp2 = a.c0 + a.c1;
+
+    this->c2 = a.c1 * c1;
+    this->c0 = ((c1 * tmp1) - this->c2).multiply_by_nonresidue();
+    this->c1 = (c1 * tmp2) - c2;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::multiply_by_c01(const my_Fp6 &a, const my_Fp2 &c0, const my_Fp2 & c1)
+{
+    const my_Fp2 tmp2 = a.c0 + a.c1;
+    const my_Fp2 tmp3 = a.c0 + a.c2;
+
+    const my_Fp2 a_a = c0 * a.c0;
+    const my_Fp2 b_b = c1 * a.c1;
+
+    this->c0 = ((c1 * (a.c1 + a.c2)) - b_b).multiply_by_nonresidue() + a_a;
+    this->c1 = ((c0 + c1) * tmp2) - a_a - b_b;
+    this->c2 = (c0 * tmp3) - a_a + b_b;
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
 template<mp_size_t m>
 Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::operator^(const bigint<m> &pow) const
 {

@@ -14,6 +14,7 @@
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
@@ -173,6 +174,11 @@ int main(void)
     bls12_377_pp::init_public_params();
     pairing_test<bls12_377_pp>();
     double_miller_loop_test<bls12_377_pp>();
+
+    printf("bls12_381:\n");
+    bls12_381_pp::init_public_params();
+    pairing_test<bls12_381_pp>();
+    double_miller_loop_test<bls12_381_pp>();
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();
