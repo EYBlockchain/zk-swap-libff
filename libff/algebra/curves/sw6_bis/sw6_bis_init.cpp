@@ -9,9 +9,9 @@ bigint<sw6_bis_q_limbs> sw6_bis_modulus_q;
 
 sw6_bis_Fq sw6_bis_coeff_a;
 sw6_bis_Fq sw6_bis_coeff_b;
-sw6_bis_Fq3 sw6_bis_twist;
-sw6_bis_Fq3 sw6_bis_twist_coeff_a;
-sw6_bis_Fq3 sw6_bis_twist_coeff_b;
+sw6_bis_Fq sw6_bis_twist;
+sw6_bis_Fq sw6_bis_twist_coeff_a;
+sw6_bis_Fq sw6_bis_twist_coeff_b;
 sw6_bis_Fq sw6_bis_twist_mul_by_a_c0;
 sw6_bis_Fq sw6_bis_twist_mul_by_a_c1;
 sw6_bis_Fq sw6_bis_twist_mul_by_a_c2;
@@ -120,12 +120,13 @@ void init_sw6_bis_params()
     sw6_bis_coeff_b = sw6_bis_Fq("5428247903343207843304490009542442997117969973913823318164330064320104021081180430153151788629347606889122435541645149581251622306618937027915190165889600280602116819284463614893841480114928247406042232431052188770336204942290254");
     sw6_bis_G1::coeff_a = sw6_bis_coeff_a;
     sw6_bis_G1::coeff_b = sw6_bis_coeff_b;
-    sw6_bis_twist = sw6_bis_Fq3(sw6_bis_Fq::zero(), sw6_bis_Fq::one(), sw6_bis_Fq::zero());
-    sw6_bis_twist_coeff_a = sw6_bis_Fq3(sw6_bis_Fq::zero(), sw6_bis_Fq::zero(), sw6_bis_G1::coeff_a);
-    sw6_bis_twist_coeff_b = sw6_bis_Fq3(sw6_bis_G1::coeff_b * sw6_bis_Fq3::non_residue, sw6_bis_Fq::zero(), sw6_bis_Fq::zero());
+    sw6_bis_twist = sw6_bis_Fq("2");
+    sw6_bis_twist_coeff_a = sw6_bis_Fq("0");
+    sw6_bis_twist_coeff_b = sw6_bis_coeff_b * sw6_bis_twist.inverse();
     sw6_bis_G2::twist = sw6_bis_twist;
     sw6_bis_G2::coeff_a = sw6_bis_twist_coeff_a;
     sw6_bis_G2::coeff_b = sw6_bis_twist_coeff_b;
+    /*
     sw6_bis_twist_mul_by_a_c0 = sw6_bis_G1::coeff_a * sw6_bis_Fq3::non_residue;
     sw6_bis_twist_mul_by_a_c1 = sw6_bis_G1::coeff_a * sw6_bis_Fq3::non_residue;
     sw6_bis_twist_mul_by_a_c2 = sw6_bis_G1::coeff_a;
@@ -134,6 +135,7 @@ void init_sw6_bis_params()
     sw6_bis_twist_mul_by_b_c2 = sw6_bis_G1::coeff_b * sw6_bis_Fq3::non_residue;
     sw6_bis_twist_mul_by_q_X = sw6_bis_Fq("4922464560225523242118178942575080391082002530232324381063048548642823052024664478336818169867474395270858391911405337707247735739826664939444490469542109391530482826728203582549674992333383150446779312029624171857054392282775648");
     sw6_bis_twist_mul_by_q_Y = sw6_bis_Fq("6891450384315732539396789682275657542479668912536150109513790160209623422243491736087683183289411687640864567753786613451161759120554247759349511699125301598951605099378508850372543631423596795951899700429969112842764913119068298");
+    */
 
 
     /* choice of group G1 */
@@ -201,17 +203,13 @@ void init_sw6_bis_params()
 
 
     /* choice of group G2 */
-    sw6_bis_G2::G2_zero = sw6_bis_G2(sw6_bis_Fq3::zero(),
-                             sw6_bis_Fq3::one(),
-                             sw6_bis_Fq3::zero());
+    sw6_bis_G2::G2_zero = sw6_bis_G2(sw6_bis_Fq::zero(),
+                             sw6_bis_Fq::one(),
+                             sw6_bis_Fq::zero());
 
-    sw6_bis_G2::G2_one = sw6_bis_G2(sw6_bis_Fq3(sw6_bis_Fq("0"),
-                                    sw6_bis_Fq("0"),
-                                    sw6_bis_Fq("2762333537634180879188497831180460021045024768964216860077326831768282319295307213190468027456390916014688653832658199933857161399195589808528083537985014526923490693736135387257722421714776391535494333278083320743942589072320465")),
-                            sw6_bis_Fq3(sw6_bis_Fq("6381154894827903503049202516448541497527668437176080964419566768101131101581568586920051373882212504439521771700091985568521381031252030757451435249323352844301649858691839209117065545550058565983491476754520157763374643574911714"),
-                                    sw6_bis_Fq("0"),
-                                    sw6_bis_Fq("0")),
-                            sw6_bis_Fq3::one());
+    sw6_bis_G2::G2_one = sw6_bis_G2(sw6_bis_Fq("1927341549153056983371408111997351328548042968294978494834969000189026293470304035599977459204729965261542271846761005860772318331500545981223571608893367688275941823171057596120108160299213215340721220851366036352671341352249730"),
+                            sw6_bis_Fq("988160213279301327537093898080958991631483821653520960539670031194912136121196584793641908436600053710383785250623801783648818754319576937736789876694975120988447685258299559803481966175853081087509810000309313805186497509015542"),
+                            sw6_bis_Fq::one());
 
 
     // TODO: wNAF window table

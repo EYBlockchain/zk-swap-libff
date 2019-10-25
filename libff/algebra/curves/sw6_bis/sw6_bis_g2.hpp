@@ -14,7 +14,7 @@ std::istream& operator>>(std::istream &, sw6_bis_G2&);
 
 class sw6_bis_G2 {
 private:
-    sw6_bis_Fq3 X_, Y_, Z_;
+    sw6_bis_Fq X_, Y_, Z_;
 public:
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
@@ -24,24 +24,24 @@ public:
     static std::vector<size_t> fixed_base_exp_window_table;
     static sw6_bis_G2 G2_zero;
     static sw6_bis_G2 G2_one;
-    static sw6_bis_Fq3 twist;
-    static sw6_bis_Fq3 coeff_a;
-    static sw6_bis_Fq3 coeff_b;
+    static sw6_bis_Fq twist;
+    static sw6_bis_Fq coeff_a;
+    static sw6_bis_Fq coeff_b;
 
     typedef sw6_bis_Fq base_field;
-    typedef sw6_bis_Fq3 twist_field;
+    typedef sw6_bis_Fq twist_field;
     typedef sw6_bis_Fr scalar_field;
 
     // using projective coordinates
     sw6_bis_G2();
-    sw6_bis_G2(const sw6_bis_Fq3& X, const sw6_bis_Fq3& Y, const sw6_bis_Fq3& Z) : X_(X), Y_(Y), Z_(Z) {}
+    sw6_bis_G2(const sw6_bis_Fq& X, const sw6_bis_Fq& Y, const sw6_bis_Fq& Z) : X_(X), Y_(Y), Z_(Z) {}
 
-    sw6_bis_Fq3 X() const { return X_; }
-    sw6_bis_Fq3 Y() const { return Y_; }
-    sw6_bis_Fq3 Z() const { return Z_; }
+    sw6_bis_Fq X() const { return X_; }
+    sw6_bis_Fq Y() const { return Y_; }
+    sw6_bis_Fq Z() const { return Z_; }
 
-    static sw6_bis_Fq3 mul_by_a(const sw6_bis_Fq3 &elt);
-    static sw6_bis_Fq3 mul_by_b(const sw6_bis_Fq3 &elt);
+    static sw6_bis_Fq mul_by_a(const sw6_bis_Fq &elt);
+    static sw6_bis_Fq mul_by_b(const sw6_bis_Fq &elt);
 
     void print() const;
     void print_coordinates() const;
