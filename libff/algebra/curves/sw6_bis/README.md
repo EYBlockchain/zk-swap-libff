@@ -24,3 +24,5 @@ In `sw6_bis_init.hpp`:
 * recompute optimal `wnaf_window_table` for G1 and G2
 
 * recompute optimal `fixed_base_exp_window_table` in G1 and G2
+
+* use a sextic twist to sw6_bis so that elements in `G2` will be in `Fq`
