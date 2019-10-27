@@ -40,6 +40,12 @@ add_library(
   algebra/curves/alt_bn128/alt_bn128_pairing.cpp
   algebra/curves/alt_bn128/alt_bn128_pp.cpp
 
+  algebra/curves/bw12_446/bw12_446_g1.cpp
+  algebra/curves/bw12_446/bw12_446_g2.cpp
+  algebra/curves/bw12_446/bw12_446_init.cpp
+  algebra/curves/bw12_446/bw12_446_pairing.cpp
+  algebra/curves/bw12_446/bw12_446_pp.cpp
+
   algebra/curves/edwards/edwards_g1.cpp
   algebra/curves/edwards/edwards_g2.cpp
   algebra/curves/edwards/edwards_init.cpp
@@ -91,12 +97,6 @@ add_library(
   algebra/curves/sw6/sw6_init.cpp
   algebra/curves/sw6/sw6_pairing.cpp
   algebra/curves/sw6/sw6_pp.cpp
-
-  algebra/curves/sw6_bis/sw6_bis_g1.cpp
-  algebra/curves/sw6_bis/sw6_bis_g2.cpp
-  algebra/curves/sw6_bis/sw6_bis_init.cpp
-  algebra/curves/sw6_bis/sw6_bis_pairing.cpp
-  algebra/curves/sw6_bis/sw6_bis_pp.cpp
 
   ${FF_EXTRASRCS}
 )

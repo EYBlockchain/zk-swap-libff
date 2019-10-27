@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
@@ -165,6 +166,7 @@ void test_cyclotomic_squaring<Fqk<pendulum_pp> >()
     assert(beta.cyclotomic_squared() == beta.squared());
 }
 
+/*
 template<>
 void test_cyclotomic_squaring<Fqk<sw6_bis_pp> >()
 {
@@ -176,6 +178,7 @@ void test_cyclotomic_squaring<Fqk<sw6_bis_pp> >()
     FieldT beta = a_unitary.Frobenius_map(1) * a_unitary;
     assert(beta.cyclotomic_squared() == beta.squared());
 }
+*/
 
 template<>
 void test_cyclotomic_squaring<Fqk<sw6_pp> >()
@@ -285,6 +288,13 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
+
+    printf("bw12_446:\n");
+    bw12_446_pp::init_public_params();
+    test_field<bw12_446_Fq6>();
+    test_Frobenius<bw12_446_Fq6>();
+    test_all_fields<bw12_446_pp>();
+
     printf("pendulum:\n");
     pendulum_pp::init_public_params();
     test_all_fields<pendulum_pp>();
@@ -295,10 +305,12 @@ int main(void)
     test_all_fields<sw6_pp>();
     test_cyclotomic_squaring<Fqk<sw6_pp> >();
 
+    /*
     printf("sw6_bis:\n");
     sw6_bis_pp::init_public_params();
     test_all_fields<sw6_bis_pp>();
     test_cyclotomic_squaring<Fqk<sw6_bis_pp> >();
+    */
 
     printf("edwards:\n");
     edwards_pp::init_public_params();

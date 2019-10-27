@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
@@ -115,6 +116,11 @@ int main(void)
 {
     start_profiling();
 
+    printf("bw12_446:\n");
+    bw12_446_pp::init_public_params();
+    pairing_test<bw12_446_pp>();
+    double_miller_loop_test<bw12_446_pp>();
+
     printf("pendulum:\n");
     pendulum_pp::init_public_params();
     pairing_test<pendulum_pp>();
@@ -125,10 +131,12 @@ int main(void)
     pairing_test<sw6_pp>();
     double_miller_loop_test<sw6_pp>();
 
+    /*
     printf("sw6_bis:\n");
     sw6_bis_pp::init_public_params();
     pairing_test<sw6_bis_pp>();
     double_miller_loop_test<sw6_bis_pp>();
+    */
 
     printf("edwards:\n");
     edwards_pp::init_public_params();
