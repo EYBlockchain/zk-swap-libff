@@ -24,6 +24,44 @@
 using namespace libff;
 
 template<typename ppT>
+void pairing_batching_test()
+{
+    // instantiate... 
+    Fr<ppT> VKx_poly = (Fr<ppT>::random_element());
+    Fr<ppT> VKy_poly = (Fr<ppT>::random_element());
+    Fr<ppT> VKz_poly = (Fr<ppT>::random_element());
+
+    Fr<ppT> A1_poly = Fr<ppT>::random_element();
+    Fr<ppT> B1_poly = Fr<ppT>::random_element();
+    Fr<ppT> C1_poly = (A1_poly * B1_poly - VKx_poly * VKy_poly) * VKz_poly.inverse();
+    Fr<ppT> A2_poly = Fr<ppT>::random_element();
+    Fr<ppT> B2_poly = Fr<ppT>::random_element();
+    Fr<ppT> C2_poly = (A2_poly * B2_poly - VKx_poly * VKy_poly) * VKz_poly.inverse();
+
+    // Proof
+    G1<ppT> A1 = A1_poly * G1<ppT>::one(); 
+    G2<ppT> B1 = B1_poly * G2<ppT>::one();   
+    G1<ppT> C1 = C1_poly * G1<ppT>::one();
+    G1<ppT> A2 = A2_poly * G1<ppT>::one(); 
+    G2<ppT> B2 = B2_poly * G2<ppT>::one();   
+    G1<ppT> C2 = C2_poly * G1<ppT>::one();
+    
+    // Verification key
+    G1<ppT> VKx = VKx_poly * G1<ppT>::one(); 
+    G2<ppT> VKy = VKy_poly * G2<ppT>::one();   
+    G2<ppT> VKz = VKz_poly * G2<ppT>::one();
+
+    // Verifier equation
+    printf("\nverifier checks proof#1: e(A1,B1)=e(VK1,VK2)*e(C1,VK3)\n");
+    assert(ppT::reduced_pairing(A1, B1) == ppT::reduced_pairing(VKx, VKy) * ppT::reduced_pairing(C1, VKz));
+    printf("\nverifier checks proof#2: e(A2,B2)=e(VK1,VK2)*e(C2,VK3)\n");
+    assert(ppT::reduced_pairing(A2, B2) == ppT::reduced_pairing(VKx, VKy) * ppT::reduced_pairing(C2, VKz));
+    // TODO: need some randomness?
+    printf("\nverifier checks a batching of proof#1 and proof#2: e(A1,B1)*e(A2,B2)=e(2*VK1,VK2)*e(C1+C2,VK3)\n");
+    assert(ppT::reduced_pairing(A1, B1) * ppT::reduced_pairing(A2, B2) == ppT::reduced_pairing(Fr<ppT>("2")*VKx, VKy) * ppT::reduced_pairing(C1+C2, VKz));
+}
+
+template<typename ppT>
 void pairing_test()
 {
     GT<ppT> GT_one = GT<ppT>::one();
@@ -116,6 +154,7 @@ int main(void)
 {
     start_profiling();
 
+    /*
     printf("bw12_446:\n");
     bw12_446_pp::init_public_params();
     pairing_test<bw12_446_pp>();
@@ -131,12 +170,10 @@ int main(void)
     pairing_test<sw6_pp>();
     double_miller_loop_test<sw6_pp>();
 
-    /*
     printf("sw6_bis:\n");
     sw6_bis_pp::init_public_params();
     pairing_test<sw6_bis_pp>();
     double_miller_loop_test<sw6_bis_pp>();
-    */
 
     printf("edwards:\n");
     edwards_pp::init_public_params();
@@ -176,15 +213,19 @@ int main(void)
     toy_curve_pp::init_public_params();
     pairing_test<toy_curve_pp>();
     double_miller_loop_test<toy_curve_pp>();
+    */
 
     printf("bls12_377:\n");
     bls12_377_pp::init_public_params();
-    pairing_test<bls12_377_pp>();
-    double_miller_loop_test<bls12_377_pp>();
+    // pairing_test<bls12_377_pp>();
+    // double_miller_loop_test<bls12_377_pp>();
+    pairing_batching_test<bls12_377_pp>();
 
+    /*
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
 #endif
+    */
 }
