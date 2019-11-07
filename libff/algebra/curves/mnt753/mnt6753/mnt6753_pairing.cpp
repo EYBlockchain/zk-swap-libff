@@ -1,3 +1,13 @@
+/** @file
+ *****************************************************************************
+ Implementation of interfaces for pairing operations on MNT6.
+ See mnt6753_pairing.hpp .
+ *****************************************************************************
+ * @author     This file is part of libff, developed by SCIPR Lab
+ *             and contributors (see AUTHORS).
+ * @copyright  MIT license (see LICENSE file)
+ *****************************************************************************/
+
 #include <cassert>
 
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_g1.hpp>
@@ -361,16 +371,11 @@ mnt6753_Fq6 mnt6753_affine_ate_miller_loop(const mnt6753_affine_ate_G1_precomput
 
     }
 
-    /* TODO: maybe handle neg
     if (mnt6753_ate_is_loop_count_neg)
     {
-    	// TODO:
-    	mnt6753_affine_ate_coeffs ac = prec_Q.coeffs[idx++];
-    	mnt6753_Fq6 g_RnegR_at_P = mnt6753_Fq6(prec_P.PY_twist_squared,
-                                          - prec_P.PX * c.gamma_twist + c.gamma_X - c.old_RY);
-    	f = (f * g_RnegR_at_P).inverse();
+    	f = f.unitary_inverse();
     }
-    */
+
 
     leave_block("Call to mnt6753_affine_ate_miller_loop");
 
