@@ -11,6 +11,7 @@
 #include <libff/algebra/curves/mnt/mnt6/mnt6_g1.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_g2.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_init.hpp>
+#include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 
 namespace libff {
 
@@ -123,7 +124,7 @@ void init_mnt6_params()
     /* choice of short Weierstrass curve and its twist */
     mnt6_G1::coeff_a = mnt6_Fq("11");
     mnt6_G1::coeff_b = mnt6_Fq("106700080510851735677967319632585352256454251201367587890185989362936000262606668469523074");
-    mnt6_twist = mnt6_Fq3(mnt6_Fq::zero(), mnt6_Fq::one(), mnt6_Fq::zero());
+    mnt6_pp::Fq3_twist = mnt6_twist = mnt6_Fq3(mnt6_Fq::zero(), mnt6_Fq::one(), mnt6_Fq::zero());
     mnt6_twist_coeff_a = mnt6_Fq3(mnt6_Fq::zero(), mnt6_Fq::zero(),
                                   mnt6_G1::coeff_a);
     mnt6_twist_coeff_b = mnt6_Fq3(mnt6_G1::coeff_b * mnt6_Fq3::non_residue,

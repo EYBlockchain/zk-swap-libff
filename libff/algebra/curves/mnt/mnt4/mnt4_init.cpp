@@ -11,6 +11,7 @@
 #include <libff/algebra/curves/mnt/mnt4/mnt4_g1.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_g2.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_init.hpp>
+#include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 
 namespace libff {
 
@@ -114,7 +115,7 @@ void init_mnt4_params()
     /* choice of short Weierstrass curve and its twist */
     mnt4_G1::coeff_a = mnt4_Fq("2");
     mnt4_G1::coeff_b = mnt4_Fq("423894536526684178289416011533888240029318103673896002803341544124054745019340795360841685");
-    mnt4_twist = mnt4_Fq2(mnt4_Fq::zero(), mnt4_Fq::one());
+    mnt4_pp::Fq2_twist = mnt4_twist = mnt4_Fq2(mnt4_Fq::zero(), mnt4_Fq::one());
     mnt4_twist_coeff_a = mnt4_Fq2(mnt4_G1::coeff_a * mnt4_Fq2::non_residue, mnt4_Fq::zero());
     mnt4_twist_coeff_b = mnt4_Fq2(mnt4_Fq::zero(), mnt4_G1::coeff_b * mnt4_Fq2::non_residue);
     mnt4_G2::twist = mnt4_twist;

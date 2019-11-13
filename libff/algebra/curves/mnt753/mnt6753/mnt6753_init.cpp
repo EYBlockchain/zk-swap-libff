@@ -1,6 +1,7 @@
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_g1.hpp>
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_g2.hpp>
 #include <libff/algebra/curves/mnt753/mnt6753/mnt6753_init.hpp>
+#include <libff/algebra/curves/mnt753/mnt6753/mnt6753_pp.hpp>
 
 namespace libff {
 
@@ -116,7 +117,7 @@ void init_mnt6753_params()
     /* choice of short Weierstrass curve and its twist */
     mnt6753_G1::coeff_a = mnt6753_Fq("11");
     mnt6753_G1::coeff_b = mnt6753_Fq("11625908999541321152027340224010374716841167701783584648338908235410859267060079819722747939267925389062611062156601938166010098747920378738927832658133625454260115409075816187555055859490253375704728027944315501122723426879114");
-    mnt6753_twist = mnt6753_Fq3(mnt6753_Fq::zero(), mnt6753_Fq::one(), mnt6753_Fq::zero());
+    mnt6753_pp::Fq3_twist = mnt6753_twist = mnt6753_Fq3(mnt6753_Fq::zero(), mnt6753_Fq::one(), mnt6753_Fq::zero());
     mnt6753_twist_coeff_a = mnt6753_Fq3(mnt6753_Fq::zero(), mnt6753_Fq::zero(),
                                   mnt6753_G1::coeff_a);
     mnt6753_twist_coeff_b = mnt6753_Fq3(mnt6753_G1::coeff_b * mnt6753_Fq3::non_residue,

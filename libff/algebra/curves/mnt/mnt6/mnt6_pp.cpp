@@ -15,6 +15,8 @@
 
 namespace libff {
 
+mnt6_Fq3 mnt6_pp::Fq3_twist;
+
 void mnt6_pp::init_public_params()
 {
     init_mnt6_params();

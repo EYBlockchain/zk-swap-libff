@@ -15,6 +15,8 @@
 
 namespace libff {
 
+mnt4_Fq2 mnt4_pp::Fq2_twist;
+
 void mnt4_pp::init_public_params()
 {
     init_mnt4_params();
