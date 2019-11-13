@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/test_curve/test_curve_pp.hpp>
 #include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
@@ -154,6 +155,11 @@ int main(void)
 {
     start_profiling();
 
+    printf("test_curve:\n");
+    test_curve_pp::init_public_params();
+    pairing_test<test_curve_pp>();
+    double_miller_loop_test<test_curve_pp>();
+
     /*
     printf("bw12_446:\n");
     bw12_446_pp::init_public_params();
@@ -213,15 +219,13 @@ int main(void)
     toy_curve_pp::init_public_params();
     pairing_test<toy_curve_pp>();
     double_miller_loop_test<toy_curve_pp>();
-    */
 
     printf("bls12_377:\n");
     bls12_377_pp::init_public_params();
-    // pairing_test<bls12_377_pp>();
-    // double_miller_loop_test<bls12_377_pp>();
+    pairing_test<bls12_377_pp>();
+    double_miller_loop_test<bls12_377_pp>();
     pairing_batching_test<bls12_377_pp>();
 
-    /*
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();
     pairing_test<bn128_pp>();
