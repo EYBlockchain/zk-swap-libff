@@ -2,6 +2,8 @@
 
 namespace libff {
 
+mnt4753_Fq2 mnt4753_pp::Fq2_twist;
+
 void mnt4753_pp::init_public_params()
 {
     init_mnt4753_params();

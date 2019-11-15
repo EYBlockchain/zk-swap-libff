@@ -23,6 +23,14 @@ public:
     typedef mnt6753_Fq6 Fqk_type;
     typedef mnt6753_GT GT_type;
 
+    static constexpr mp_size_t r_limbs = mnt46753_B_limbs;
+    static constexpr mp_size_t q_limbs = mnt46753_A_limbs;
+    static constexpr bigint<mnt6753_q_limbs> &final_exponent_last_chunk_abs_of_w0 = mnt6753_final_exponent_last_chunk_abs_of_w0;
+    static constexpr bool &final_exponent_last_chunk_is_w0_neg = mnt6753_final_exponent_last_chunk_is_w0_neg;
+    static constexpr bigint<mnt6753_q_limbs> &final_exponent_last_chunk_w1 = mnt6753_final_exponent_last_chunk_w1;
+
+    static mnt6753_Fq3 Fq3_twist;
+
     static const bool has_affine_pairing = true;
 
     static void init_public_params();

@@ -34,6 +34,14 @@ public:
     typedef mnt4_Fq4 Fqk_type;
     typedef mnt4_GT GT_type;
 
+    static mnt4_Fq2 Fq2_twist;
+
+    static constexpr mp_size_t r_limbs = mnt46_A_limbs;
+    static constexpr mp_size_t q_limbs = mnt46_B_limbs;
+    static constexpr bigint<mnt4_q_limbs> &final_exponent_last_chunk_abs_of_w0 = mnt4_final_exponent_last_chunk_abs_of_w0;
+    static constexpr bool &final_exponent_last_chunk_is_w0_neg = mnt4_final_exponent_last_chunk_is_w0_neg;
+    static constexpr bigint<mnt4_q_limbs> &final_exponent_last_chunk_w1 = mnt4_final_exponent_last_chunk_w1;
+
     static const bool has_affine_pairing = true;
 
     static void init_public_params();

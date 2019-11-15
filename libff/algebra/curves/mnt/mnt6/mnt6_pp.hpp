@@ -36,6 +36,14 @@ public:
 
     static const bool has_affine_pairing = true;
 
+    static constexpr mp_size_t r_limbs = mnt46_B_limbs;
+    static constexpr mp_size_t q_limbs = mnt46_A_limbs;
+    static constexpr bigint<mnt6_q_limbs> &final_exponent_last_chunk_abs_of_w0 = mnt6_final_exponent_last_chunk_abs_of_w0;
+    static constexpr bool &final_exponent_last_chunk_is_w0_neg = mnt6_final_exponent_last_chunk_is_w0_neg;
+    static constexpr bigint<mnt6_q_limbs> &final_exponent_last_chunk_w1 = mnt6_final_exponent_last_chunk_w1;
+
+    static mnt6_Fq3 Fq3_twist;
+
     static void init_public_params();
     static mnt6_GT final_exponentiation(const mnt6_Fq6 &elt);
     static mnt6_G1_precomp precompute_G1(const mnt6_G1 &P);
