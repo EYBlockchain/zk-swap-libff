@@ -1,10 +1,7 @@
 /** @file
  *****************************************************************************
-
  Implementation of interfaces for initializing MNT6.
-
  See mnt6_init.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
@@ -14,6 +11,7 @@
 #include <libff/algebra/curves/mnt/mnt6/mnt6_g1.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_g2.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_init.hpp>
+#include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 
 namespace libff {
 
@@ -70,6 +68,7 @@ void init_mnt6_params()
     mnt6_Fr::root_of_unity = mnt6_Fr("264706250571800080758069302369654305530125675521263976034054878017580902343339784464690243");
     mnt6_Fr::nqr = mnt6_Fr("17");
     mnt6_Fr::nqr_to_t = mnt6_Fr("264706250571800080758069302369654305530125675521263976034054878017580902343339784464690243");
+    mnt6_Fr::small_subgroup_defined = false;
 
     /* parameters for base field Fq */
     mnt6_modulus_q = bigint_q("475922286169261325753349249653048451545124878552823515553267735739164647307408490559963137");
@@ -95,6 +94,7 @@ void init_mnt6_params()
     mnt6_Fq::root_of_unity = mnt6_Fq("120638817826913173458768829485690099845377008030891618010109772937363554409782252579816313");
     mnt6_Fq::nqr = mnt6_Fq("5");
     mnt6_Fq::nqr_to_t = mnt6_Fq("406220604243090401056429458730298145937262552508985450684842547562990900634752279902740880");
+    mnt6_Fq::small_subgroup_defined = false;
 
     /* parameters for twist field Fq3 */
     mnt6_Fq3::euler = bigint<3*mnt6_q_limbs>("53898680178554951715397245154796036139463891589001478629193136369124915637741423690184935056189295242736833704290747216410090671804540908400210778934462129625646263095398323485795557551284190224166851571615834194321908328559167529729507439069424158411618728014749106176");
@@ -124,7 +124,7 @@ void init_mnt6_params()
     /* choice of short Weierstrass curve and its twist */
     mnt6_G1::coeff_a = mnt6_Fq("11");
     mnt6_G1::coeff_b = mnt6_Fq("106700080510851735677967319632585352256454251201367587890185989362936000262606668469523074");
-    mnt6_twist = mnt6_Fq3(mnt6_Fq::zero(), mnt6_Fq::one(), mnt6_Fq::zero());
+    mnt6_pp::Fq3_twist = mnt6_twist = mnt6_Fq3(mnt6_Fq::zero(), mnt6_Fq::one(), mnt6_Fq::zero());
     mnt6_twist_coeff_a = mnt6_Fq3(mnt6_Fq::zero(), mnt6_Fq::zero(),
                                   mnt6_G1::coeff_a);
     mnt6_twist_coeff_b = mnt6_Fq3(mnt6_G1::coeff_b * mnt6_Fq3::non_residue,

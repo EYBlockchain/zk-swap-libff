@@ -2,6 +2,8 @@
 
 namespace libff {
 
+mnt6753_Fq3 mnt6753_pp::Fq3_twist;
+
 void mnt6753_pp::init_public_params()
 {
     init_mnt6753_params();

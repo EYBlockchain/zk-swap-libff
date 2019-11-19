@@ -1,10 +1,7 @@
 /** @file
  *****************************************************************************
-
  Implementation of interfaces for initializing MNT4.
-
  See mnt4_init.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
@@ -14,6 +11,7 @@
 #include <libff/algebra/curves/mnt/mnt4/mnt4_g1.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_g2.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_init.hpp>
+#include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 
 namespace libff {
 
@@ -68,6 +66,7 @@ void init_mnt4_params()
     mnt4_Fr::root_of_unity = mnt4_Fr("120638817826913173458768829485690099845377008030891618010109772937363554409782252579816313");
     mnt4_Fr::nqr = mnt4_Fr("5");
     mnt4_Fr::nqr_to_t = mnt4_Fr("406220604243090401056429458730298145937262552508985450684842547562990900634752279902740880");
+    mnt4_Fr::small_subgroup_defined = false;
 
     /* parameters for base field Fq */
     mnt4_modulus_q = bigint_q("475922286169261325753349249653048451545124879242694725395555128576210262817955800483758081");
@@ -93,6 +92,7 @@ void init_mnt4_params()
     mnt4_Fq::root_of_unity = mnt4_Fq("264706250571800080758069302369654305530125675521263976034054878017580902343339784464690243");
     mnt4_Fq::nqr = mnt4_Fq("17");
     mnt4_Fq::nqr_to_t = mnt4_Fq("264706250571800080758069302369654305530125675521263976034054878017580902343339784464690243");
+    mnt4_Fq::small_subgroup_defined = false;
 
     /* parameters for twist field Fq2 */
     mnt4_Fq2::euler = bigint<2*mnt4_q_limbs>("113251011236288135098249345249154230895914381858788918106847214243419142422924133497460817468249854833067260038985710370091920860837014281886963086681184370139950267830740466401280");
@@ -115,7 +115,7 @@ void init_mnt4_params()
     /* choice of short Weierstrass curve and its twist */
     mnt4_G1::coeff_a = mnt4_Fq("2");
     mnt4_G1::coeff_b = mnt4_Fq("423894536526684178289416011533888240029318103673896002803341544124054745019340795360841685");
-    mnt4_twist = mnt4_Fq2(mnt4_Fq::zero(), mnt4_Fq::one());
+    mnt4_pp::Fq2_twist = mnt4_twist = mnt4_Fq2(mnt4_Fq::zero(), mnt4_Fq::one());
     mnt4_twist_coeff_a = mnt4_Fq2(mnt4_G1::coeff_a * mnt4_Fq2::non_residue, mnt4_Fq::zero());
     mnt4_twist_coeff_b = mnt4_Fq2(mnt4_Fq::zero(), mnt4_G1::coeff_b * mnt4_Fq2::non_residue);
     mnt4_G2::twist = mnt4_twist;
