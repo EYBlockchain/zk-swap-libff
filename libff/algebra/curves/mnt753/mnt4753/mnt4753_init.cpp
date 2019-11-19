@@ -15,8 +15,8 @@
 
 namespace libff {
 
-// bigint<mnt4753_r_limbs> mnt4753_modulus_r = mnt46_modulus_A;
-// bigint<mnt4753_q_limbs> mnt4753_modulus_q = mnt46_modulus_B;
+// bigint<mnt4753_r_limbs> mnt4753_modulus_r = mnt46753_modulus_A;
+// bigint<mnt4753_q_limbs> mnt4753_modulus_q = mnt46753_modulus_B;
 
 mnt4753_Fq2 mnt4753_twist;
 mnt4753_Fq2 mnt4753_twist_coeff_a;
