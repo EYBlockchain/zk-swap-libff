@@ -1,5 +1,5 @@
 # Curve BW12_446
-A new optimized Brezing-Weng pairing-friendly curve of embedding degree `k=12` that conservatively targets 128-bit security level. The subgroup is highly 2-adic ('s=37').
+A new optimized Brezing-Weng pairing-friendly curve of embedding degree `k=12` that conservatively targets 128-bit security level. The subgroup is highly 2-adic (`s=37).
 *source*: Family 17 choice (b) in [this paper](https://eprint.iacr.org/2019/555.pdf).
 
 ### Progress:
