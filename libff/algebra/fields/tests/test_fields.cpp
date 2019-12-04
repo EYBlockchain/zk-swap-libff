@@ -4,7 +4,6 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include <libff/algebra/curves/test_curve/test_curve_pp.hpp>
 #include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
@@ -289,13 +288,6 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
-    printf("test_curve:\n");
-    test_curve_pp::init_public_params();
-    test_field<test_curve_Fq6>();
-    test_Frobenius<test_curve_Fq6>();
-    test_all_fields<test_curve_pp>();
-
-    /*
     printf("bw12_446:\n");
     bw12_446_pp::init_public_params();
     test_field<bw12_446_Fq6>();
@@ -312,10 +304,12 @@ int main(void)
     test_all_fields<sw6_pp>();
     test_cyclotomic_squaring<Fqk<sw6_pp> >();
 
+    /*
     printf("sw6_bis:\n");
     sw6_bis_pp::init_public_params();
     test_all_fields<sw6_bis_pp>();
     test_cyclotomic_squaring<Fqk<sw6_bis_pp> >();
+    */
 
     printf("edwards:\n");
     edwards_pp::init_public_params();
@@ -364,5 +358,4 @@ int main(void)
     test_field<Fr<bn128_pp> >();
     test_field<Fq<bn128_pp> >();
 #endif
-    */
 }

@@ -4,7 +4,6 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include <libff/algebra/curves/test_curve/test_curve_pp.hpp>
 #include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
@@ -148,14 +147,6 @@ void test_output()
 
 int main(void)
 {
-    printf("test_curve: \n");
-    test_curve_pp::init_public_params();
-    test_group<G1<test_curve_pp> >();
-    test_group<G2<test_curve_pp> >();
-    test_output<G2<test_curve_pp> >();
-    test_mul_by_q<G2<test_curve_pp> >();
-
-    /*
     printf("bw12_446: \n");
     bw12_446_pp::init_public_params();
     test_group<G1<bw12_446_pp> >();
@@ -255,5 +246,4 @@ int main(void)
     test_group<G2<bn128_pp> >();
     test_output<G2<bn128_pp> >();
 #endif
-    */
 }

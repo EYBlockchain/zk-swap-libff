@@ -4,7 +4,6 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include <libff/algebra/curves/test_curve/test_curve_pp.hpp>
 #include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
@@ -27,7 +26,7 @@ using namespace libff;
 template<typename ppT>
 void pairing_batching_test()
 {
-    // instantiate... 
+    // instantiate...
     Fr<ppT> VKx_poly = (Fr<ppT>::random_element());
     Fr<ppT> VKy_poly = (Fr<ppT>::random_element());
     Fr<ppT> VKz_poly = (Fr<ppT>::random_element());
@@ -40,16 +39,16 @@ void pairing_batching_test()
     Fr<ppT> C2_poly = (A2_poly * B2_poly - VKx_poly * VKy_poly) * VKz_poly.inverse();
 
     // Proof
-    G1<ppT> A1 = A1_poly * G1<ppT>::one(); 
-    G2<ppT> B1 = B1_poly * G2<ppT>::one();   
+    G1<ppT> A1 = A1_poly * G1<ppT>::one();
+    G2<ppT> B1 = B1_poly * G2<ppT>::one();
     G1<ppT> C1 = C1_poly * G1<ppT>::one();
-    G1<ppT> A2 = A2_poly * G1<ppT>::one(); 
-    G2<ppT> B2 = B2_poly * G2<ppT>::one();   
+    G1<ppT> A2 = A2_poly * G1<ppT>::one();
+    G2<ppT> B2 = B2_poly * G2<ppT>::one();
     G1<ppT> C2 = C2_poly * G1<ppT>::one();
-    
+
     // Verification key
-    G1<ppT> VKx = VKx_poly * G1<ppT>::one(); 
-    G2<ppT> VKy = VKy_poly * G2<ppT>::one();   
+    G1<ppT> VKx = VKx_poly * G1<ppT>::one();
+    G2<ppT> VKy = VKy_poly * G2<ppT>::one();
     G2<ppT> VKz = VKz_poly * G2<ppT>::one();
 
     // Verifier equation
@@ -155,12 +154,6 @@ int main(void)
 {
     start_profiling();
 
-    printf("test_curve:\n");
-    test_curve_pp::init_public_params();
-    pairing_test<test_curve_pp>();
-    double_miller_loop_test<test_curve_pp>();
-
-    /*
     printf("bw12_446:\n");
     bw12_446_pp::init_public_params();
     pairing_test<bw12_446_pp>();
@@ -231,5 +224,4 @@ int main(void)
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
 #endif
-    */
 }

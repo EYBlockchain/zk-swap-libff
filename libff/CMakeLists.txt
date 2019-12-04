@@ -28,12 +28,6 @@ add_library(
   common/profiling.cpp
   common/utils.cpp
 
-  algebra/curves/test_curve/test_curve_g1.cpp
-  algebra/curves/test_curve/test_curve_g2.cpp
-  algebra/curves/test_curve/test_curve_init.cpp
-  algebra/curves/test_curve/test_curve_pairing.cpp
-  algebra/curves/test_curve/test_curve_pp.cpp
-
   algebra/curves/toy_curve/toy_curve_g1.cpp
   algebra/curves/toy_curve/toy_curve_g2.cpp
   algebra/curves/toy_curve/toy_curve_init.cpp
