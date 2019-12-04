@@ -21,6 +21,7 @@
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 
 using namespace libff;
 
@@ -222,7 +223,14 @@ int main(void)
     test_output<G1<bls12_377_pp> >();
     test_group<G2<bls12_377_pp> >();
     test_output<G2<bls12_377_pp> >();
-    test_mul_by_q<G2<bls12_377_pp> >();
+    //test_mul_by_q<G2<bls12_377_pp> >();
+
+    printf("bls12_381: \n");
+    bls12_381_pp::init_public_params();
+    test_group<G1<bls12_381_pp> >();
+    test_output<G1<bls12_381_pp> >();
+    test_group<G2<bls12_381_pp> >();
+    test_output<G2<bls12_381_pp> >();
 
     printf("toy_curve: \n");
     toy_curve_pp::init_public_params();

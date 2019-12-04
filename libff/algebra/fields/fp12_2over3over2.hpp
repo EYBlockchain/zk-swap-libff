@@ -40,6 +40,7 @@ public:
     typedef Fp_model<n, modulus> my_Fp;
     typedef Fp2_model<n, modulus> my_Fp2;
     typedef Fp6_3over2_model<n, modulus> my_Fp6;
+    typedef Fp12_2over3over2_model<n, modulus> my_Fp12;
 
     static Fp2_model<n, modulus> non_residue;
     static Fp2_model<n, modulus> Frobenius_coeffs_c1[12]; // non_residue^((modulus^i-1)/6) for i=0,...,11
@@ -72,6 +73,9 @@ public:
     Fp12_2over3over2_model cyclotomic_squared() const;
 
     Fp12_2over3over2_model mul_by_024(const my_Fp2 &ell_0, const my_Fp2 &ell_VW, const my_Fp2 &ell_VV) const;
+    void multiply_by_c034(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4);
+    void multiply_by_c014(const my_Fp12 &a, const my_Fp2 &c0, const my_Fp2 &c1, const my_Fp2 &c4);
+
 
     static my_Fp6 mul_by_non_residue(const my_Fp6 &elt);
 

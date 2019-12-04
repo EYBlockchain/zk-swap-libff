@@ -120,6 +120,13 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::squared_complex() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus> Fp2_model<n,modulus>::multiply_by_nonresidue() const
+{
+    // TODO: use faster implementation customised for specific Fq2 and Fq non-residues
+    return *this * nqr;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::inverse() const
 {
     const my_Fp &a = this->c0, &b = this->c1;

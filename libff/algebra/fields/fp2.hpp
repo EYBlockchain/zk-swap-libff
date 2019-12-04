@@ -71,6 +71,7 @@ public:
     Fp2_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
     Fp2_model squared_karatsuba() const;
     Fp2_model squared_complex() const;
+    Fp2_model<n,modulus> multiply_by_nonresidue() const;
 
     template<mp_size_t m>
     Fp2_model operator^(const bigint<m> &other) const;
