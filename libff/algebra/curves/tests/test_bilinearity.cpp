@@ -154,15 +154,26 @@ int main(void)
 {
     start_profiling();
 
+    printf("edwards:\n");
+    edwards_pp::init_public_params();
+    pairing_test<edwards_pp>();
+    double_miller_loop_test<edwards_pp>();
+
+    printf("alt_bn128:\n");
+    alt_bn128_pp::init_public_params();
+    pairing_test<alt_bn128_pp>();
+    double_miller_loop_test<alt_bn128_pp>();
+
     printf("bw12_446:\n");
     bw12_446_pp::init_public_params();
     pairing_test<bw12_446_pp>();
     double_miller_loop_test<bw12_446_pp>();
 
-    printf("pendulum:\n");
-    pendulum_pp::init_public_params();
-    pairing_test<pendulum_pp>();
-    double_miller_loop_test<pendulum_pp>();
+    printf("bls12_377:\n");
+    bls12_377_pp::init_public_params();
+    pairing_test<bls12_377_pp>();
+    double_miller_loop_test<bls12_377_pp>();
+    pairing_batching_test<bls12_377_pp>();
 
     printf("sw6:\n");
     sw6_pp::init_public_params();
@@ -174,10 +185,11 @@ int main(void)
     pairing_test<sw6_bis_pp>();
     double_miller_loop_test<sw6_bis_pp>();
 
-    printf("edwards:\n");
-    edwards_pp::init_public_params();
-    pairing_test<edwards_pp>();
-    double_miller_loop_test<edwards_pp>();
+    printf("mnt4:\n");
+    mnt4_pp::init_public_params();
+    pairing_test<mnt4_pp>();
+    double_miller_loop_test<mnt4_pp>();
+    affine_pairing_test<mnt4_pp>();
 
     printf("mnt6:\n");
     mnt6_pp::init_public_params();
@@ -185,11 +197,10 @@ int main(void)
     double_miller_loop_test<mnt6_pp>();
     affine_pairing_test<mnt6_pp>();
 
-    printf("mnt4:\n");
-    mnt4_pp::init_public_params();
-    pairing_test<mnt4_pp>();
-    double_miller_loop_test<mnt4_pp>();
-    affine_pairing_test<mnt4_pp>();
+    printf("pendulum:\n");
+    pendulum_pp::init_public_params();
+    pairing_test<pendulum_pp>();
+    double_miller_loop_test<pendulum_pp>();
 
     printf("mnt4753:\n");
     mnt4753_pp::init_public_params();
@@ -203,21 +214,10 @@ int main(void)
     double_miller_loop_test<mnt6753_pp>();
     affine_pairing_test<mnt6753_pp>();
 
-    printf("alt_bn128:\n");
-    alt_bn128_pp::init_public_params();
-    pairing_test<alt_bn128_pp>();
-    double_miller_loop_test<alt_bn128_pp>();
-
     printf("toy_curve:\n");
     toy_curve_pp::init_public_params();
     pairing_test<toy_curve_pp>();
     double_miller_loop_test<toy_curve_pp>();
-
-    printf("bls12_377:\n");
-    bls12_377_pp::init_public_params();
-    pairing_test<bls12_377_pp>();
-    double_miller_loop_test<bls12_377_pp>();
-    pairing_batching_test<bls12_377_pp>();
 
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     bn128_pp::init_public_params();
