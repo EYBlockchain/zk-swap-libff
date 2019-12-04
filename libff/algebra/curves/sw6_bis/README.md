@@ -1,5 +1,11 @@
-# Curve sw6_bis
-An alternative curve to Zexe's SW6 (slightly faster). A pairing-friendly curve (embedding degree `k=6`), constructed over BLS12_377 via Cocks-Pinch method.
+# Curve SW6_bis
+An alternative curve to Zexe's `SW6`. A pairing-friendly curve (embedding degree `k=6`), constructed over `BLS12_377` via modified Cocks-Pinch method.
+
+It has 3 enhacements over `SW6`:
+- Smaller field size (`761` bits vs. `782` bits, or in Montgemery domain `768` bits vs. `832` bits)
+- Smaller `G2` representation (coordinates over `Fq` vs. coordinates over `Fq^3`, thanks to the use of sextic twist vs. use of quadratic twist)
+- Optimized final exponentiation (polynomial representation of `q` vs. N/A)
+- use of GLV fast multiplication (polynomial representation of `q` vs. N/A)
 
 ### Progress:
 - [x] sw6_bis_g1.cpp
@@ -21,8 +27,12 @@ An alternative curve to Zexe's SW6 (slightly faster). A pairing-friendly curve (
 ## TODO:
 In `sw6_bis_init.hpp`:
 
-* recompute optimal `wnaf_window_table` for G1 and G2
+* [ ] fill in `wnaf_window_table` for G1 and G2
 
-* recompute optimal `fixed_base_exp_window_table` in G1 and G2
+* [ ] fill in `fixed_base_exp_window_table` in G1 and G2
 
-* use a sextic twist to sw6_bis so that elements in `G2` will be in `Fq`
+* [ ] implement and use the sextic twist
+
+* [ ] implement optimized final exponentiation
+
+* [ ] implement GLV fast multiplication

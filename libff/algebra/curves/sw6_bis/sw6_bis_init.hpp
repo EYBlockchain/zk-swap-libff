@@ -23,10 +23,10 @@ typedef Fp3_model<sw6_bis_q_limbs, sw6_bis_modulus_q> sw6_bis_Fq3;
 typedef Fp6_2over3_model<sw6_bis_q_limbs, sw6_bis_modulus_q> sw6_bis_Fq6;
 typedef sw6_bis_Fq6 sw6_bis_GT;
 
-// parameters for twisted short Weierstrass curve E'/Fq : y^2 = x^3 + (b / twist)
-extern sw6_bis_Fq sw6_bis_twist;
-extern sw6_bis_Fq sw6_bis_twist_coeff_a;
-extern sw6_bis_Fq sw6_bis_twist_coeff_b;
+// parameters for twisted short Weierstrass curve E'/Fq3 : y^2 = x^3 + (a * twist^2) * x + (b * twist^3)
+extern sw6_bis_Fq3 sw6_bis_twist;
+extern sw6_bis_Fq3 sw6_bis_twist_coeff_a;
+extern sw6_bis_Fq3 sw6_bis_twist_coeff_b;
 extern sw6_bis_Fq sw6_bis_twist_mul_by_a_c0;
 extern sw6_bis_Fq sw6_bis_twist_mul_by_a_c1;
 extern sw6_bis_Fq sw6_bis_twist_mul_by_a_c2;

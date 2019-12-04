@@ -209,7 +209,6 @@ sw6_bis_GT sw6_bis_final_exponentiation(const sw6_bis_Fq6 &elt)
     const sw6_bis_Fq6 elt_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt, elt_inv);
     const sw6_bis_Fq6 elt_inv_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt_inv, elt);
     sw6_bis_GT result = sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk, elt_inv_to_first_chunk);
-    // sw6_bis_GT result = elt^sw6_bis_final_exponent;
     leave_block("Call to sw6_bis_final_exponentiation");
 
     return result;
