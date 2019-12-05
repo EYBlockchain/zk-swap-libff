@@ -46,6 +46,7 @@ public:
     // using projective coordinates
     mnt6_G2();
     mnt6_G2(const mnt6_Fq3& X, const mnt6_Fq3& Y, const mnt6_Fq3& Z) : X_(X), Y_(Y), Z_(Z) {}
+    mnt6_G2(const mnt6_Fq3& X, const mnt6_Fq3& Y) : X_(X), Y_(Y), Z_(mnt6_Fq3::one()) {}
 
     mnt6_Fq3 X() const { return X_; }
     mnt6_Fq3 Y() const { return Y_; }

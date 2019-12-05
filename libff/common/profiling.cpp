@@ -55,8 +55,6 @@ long long start_cpu_time, last_cpu_time;
 
 void start_profiling()
 {
-    printf("Reset time counters for profiling\n");
-
     last_time = start_time = get_nsec_time();
     last_cpu_time = start_cpu_time = get_nsec_cpu_time();
 }
