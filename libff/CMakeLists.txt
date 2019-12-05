@@ -40,6 +40,12 @@ add_library(
   algebra/curves/alt_bn128/alt_bn128_pairing.cpp
   algebra/curves/alt_bn128/alt_bn128_pp.cpp
 
+  algebra/curves/bw12_446/bw12_446_g1.cpp
+  algebra/curves/bw12_446/bw12_446_g2.cpp
+  algebra/curves/bw12_446/bw12_446_init.cpp
+  algebra/curves/bw12_446/bw12_446_pairing.cpp
+  algebra/curves/bw12_446/bw12_446_pp.cpp
+
   algebra/curves/edwards/edwards_g1.cpp
   algebra/curves/edwards/edwards_g2.cpp
   algebra/curves/edwards/edwards_init.cpp

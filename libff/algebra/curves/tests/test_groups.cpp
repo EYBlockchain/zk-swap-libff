@@ -4,6 +4,7 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
 #include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
@@ -17,7 +18,6 @@
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
 #include <sstream>
-
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
@@ -147,12 +147,36 @@ void test_output()
 
 int main(void)
 {
-    printf("pendulum: \n");
-    pendulum_pp::init_public_params();
-    test_group<G1<pendulum_pp> >();
-    test_group<G2<pendulum_pp> >();
-    test_output<G2<pendulum_pp> >();
-    test_mul_by_q<G2<pendulum_pp> >();
+    printf("edwards: \n");
+    edwards_pp::init_public_params();
+    test_group<G1<edwards_pp> >();
+    test_output<G1<edwards_pp> >();
+    test_group<G2<edwards_pp> >();
+    test_output<G2<edwards_pp> >();
+    test_mul_by_q<G2<edwards_pp> >();
+
+    printf("alt_bn128: \n");
+    alt_bn128_pp::init_public_params();
+    test_group<G1<alt_bn128_pp> >();
+    test_output<G1<alt_bn128_pp> >();
+    test_group<G2<alt_bn128_pp> >();
+    test_output<G2<alt_bn128_pp> >();
+    test_mul_by_q<G2<alt_bn128_pp> >();
+
+    printf("bw12_446: \n");
+    bw12_446_pp::init_public_params();
+    test_group<G1<bw12_446_pp> >();
+    test_group<G2<bw12_446_pp> >();
+    test_output<G2<bw12_446_pp> >();
+    test_mul_by_q<G2<bw12_446_pp> >();
+
+    printf("bls12_377: \n");
+    bls12_377_pp::init_public_params();
+    test_group<G1<bls12_377_pp> >();
+    test_output<G1<bls12_377_pp> >();
+    test_group<G2<bls12_377_pp> >();
+    test_output<G2<bls12_377_pp> >();
+    test_mul_by_q<G2<bls12_377_pp> >();
 
     printf("sw6: \n");
     sw6_pp::init_public_params();
@@ -167,14 +191,6 @@ int main(void)
     test_group<G2<sw6_bis_pp> >();
     test_output<G2<sw6_bis_pp> >();
     test_mul_by_q<G2<sw6_bis_pp> >();
-
-    printf("edwards: \n");
-    edwards_pp::init_public_params();
-    test_group<G1<edwards_pp> >();
-    test_output<G1<edwards_pp> >();
-    test_group<G2<edwards_pp> >();
-    test_output<G2<edwards_pp> >();
-    test_mul_by_q<G2<edwards_pp> >();
 
     printf("mnt4: \n");
     mnt4_pp::init_public_params();
@@ -192,6 +208,13 @@ int main(void)
     test_output<G2<mnt6_pp> >();
     test_mul_by_q<G2<mnt6_pp> >();
 
+    printf("pendulum: \n");
+    pendulum_pp::init_public_params();
+    test_group<G1<pendulum_pp> >();
+    test_group<G2<pendulum_pp> >();
+    test_output<G2<pendulum_pp> >();
+    test_mul_by_q<G2<pendulum_pp> >();
+
     printf("mnt6753: \n");
     mnt6753_pp::init_public_params();
     test_group<G1<mnt6753_pp> >();
@@ -207,22 +230,6 @@ int main(void)
     test_group<G2<mnt4753_pp> >();
     test_output<G2<mnt4753_pp> >();
     test_mul_by_q<G2<mnt4753_pp> >();
-
-    printf("alt_bn128: \n");
-    alt_bn128_pp::init_public_params();
-    test_group<G1<alt_bn128_pp> >();
-    test_output<G1<alt_bn128_pp> >();
-    test_group<G2<alt_bn128_pp> >();
-    test_output<G2<alt_bn128_pp> >();
-    test_mul_by_q<G2<alt_bn128_pp> >();
-
-    printf("bls12_377: \n");
-    bls12_377_pp::init_public_params();
-    test_group<G1<bls12_377_pp> >();
-    test_output<G1<bls12_377_pp> >();
-    test_group<G2<bls12_377_pp> >();
-    test_output<G2<bls12_377_pp> >();
-    test_mul_by_q<G2<bls12_377_pp> >();
 
     printf("toy_curve: \n");
     toy_curve_pp::init_public_params();
