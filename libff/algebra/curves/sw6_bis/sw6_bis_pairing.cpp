@@ -164,21 +164,319 @@ std::istream& operator>>(std::istream& in, sw6_bis_ate_G2_precomp &prec_Q)
     return in;
 }
 
+sw6_bis_Fq6 sw6_bis_exp_by_z(const sw6_bis_Fq6 &elt)
+{
+  enter_block("Call to sw6_bis_exp_by_z");
+
+  sw6_bis_Fq6 result = elt.cyclotomic_exp(sw6_bis_final_exponent_z);
+  if (sw6_bis_final_exponent_is_z_neg)
+  {
+    result = result.unitary_inverse();
+  }
+
+  leave_block("Call to sw6_bis_exp_by_z");
+
+  return result;
+}
+
 /* final exponentiations */
 
-sw6_bis_Fq6 sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt, const sw6_bis_Fq6 &elt_inv)
+sw6_bis_Fq6 sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt)
 {
     enter_block("Call to sw6_bis_final_exponentiation_last_chunk");
-    const sw6_bis_Fq6 elt_q = elt.Frobenius_map(1);
-    sw6_bis_Fq6 w1_part = elt_q.cyclotomic_exp(sw6_bis_final_exponent_last_chunk_w1);
-    sw6_bis_Fq6 w0_part;
-    if (sw6_bis_final_exponent_last_chunk_is_w0_neg)
-    {
-    	w0_part = elt_inv.cyclotomic_exp(sw6_bis_final_exponent_last_chunk_abs_of_w0);
-    } else {
-    	w0_part = elt.cyclotomic_exp(sw6_bis_final_exponent_last_chunk_abs_of_w0);
-    }
-    sw6_bis_Fq6 result = w1_part * w0_part;
+    /*
+     * R0(x) := (-103*x^7 + 70*x^6 + 269*x^5 - 197*x^4 - 314*x^3 - 73*x^2 - 263*x - 220)
+     * R1(x) := (103*x^9 - 276*x^8 + 77*x^7 + 492*x^6 - 445*x^5 - 65*x^4 + 452*x^3 - 181*x^2 + 34*x + 229)
+     *
+     * La dernière partie de l'exponentiation finale est
+     * f^R0(u)*(f^p)^R1(u) avec R0 et R1 ci-dessus et f^p est un Frobenius dans GF(p^6).
+     *
+     * ++ powers of f
+     * A0 = f^2 (2)
+     * B0 = A0^2 (4)
+     * C0 = B0^2 (8)
+     * D0 = C0^2 (16)
+     * E0 = D0^2 (32)
+     * F0 = E0^2 (64)
+     * G0 = F0^2 (128)
+     * H0 = G0*F0 (192)
+     * I0 = H0*D0 (208)
+     * J0 = I0*C0 (216)
+     * (R0) K0 = J0*B0 (220)
+     * L0 = K0*C0 (228)
+     * (R1) M0 = L0*f (229)
+     *
+     * ++ powers of f^z
+     * A1 = exp_by_z(A0) (2z)
+     * B1 = exp_by_z(E0) (32z)
+     * (R1) C1 = A1*B1        (34z)
+     * D1 = exp_by_z(M0) (229z)
+     * (R0) E1 = D1*C1        (263z)
+     * F1 = A1^2         (4z)
+     * G1 = exp_by_z(f)  (z)
+     * H1 = F1*G1        (5z)
+     *
+     * ++ powers of f^(z^2)
+     * A2 = exp_by_z(C1) (34z^2)
+     * B2 = C1^2         (68z^2)
+     * C2 = exp_by_z(H1) (5z^2)
+     * (R0) D2 = C2*B2        (73z^2)
+     * E2 = D2^2         (146z^2)
+     * F2 = E2*A2        (180z^2)
+     * G2 = exp_by_z(G1) (z^2)
+     * H2 = G2*F2        (181z^2)
+     * (R1) H2_inv = H2.inverse()        (-181z^2)
+     * I2 = H2*D2        (254z^2)
+     *
+     * ++ powers of f^(z^3)
+     * A3 = exp_by_z(I2) (254z^3)
+     * B3 = exp_by_z(A2) (34z^3)
+     * C3 = exp_by_z(C2) (5z^3)
+     * D3 = C3^2         (10z^3)
+     * E3 = D3*C3        (15z^3)
+     * F3 = exp_by_z(G2) (z^3)
+     * G3 = F3*E3        (16z^3)
+     * (R0) H3 = G3*A3        (314z^3)
+     * I3 = B3^2         (68z^3)
+     * J3 = I3^2         (136z^3)
+     * K3 = F3^2         (2z^3)
+     * L3 = K3*J3        (138z^3)
+     * (R1) M3 = H3*L3        (452z^3)
+     * N3 = E3^2         (30z^3)
+     * O3 = N3*B3        (64z^3)
+     *
+     * ++ powers of f^(z^4)
+     * A4 = exp_by_z(F3) (z^4)
+     * B4 = A4^2         (2z^4)
+     * C4 = exp_by_z(O3) (64z^4)
+     * D4 = C4*A4        (65z^4)
+     * (R1) D4_inv = D4.inverse()        (-65z^4)
+     * E4 = D4^2         (130z^4)
+     * F4 = E4*D4        (195z^4)
+     * (R0) G4 = F4*B4        (197z^4)
+     * H4 = G4^2         (260z^4)
+     * I4 = B4^2         (4z^4)
+     * J4 = exp_by_z(C3) (5z^4)
+     * K4 = J4*I4        (9z^4)
+     * L4 = K4*H4        (269z^4)
+     *
+     * ++ powers of f^(z^5)
+     * A5 = exp_by_z(L4) (269z^5)
+     * (R0) A5_inv = A5.inverse() (-269z^5)
+     * B5 = exp_by_z(F4) (195z^5)
+     * C5 = B5^2         (390z^5)
+     * E5 = exp_by_z(K4) (9z^5)
+     * F5 = E5^2         (18z^5)
+     * G5 = F5^2         (36z^5)
+     * H5 = G5*F5        (54z^5)
+     * I5 = exp_by_z(A4) (z^5)
+     * J5 = I5*H5        (55z^5)
+     * K5 = J5*C5        (445z^5)
+     * (R1) K5_inv = K5.inverse()        (-445z^5)
+     * L5 = J5*E5        (63z^5)
+     * M5 = exp_by_z(J4) (5z^5)
+     * N5 = M5*L5        (68z^5)
+     *
+     * ++ powers of f^(z^6)
+     * A6 = exp_by_z(N5) (68z^6)
+     * B6 = exp_by_z(I5) (z^6)
+     * C6 = B5^2         (2z^6)
+     * D6 = C5*A5        (70z^6)
+     * (R0) D6_inv = D6.inverse() (70z^6)
+     * E6 = exp_by_z(K5) (445z^6)
+     * F6 = exp_by_z(F5) (18z^6)
+     * G6 = F6^2         (36z^6)
+     * H6 = exp_by_z(E5) (9z^6)
+     * I6 = H6*G6        (45z^6)
+     * J6 = I6*C6        (47z^6)
+     * (R1) K6 = J6*E6        (492z^6)
+     * L6 = J6*F6        (65z^6)
+     * M6 = C6^2         (4z^6)
+     * N6 = M6*B6        (5z^6)
+     *
+     * ++ powers of f^(z^7)
+     * A7 = exp_by_z(J6) (47z^7)
+     * B7 = A7^2         (94z^7)
+     * C7 = exp_by_z(H6) (9z^7)
+     * (R0) D7 = C7*B7        (103z^7)
+     * E7 = exp_by_z(L6) (65z^7)
+     * F7 = exp_by_z(N6) (5z^7)
+     * G7 = E7*F7        (70z^7)
+     * H7 = exp_by_z(C6) (2z^7)
+     * I7 = H7*F7        (7z^7)
+     * (R1) J7 = I7*G7        (77z^7)
+     *
+     * ++ powers of f^(z^8)
+     * A8 = exp_by_z(D7) (103z^8)
+     * B8 = A8^2         (206z^8)
+     * C8 = exp_by_z(G7) (70z^8)
+     * D8 = B8*C8        (276z^8)
+     * (R1) D8_inv = D8.inverse()        (-276z^8)
+     *
+     * ++ powers of f^(z^9)
+     * (R1) A9 = exp_by_z(A8) (103z^9)
+     *
+     * ++ f^R0(u)
+     * R01 = K0*E1
+     * R02 = D2*R01
+     * R03 = H3*R02
+     * R04 = G4*R03
+     * R05 = A5_inv*R04
+     * R06 = D6_inv*R05
+     * R07 = D7*R06
+     * R0 = R07.inverse()  (f^R0(u))
+     *
+     * ++ (f^p)^R1(u)
+     * R11 = M0*C1
+     * R12 = H2_inv*R11
+     * R13 = M3*R12
+     * R14 = D4_inv*R13
+     * R15 = K5_inv*R14
+     * R16 = K6*R15
+     * R17 = J7*R16
+     * R18 = D8_inv*R17
+     * R19 = A9*R18
+     * R1 = R19.Frobenius_map(1)
+     *
+     * result = R0*R1
+     */
+
+    const sw6_bis_Fq6 A0 = elt.cyclotomic_squared();
+    const sw6_bis_Fq6 B0 = A0.cyclotomic_squared();
+    const sw6_bis_Fq6 C0 = B0.cyclotomic_squared();
+    const sw6_bis_Fq6 D0 = C0.cyclotomic_squared();
+    const sw6_bis_Fq6 E0 = D0.cyclotomic_squared();
+    const sw6_bis_Fq6 F0 = E0.cyclotomic_squared();
+    const sw6_bis_Fq6 G0 = F0.cyclotomic_squared();
+    const sw6_bis_Fq6 H0 = G0*F0;
+    const sw6_bis_Fq6 I0 = H0*D0;
+    const sw6_bis_Fq6 J0 = I0*C0;
+    const sw6_bis_Fq6 K0 = J0*B0;
+    const sw6_bis_Fq6 L0 = K0*C0;
+    const sw6_bis_Fq6 M0 = L0*elt;
+
+    const sw6_bis_Fq6 A1 = sw6_bis_exp_by_z(A0);
+    const sw6_bis_Fq6 B1 = sw6_bis_exp_by_z(E0);
+    const sw6_bis_Fq6 C1 = A1*B1;
+    const sw6_bis_Fq6 D1 = sw6_bis_exp_by_z(M0);
+    const sw6_bis_Fq6 E1 = D1*C1;
+    const sw6_bis_Fq6 F1 = A1.cyclotomic_squared();
+    const sw6_bis_Fq6 G1 = sw6_bis_exp_by_z(elt);
+    const sw6_bis_Fq6 H1 = F1*G1;
+
+    const sw6_bis_Fq6 A2 = sw6_bis_exp_by_z(C1);
+    const sw6_bis_Fq6 B2 = C1.cyclotomic_squared();
+    const sw6_bis_Fq6 C2 = sw6_bis_exp_by_z(H1);
+    const sw6_bis_Fq6 D2 = C2*B2;
+    const sw6_bis_Fq6 E2 = D2.cyclotomic_squared();
+    const sw6_bis_Fq6 F2 = E2*A2;
+    const sw6_bis_Fq6 G2 = sw6_bis_exp_by_z(G1);
+    const sw6_bis_Fq6 H2 = G2*F2;
+    const sw6_bis_Fq6 H2_inv = H2.unitary_inverse();
+    const sw6_bis_Fq6 I2 = H2*D2;
+
+    const sw6_bis_Fq6 A3 = sw6_bis_exp_by_z(I2);
+    const sw6_bis_Fq6 B3 = sw6_bis_exp_by_z(A2);
+    const sw6_bis_Fq6 C3 = sw6_bis_exp_by_z(C2);
+    const sw6_bis_Fq6 D3 = C3.cyclotomic_squared();
+    const sw6_bis_Fq6 E3 = D3*C3;
+    const sw6_bis_Fq6 F3 = sw6_bis_exp_by_z(G2);
+    const sw6_bis_Fq6 G3 = F3*E3;
+    const sw6_bis_Fq6 H3 = G3*A3;
+    const sw6_bis_Fq6 I3 = B3.cyclotomic_squared();
+    const sw6_bis_Fq6 J3 = I3.cyclotomic_squared();
+    const sw6_bis_Fq6 K3 = F3.cyclotomic_squared();
+    const sw6_bis_Fq6 L3 = K3*J3;
+    const sw6_bis_Fq6 M3 = H3*L3;
+    const sw6_bis_Fq6 N3 = E3.cyclotomic_squared();
+    const sw6_bis_Fq6 O3 = N3*B3;
+
+    const sw6_bis_Fq6 A4 = sw6_bis_exp_by_z(F3);
+    const sw6_bis_Fq6 B4 = A4.cyclotomic_squared();
+    const sw6_bis_Fq6 C4 = sw6_bis_exp_by_z(O3);
+    const sw6_bis_Fq6 D4 = C4*A4;
+    const sw6_bis_Fq6 D4_inv = D4.unitary_inverse();
+    const sw6_bis_Fq6 E4 = D4.cyclotomic_squared();
+    const sw6_bis_Fq6 F4 = E4*D4;
+    const sw6_bis_Fq6 G4 = F4*B4;
+    const sw6_bis_Fq6 H4 = G4.cyclotomic_squared();
+    const sw6_bis_Fq6 I4 = B4.cyclotomic_squared();
+    const sw6_bis_Fq6 J4 = sw6_bis_exp_by_z(C3);
+    const sw6_bis_Fq6 K4 = J4*I4;
+    const sw6_bis_Fq6 L4 = K4*H4;
+
+    const sw6_bis_Fq6 A5 = sw6_bis_exp_by_z(L4);
+    const sw6_bis_Fq6 A5_inv = A5.unitary_inverse();
+    const sw6_bis_Fq6 B5 = sw6_bis_exp_by_z(F4);
+    const sw6_bis_Fq6 C5 = B5.cyclotomic_squared();
+    const sw6_bis_Fq6 E5 = sw6_bis_exp_by_z(K4);
+    const sw6_bis_Fq6 F5 = E5.cyclotomic_squared();
+    const sw6_bis_Fq6 G5 = F5.cyclotomic_squared();
+    const sw6_bis_Fq6 H5 = G5*F5;
+    const sw6_bis_Fq6 I5 = sw6_bis_exp_by_z(A4);
+    const sw6_bis_Fq6 J5 = I5*H5;
+    const sw6_bis_Fq6 K5 = J5*C5;
+    const sw6_bis_Fq6 K5_inv = K5.unitary_inverse();
+    const sw6_bis_Fq6 L5 = J5*E5;
+    const sw6_bis_Fq6 M5 = sw6_bis_exp_by_z(J4);
+    const sw6_bis_Fq6 N5 = M5*L5;
+
+    const sw6_bis_Fq6 A6 = sw6_bis_exp_by_z(N5);
+    const sw6_bis_Fq6 B6 = sw6_bis_exp_by_z(I5);
+    const sw6_bis_Fq6 C6 = B5.cyclotomic_squared();
+    const sw6_bis_Fq6 D6 = C5*A5;
+    const sw6_bis_Fq6 D6_inv = D6.unitary_inverse();
+    const sw6_bis_Fq6 E6 = sw6_bis_exp_by_z(K5);
+    const sw6_bis_Fq6 F6 = sw6_bis_exp_by_z(F5);
+    const sw6_bis_Fq6 G6 = F6.cyclotomic_squared();
+    const sw6_bis_Fq6 H6 = sw6_bis_exp_by_z(E5);
+    const sw6_bis_Fq6 I6 = H6*G6;
+    const sw6_bis_Fq6 J6 = I6*C6;
+    const sw6_bis_Fq6 K6 = J6*E6;
+    const sw6_bis_Fq6 L6 = J6*F6;
+    const sw6_bis_Fq6 M6 = C6.cyclotomic_squared();
+    const sw6_bis_Fq6 N6 = M6*B6;
+
+    const sw6_bis_Fq6 A7 = sw6_bis_exp_by_z(J6);
+    const sw6_bis_Fq6 B7 = A7.cyclotomic_squared();
+    const sw6_bis_Fq6 C7 = sw6_bis_exp_by_z(H6);
+    const sw6_bis_Fq6 D7 = C7*B7;
+    const sw6_bis_Fq6 E7 = sw6_bis_exp_by_z(L6);
+    const sw6_bis_Fq6 F7 = sw6_bis_exp_by_z(N6);
+    const sw6_bis_Fq6 G7 = E7*F7;
+    const sw6_bis_Fq6 H7 = sw6_bis_exp_by_z(C6);
+    const sw6_bis_Fq6 I7 = H7*F7;
+    const sw6_bis_Fq6 J7 = I7*G7;
+
+    const sw6_bis_Fq6 A8 = sw6_bis_exp_by_z(D7);
+    const sw6_bis_Fq6 B8 = A8.cyclotomic_squared();
+    const sw6_bis_Fq6 C8 = sw6_bis_exp_by_z(G7);
+    const sw6_bis_Fq6 D8 = B8*C8;
+    const sw6_bis_Fq6 D8_inv = D8.unitary_inverse();
+
+    const sw6_bis_Fq6 A9 = sw6_bis_exp_by_z(A8);
+
+    const sw6_bis_Fq6 R01 = K0*E1;
+    const sw6_bis_Fq6 R02 = D2*R01;
+    const sw6_bis_Fq6 R03 = H3*R02;
+    const sw6_bis_Fq6 R04 = G4*R03;
+    const sw6_bis_Fq6 R05 = A5_inv*R04;
+    const sw6_bis_Fq6 R06 = D6_inv*R05;
+    const sw6_bis_Fq6 R07 = D7*R06;
+    const sw6_bis_Fq6 R0 = R07.unitary_inverse();
+
+    const sw6_bis_Fq6 R11 = M0*C1;
+    const sw6_bis_Fq6 R12 = H2_inv*R11;
+    const sw6_bis_Fq6 R13 = M3*R12;
+    const sw6_bis_Fq6 R14 = D4_inv*R13;
+    const sw6_bis_Fq6 R15 = K5_inv*R14;
+    const sw6_bis_Fq6 R16 = K6*R15;
+    const sw6_bis_Fq6 R17 = J7*R16;
+    const sw6_bis_Fq6 R18 = D8_inv*R17;
+    const sw6_bis_Fq6 R19 = A9*R18;
+    const sw6_bis_Fq6 R1 = R19.Frobenius_map(1);
+
+    const sw6_bis_Fq6 result = R0*R1;
     leave_block("Call to sw6_bis_final_exponentiation_last_chunk");
 
     return result;
@@ -206,10 +504,8 @@ sw6_bis_GT sw6_bis_final_exponentiation(const sw6_bis_Fq6 &elt)
 {
     enter_block("Call to sw6_bis_final_exponentiation");
     const sw6_bis_Fq6 elt_inv = elt.inverse();
-    const sw6_bis_Fq6 elt_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt, elt_inv);
-    const sw6_bis_Fq6 elt_inv_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt_inv, elt);
-    sw6_bis_GT result = sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk, elt_inv_to_first_chunk);
-    // sw6_bis_GT result = elt^sw6_bis_final_exponent;
+    sw6_bis_Fq6 elt_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt, elt_inv);
+    sw6_bis_GT result = sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk);
     leave_block("Call to sw6_bis_final_exponentiation");
 
     return result;

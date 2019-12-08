@@ -9,8 +9,7 @@ namespace libff {
 
 /* final exponentiation */
 
-sw6_bis_Fq6 sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt,
-                                              const sw6_bis_Fq6 &elt_inv);
+sw6_bis_Fq6 sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt);
 sw6_bis_Fq6 sw6_bis_final_exponentiation_first_chunk(const sw6_bis_Fq6 &elt,
                                                const sw6_bis_Fq6 &elt_inv);
 sw6_bis_GT sw6_bis_final_exponentiation(const sw6_bis_Fq6 &elt);

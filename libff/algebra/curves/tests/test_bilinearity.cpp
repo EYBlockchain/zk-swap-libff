@@ -154,6 +154,7 @@ int main(void)
 {
     start_profiling();
 
+    /*
     printf("edwards:\n");
     edwards_pp::init_public_params();
     pairing_test<edwards_pp>();
@@ -180,11 +181,13 @@ int main(void)
     pairing_test<sw6_pp>();
     double_miller_loop_test<sw6_pp>();
 
+    */
     printf("sw6_bis:\n");
     sw6_bis_pp::init_public_params();
     pairing_test<sw6_bis_pp>();
     double_miller_loop_test<sw6_bis_pp>();
 
+    /*
     printf("mnt4:\n");
     mnt4_pp::init_public_params();
     pairing_test<mnt4_pp>();
@@ -224,4 +227,5 @@ int main(void)
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
 #endif
+    */
 }

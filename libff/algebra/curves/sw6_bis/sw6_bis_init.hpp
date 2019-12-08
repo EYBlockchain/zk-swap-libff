@@ -40,9 +40,8 @@ extern sw6_bis_Fq sw6_bis_twist_mul_by_q_Y;
 extern bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count;
 extern bool sw6_bis_ate_is_loop_count_neg;
 extern bigint<6*sw6_bis_q_limbs> sw6_bis_final_exponent;
-extern bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_last_chunk_abs_of_w0;
-extern bool sw6_bis_final_exponent_last_chunk_is_w0_neg;
-extern bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_last_chunk_w1;
+extern bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_z;
+extern bool sw6_bis_final_exponent_is_z_neg;
 
 void init_sw6_bis_params();
 
