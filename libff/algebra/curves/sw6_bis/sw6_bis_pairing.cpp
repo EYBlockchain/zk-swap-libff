@@ -181,6 +181,24 @@ sw6_bis_Fq6 sw6_bis_exp_by_z(const sw6_bis_Fq6 &elt)
 
 /* final exponentiations */
 
+sw6_bis_Fq6 old_sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt, const sw6_bis_Fq6 &elt_inv)
+{
+    enter_block("Call to sw6_bis_final_exponentiation_last_chunk");
+    const sw6_bis_Fq6 elt_q = elt.Frobenius_map(1);
+    sw6_bis_Fq6 w1_part = elt_q.cyclotomic_exp(sw6_bis_final_exponent_last_chunk_w1);
+    sw6_bis_Fq6 w0_part;
+    if (sw6_bis_final_exponent_last_chunk_is_w0_neg)
+    {
+    	w0_part = elt_inv.cyclotomic_exp(sw6_bis_final_exponent_last_chunk_abs_of_w0);
+    } else {
+    	w0_part = elt.cyclotomic_exp(sw6_bis_final_exponent_last_chunk_abs_of_w0);
+    }
+    sw6_bis_Fq6 result = w1_part * w0_part;
+    leave_block("Call to sw6_bis_final_exponentiation_last_chunk");
+
+    return result;
+}
+
 sw6_bis_Fq6 sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt)
 {
     enter_block("Call to sw6_bis_final_exponentiation_last_chunk");
@@ -505,7 +523,10 @@ sw6_bis_GT sw6_bis_final_exponentiation(const sw6_bis_Fq6 &elt)
     enter_block("Call to sw6_bis_final_exponentiation");
     const sw6_bis_Fq6 elt_inv = elt.inverse();
     sw6_bis_Fq6 elt_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt, elt_inv);
-    sw6_bis_GT result = sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk);
+    const sw6_bis_Fq6 elt_inv_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt_inv, elt);
+    // sw6_bis_GT result = sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk);
+    sw6_bis_GT result = old_sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk, elt_inv_to_first_chunk);
+
     leave_block("Call to sw6_bis_final_exponentiation");
 
     return result;

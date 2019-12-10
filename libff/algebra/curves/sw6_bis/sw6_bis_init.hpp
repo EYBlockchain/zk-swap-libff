@@ -43,6 +43,11 @@ extern bigint<6*sw6_bis_q_limbs> sw6_bis_final_exponent;
 extern bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_z;
 extern bool sw6_bis_final_exponent_is_z_neg;
 
+// old
+extern bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_last_chunk_abs_of_w0;
+extern bool sw6_bis_final_exponent_last_chunk_is_w0_neg;
+extern bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_last_chunk_w1;
+
 void init_sw6_bis_params();
 
 class sw6_bis_G1;

@@ -147,6 +147,7 @@ void test_output()
 
 int main(void)
 {
+    /*
     printf("edwards: \n");
     edwards_pp::init_public_params();
     test_group<G1<edwards_pp> >();
@@ -185,12 +186,14 @@ int main(void)
     test_output<G2<sw6_pp> >();
     test_mul_by_q<G2<sw6_pp> >();
 
+    */
     printf("sw6_bis: \n");
     sw6_bis_pp::init_public_params();
     test_group<G1<sw6_bis_pp> >();
     test_group<G2<sw6_bis_pp> >();
     test_output<G2<sw6_bis_pp> >();
     test_mul_by_q<G2<sw6_bis_pp> >();
+    /*
 
     printf("mnt4: \n");
     mnt4_pp::init_public_params();
@@ -246,4 +249,5 @@ int main(void)
     test_group<G2<bn128_pp> >();
     test_output<G2<bn128_pp> >();
 #endif
+    */
 }
