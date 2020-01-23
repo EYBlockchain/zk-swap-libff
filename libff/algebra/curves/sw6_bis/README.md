@@ -21,7 +21,7 @@ An alternative curve to Zexe's SW6 (faster). A pairing-friendly curve (embedding
 ## TODO:
 - [x] change curve coefficient to `b=-1`
 - [ ] use a sextic twist to sw6_bis so that elements in `G2` will be in `Fq`
-- [x] optimize FE
+- [ ] optimize FE hard part
 - [ ] Fast multiplication with GLV endomorphisms
 - [ ] Faster hash into curve with endomorphisms
 - [ ] Faster points checks with endomorphisms
