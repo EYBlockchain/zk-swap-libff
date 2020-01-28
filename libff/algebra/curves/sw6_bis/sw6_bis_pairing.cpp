@@ -181,6 +181,7 @@ sw6_bis_Fq6 sw6_bis_exp_by_z(const sw6_bis_Fq6 &elt)
 
 /* final exponentiations */
 
+/*
 sw6_bis_Fq6 old_sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt, const sw6_bis_Fq6 &elt_inv)
 {
     enter_block("Call to old_sw6_bis_final_exponentiation_last_chunk");
@@ -198,6 +199,7 @@ sw6_bis_Fq6 old_sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt, 
 
     return result;
 }
+*/
 
 sw6_bis_Fq6 sw6_bis_final_exponentiation_last_chunk(const sw6_bis_Fq6 &elt)
 {
