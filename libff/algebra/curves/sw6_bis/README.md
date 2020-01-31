@@ -21,7 +21,7 @@ An alternative curve to Zexe's SW6 (faster). A pairing-friendly curve (embedding
 ## TODO:
 - [x] change curve coefficient to `b=-1`
 - [ ] use a sextic twist to sw6_bis so that elements in `G2` will be in `Fq`
-- [ ] optimize FE hard part
+- [x] optimize FE hard part
 - [ ] Fast multiplication with GLV endomorphisms
 - [ ] Faster hash into curve with endomorphisms
 - [ ] Faster points checks with endomorphisms
@@ -29,7 +29,4 @@ An alternative curve to Zexe's SW6 (faster). A pairing-friendly curve (embedding
 - [ ] recompute optimal `fixed_base_exp_window_table` in G1 and G2
 
 ## Note
-(*) pairing works with naive final exponentiation:
-  - [x] first chunk: `(q^3-1)(q+1)`
-  - [x] last chunk: `(q^2-q+1)/r = w0+q*w1`
-but we want to implement the last chunk as `R0(u)+p*R1(u)` with `R0` et `R1` polynomials and `p` a Frobenius in `GF(p^6)`
+(*) pairing works with a not too optimized miller loop
