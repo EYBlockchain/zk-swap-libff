@@ -21,7 +21,9 @@ sw6_bis_Fq sw6_bis_twist_mul_by_b_c2;
 sw6_bis_Fq sw6_bis_twist_mul_by_q_X;
 sw6_bis_Fq sw6_bis_twist_mul_by_q_Y;
 
-bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count;
+bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count; // old
+bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count1;
+bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count2;
 bool sw6_bis_ate_is_loop_count_neg;
 bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_z;
 bool sw6_bis_final_exponent_is_z_neg;
@@ -279,7 +281,9 @@ void init_sw6_bis_params()
 
 
     /* pairing parameters */
-    sw6_bis_ate_loop_count = bigint_q("3362637538168598222219435186298528655381674028954528064283340709388076588006567983337308081752755143497537638367247");
+    sw6_bis_ate_loop_count = bigint_q("3362637538168598222219435186298528655381674028954528064283340709388076588006567983337308081752755143497537638367247"); // old
+    sw6_bis_ate_loop_count1 = bigint_q("9586122913090633730");
+    sw6_bis_ate_loop_count2 = bigint_q("880904806456922042166256752416502360955572640081583800319");
     sw6_bis_ate_is_loop_count_neg = false;
     sw6_bis_final_exponent_z = bigint_q("9586122913090633729");
     sw6_bis_final_exponent_is_z_neg = false;

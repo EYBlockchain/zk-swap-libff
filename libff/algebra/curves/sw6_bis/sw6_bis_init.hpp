@@ -37,7 +37,9 @@ extern sw6_bis_Fq sw6_bis_twist_mul_by_q_X;
 extern sw6_bis_Fq sw6_bis_twist_mul_by_q_Y;
 
 // parameters for pairing
-extern bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count;
+extern bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count; // old
+extern bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count1;
+extern bigint<sw6_bis_q_limbs> sw6_bis_ate_loop_count2;
 extern bool sw6_bis_ate_is_loop_count_neg;
 extern bigint<sw6_bis_q_limbs> sw6_bis_final_exponent_z;
 extern bool sw6_bis_final_exponent_is_z_neg;

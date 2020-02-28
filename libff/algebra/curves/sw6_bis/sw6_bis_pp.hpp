@@ -28,9 +28,10 @@ public:
     static void init_public_params();
     static sw6_bis_GT final_exponentiation(const sw6_bis_Fq6 &elt);
     static sw6_bis_G1_precomp precompute_G1(const sw6_bis_G1 &P);
-    static sw6_bis_G2_precomp precompute_G2(const sw6_bis_G2 &Q);
+    static sw6_bis_G2_precomp precompute_G2_1(const sw6_bis_G2 &Q);
+    static sw6_bis_G2_precomp precompute_G2_2(const sw6_bis_G2 &Q);
     static sw6_bis_Fq6 miller_loop(const sw6_bis_G1_precomp &prec_P,
-                                const sw6_bis_G2_precomp &prec_Q);
+                                const sw6_bis_G2_precomp &prec_Q_1, const sw6_bis_G2_precomp &prec_Q_2);
     static sw6_bis_affine_ate_G1_precomputation affine_ate_precompute_G1(const sw6_bis_G1 &P);
     static sw6_bis_affine_ate_G2_precomputation affine_ate_precompute_G2(const sw6_bis_G2 &Q);
     static sw6_bis_Fq6 affine_ate_miller_loop(const sw6_bis_affine_ate_G1_precomputation &prec_P,
