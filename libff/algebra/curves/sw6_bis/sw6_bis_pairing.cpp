@@ -808,10 +808,11 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
                                          -(prec_Q_2.QY_over_twist * ac.c_RZ + L1_coeff_2 * ac.c_L1));
     	f_2 = (f_2 * g_RnegR_at_P).inverse();
     }
+    f_2 = f_2.Frobenius_map(1);
 
     leave_block("Call to sw6_bis_ate_miller_loop 2");
 
-    return f_1 * f_2.Frobenius_map(1);
+    return f_1 * f_2;
 }
 
 sw6_bis_Fq6 sw6_bis_ate_double_miller_loop(const sw6_bis_ate_G1_precomp &prec_P1,
