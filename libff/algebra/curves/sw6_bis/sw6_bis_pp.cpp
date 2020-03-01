@@ -17,14 +17,9 @@ sw6_bis_G1_precomp sw6_bis_pp::precompute_G1(const sw6_bis_G1 &P)
     return sw6_bis_precompute_G1(P);
 }
 
-sw6_bis_G2_precomp sw6_bis_pp::precompute_G2_1(const sw6_bis_G2 &Q)
+sw6_bis_G2_precomp sw6_bis_pp::precompute_G2(const sw6_bis_G2& Q, const bigint<sw6_bis_Fq::num_limbs> &loop_count)
 {
-    return sw6_bis_precompute_G2_1(Q);
-}
-
-sw6_bis_G2_precomp sw6_bis_pp::precompute_G2_2(const sw6_bis_G2 &Q)
-{
-    return sw6_bis_precompute_G2_2(Q);
+    return sw6_bis_precompute_G2(Q, loop_count);
 }
 
 sw6_bis_Fq6 sw6_bis_pp::miller_loop(const sw6_bis_G1_precomp &prec_P,
