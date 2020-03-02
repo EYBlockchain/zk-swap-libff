@@ -334,7 +334,7 @@ sw6_bis_affine_ate_G1_precomputation sw6_bis_affine_ate_precompute_G1(const sw6_
     return result;
 }
 
-sw6_bis_affine_ate_G2_precomputation sw6_bis_affine_ate_precompute_G2(const sw6_bis_G2& Q)
+sw6_bis_affine_ate_G2_precomputation sw6_bis_affine_ate_precompute_G2(const sw6_bis_G2& Q, const bigint<sw6_bis_Fq::num_limbs> &loop_count)
 {
     enter_block("Call to sw6_bis_affine_ate_precompute_G2");
 
@@ -348,7 +348,6 @@ sw6_bis_affine_ate_G2_precomputation sw6_bis_affine_ate_precompute_G2(const sw6_
     sw6_bis_Fq3 RX = Qcopy.X();
     sw6_bis_Fq3 RY = Qcopy.Y();
 
-    const bigint<sw6_bis_Fq::num_limbs> &loop_count = sw6_bis_ate_loop_count;
     bool found_nonzero = false;
 
     std::vector<long> NAF = find_wnaf(1, loop_count);
@@ -415,68 +414,107 @@ sw6_bis_affine_ate_G2_precomputation sw6_bis_affine_ate_precompute_G2(const sw6_
 }
 
 sw6_bis_Fq6 sw6_bis_affine_ate_miller_loop(const sw6_bis_affine_ate_G1_precomputation &prec_P,
-                                     const sw6_bis_affine_ate_G2_precomputation &prec_Q)
+                                     const sw6_bis_affine_ate_G2_precomputation &prec_Q_1,
+                                     const sw6_bis_affine_ate_G2_precomputation &prec_Q_2)
 {
     enter_block("Call to sw6_bis_affine_ate_miller_loop");
 
-    sw6_bis_Fq6 f = sw6_bis_Fq6::one();
+    // f_{u+1,Q}(P)
+    sw6_bis_Fq6 f_1 = sw6_bis_Fq6::one();
 
-    const bigint<sw6_bis_Fq::num_limbs> &loop_count = sw6_bis_ate_loop_count;
-    bool found_nonzero = false;
-    size_t idx = 0;
+    const bigint<sw6_bis_Fq::num_limbs> &loop_count_1 = sw6_bis_ate_loop_count1;
+    bool found_nonzero_1 = false;
+    size_t idx_1 = 0;
 
-    std::vector<long> NAF = find_wnaf(1, loop_count);
-    for (long i = NAF.size() - 1; i >= 0; --i)
+    std::vector<long> NAF_1 = find_wnaf(1, loop_count_1);
+    for (long i = NAF_1.size() - 1; i >= 0; --i)
     {
-        if (!found_nonzero)
+        if (!found_nonzero_1)
         {
             /* this skips the MSB itself */
-            found_nonzero |= (NAF[i] != 0);
+            found_nonzero_1 |= (NAF_1[i] != 0);
             continue;
         }
 
         /* code below gets executed for all bits (EXCEPT the MSB itself) of
            sw6_bis_param_p (skipping leading zeros) in MSB to LSB
            order */
-        sw6_bis_affine_ate_coeffs c = prec_Q.coeffs[idx++];
+        sw6_bis_affine_ate_coeffs c_1 = prec_Q_1.coeffs[idx_1++];
 
-        sw6_bis_Fq6 g_RR_at_P = sw6_bis_Fq6(prec_P.PY_twist_squared,
-                                      - prec_P.PX * c.gamma_twist + c.gamma_X - c.old_RY);
-        f = f.squared().mul_by_2345(g_RR_at_P);
+        sw6_bis_Fq6 g_RR_at_P_1 = sw6_bis_Fq6(prec_P.PY_twist_squared,
+                                      - prec_P.PX * c_1.gamma_twist + c_1.gamma_X - c_1.old_RY);
+        f_1 = f_1.squared().mul_by_2345(g_RR_at_P_1);
 
-        if (NAF[i] != 0)
+        if (NAF_1[i] != 0)
         {
-            sw6_bis_affine_ate_coeffs c = prec_Q.coeffs[idx++];
-            sw6_bis_Fq6 g_RQ_at_P;
-            if (NAF[i] > 0)
+            sw6_bis_affine_ate_coeffs c_1 = prec_Q_1.coeffs[idx_1++];
+            sw6_bis_Fq6 g_RQ_at_P_1;
+            if (NAF_1[i] > 0)
             {
-                g_RQ_at_P = sw6_bis_Fq6(prec_P.PY_twist_squared,
-                                     - prec_P.PX * c.gamma_twist + c.gamma_X - prec_Q.QY);
+                g_RQ_at_P_1 = sw6_bis_Fq6(prec_P.PY_twist_squared,
+                                     - prec_P.PX * c_1.gamma_twist + c_1.gamma_X - prec_Q_1.QY);
             }
             else
             {
-                g_RQ_at_P = sw6_bis_Fq6(prec_P.PY_twist_squared,
-                                     - prec_P.PX * c.gamma_twist + c.gamma_X + prec_Q.QY);
+                g_RQ_at_P_1 = sw6_bis_Fq6(prec_P.PY_twist_squared,
+                                     - prec_P.PX * c_1.gamma_twist + c_1.gamma_X + prec_Q_1.QY);
             }
-            f = f.mul_by_2345(g_RQ_at_P);
+            f_1 = f_1.mul_by_2345(g_RQ_at_P_1);
         }
 
     }
 
-    /* TODO: maybe handle neg
-    if (sw6_bis_ate_is_loop_count_neg)
+    // f_{u^3-u^2-u,Q}(P)
+    sw6_bis_Fq6 f_2 = sw6_bis_Fq6::one();
+
+    const bigint<sw6_bis_Fq::num_limbs> &loop_count_2 = sw6_bis_ate_loop_count2;
+    bool found_nonzero_2 = false;
+    size_t idx_2 = 0;
+
+    std::vector<long> NAF_2 = find_wnaf(1, loop_count_2);
+    for (long i = NAF_2.size() - 1; i >= 0; --i)
     {
-    	// TODO:
-    	sw6_bis_affine_ate_coeffs ac = prec_Q.coeffs[idx++];
-    	sw6_bis_Fq6 g_RnegR_at_P = sw6_bis_Fq6(prec_P.PY_twist_squared,
-                                          - prec_P.PX * c.gamma_twist + c.gamma_X - c.old_RY);
-    	f = (f * g_RnegR_at_P).inverse();
+        if (!found_nonzero_2)
+        {
+            /* this skips the MSB itself */
+            found_nonzero_2 |= (NAF_2[i] != 0);
+            continue;
+        }
+
+        /* code below gets executed for all bits (EXCEPT the MSB itself) of
+           sw6_bis_param_p (skipping leading zeros) in MSB to LSB
+           order */
+        sw6_bis_affine_ate_coeffs c_2 = prec_Q_2.coeffs[idx_2++];
+
+        sw6_bis_Fq6 g_RR_at_P_2 = sw6_bis_Fq6(prec_P.PY_twist_squared,
+                                      - prec_P.PX * c_2.gamma_twist + c_2.gamma_X - c_2.old_RY);
+        f_2 = f_2.squared().mul_by_2345(g_RR_at_P_2);
+
+        if (NAF_2[i] != 0)
+        {
+            sw6_bis_affine_ate_coeffs c_2 = prec_Q_2.coeffs[idx_2++];
+            sw6_bis_Fq6 g_RQ_at_P_2;
+            if (NAF_2[i] > 0)
+            {
+                g_RQ_at_P_2 = sw6_bis_Fq6(prec_P.PY_twist_squared,
+                                     - prec_P.PX * c_2.gamma_twist + c_2.gamma_X - prec_Q_2.QY);
+            }
+            else
+            {
+                g_RQ_at_P_2 = sw6_bis_Fq6(prec_P.PY_twist_squared,
+                                     - prec_P.PX * c_2.gamma_twist + c_2.gamma_X + prec_Q_2.QY);
+            }
+            f_2 = f_2.mul_by_2345(g_RQ_at_P_2);
+        }
+
     }
-    */
+    // TODO: maybe handle neg
+
+    f_2 = f_2.Frobenius_map(1);
 
     leave_block("Call to sw6_bis_affine_ate_miller_loop");
 
-    return f;
+    return f_1 * f_2;
 }
 
 /* ate pairing */
@@ -890,8 +928,9 @@ sw6_bis_GT sw6_bis_affine_reduced_pairing(const sw6_bis_G1 &P,
                                     const sw6_bis_G2 &Q)
 {
     const sw6_bis_affine_ate_G1_precomputation prec_P = sw6_bis_affine_ate_precompute_G1(P);
-    const sw6_bis_affine_ate_G2_precomputation prec_Q = sw6_bis_affine_ate_precompute_G2(Q);
-    const sw6_bis_Fq6 f = sw6_bis_affine_ate_miller_loop(prec_P, prec_Q);
+    const sw6_bis_affine_ate_G2_precomputation prec_Q_1 = sw6_bis_affine_ate_precompute_G2(Q, sw6_bis_ate_loop_count1);
+    const sw6_bis_affine_ate_G2_precomputation prec_Q_2 = sw6_bis_affine_ate_precompute_G2(Q, sw6_bis_ate_loop_count2);
+    const sw6_bis_Fq6 f = sw6_bis_affine_ate_miller_loop(prec_P, prec_Q_1, prec_Q_2);
     const sw6_bis_GT result = sw6_bis_final_exponentiation(f);
     return result;
 }

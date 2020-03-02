@@ -32,9 +32,11 @@ public:
     static sw6_bis_Fq6 miller_loop(const sw6_bis_G1_precomp &prec_P,
                                 const sw6_bis_G2_precomp &prec_Q_1, const sw6_bis_G2_precomp &prec_Q_2);
     static sw6_bis_affine_ate_G1_precomputation affine_ate_precompute_G1(const sw6_bis_G1 &P);
-    static sw6_bis_affine_ate_G2_precomputation affine_ate_precompute_G2(const sw6_bis_G2 &Q);
+    static sw6_bis_affine_ate_G2_precomputation affine_ate_precompute_G2(const sw6_bis_G2 &Q, const bigint<sw6_bis_Fq::num_limbs> &loop_count);
     static sw6_bis_Fq6 affine_ate_miller_loop(const sw6_bis_affine_ate_G1_precomputation &prec_P,
-                                           const sw6_bis_affine_ate_G2_precomputation &prec_Q);
+                                           const sw6_bis_affine_ate_G2_precomputation &prec_Q_1,
+                                           const sw6_bis_affine_ate_G2_precomputation &prec_Q_2);
+    /*
     static sw6_bis_Fq6 affine_ate_e_over_e_miller_loop(const sw6_bis_affine_ate_G1_precomputation &prec_P1,
                                                     const sw6_bis_affine_ate_G2_precomputation &prec_Q1,
                                                     const sw6_bis_affine_ate_G1_precomputation &prec_P2,
@@ -45,6 +47,7 @@ public:
                                                             const sw6_bis_affine_ate_G2_precomputation &prec_Q2,
                                                             const sw6_bis_affine_ate_G1_precomputation &prec_P3,
                                                             const sw6_bis_affine_ate_G2_precomputation &prec_Q3);
+    */
     static sw6_bis_Fq6 double_miller_loop(const sw6_bis_G1_precomp &prec_P1,
                                        const sw6_bis_G2_precomp &prec_Q1,
                                        const sw6_bis_G1_precomp &prec_P2,

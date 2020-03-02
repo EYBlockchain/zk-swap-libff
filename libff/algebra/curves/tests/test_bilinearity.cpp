@@ -117,11 +117,13 @@ void affine_pairing_test()
     G1<ppT> P = (Fr<ppT>::random_element()) * G1<ppT>::one();
     G2<ppT> Q = (Fr<ppT>::random_element()) * G2<ppT>::one();
 
+    /*
     printf("P:\n");
     P.print();
     printf("Q:\n");
     Q.print();
     printf("\n\n");
+    */
 
     Fr<ppT> s = Fr<ppT>::random_element();
     G1<ppT> sP = s * P;
@@ -131,9 +133,11 @@ void affine_pairing_test()
     GT<ppT> ans1 = ppT::affine_reduced_pairing(sP, Q);
     GT<ppT> ans2 = ppT::affine_reduced_pairing(P, sQ);
     GT<ppT> ans3 = ppT::affine_reduced_pairing(P, Q)^s;
+    /*
     ans1.print();
     ans2.print();
     ans3.print();
+    */
     assert(ans1 == ans2);
     assert(ans2 == ans3);
 
@@ -172,16 +176,16 @@ int main(void)
     printf("sw6:\n");
     sw6_pp::init_public_params();
     pairing_test<sw6_pp>();
+    affine_pairing_test<sw6_pp>();
     // double_miller_loop_test<sw6_pp>();
-    // affine_pairing_test<sw6_pp>();
 
     printf("sw6_bis:\n");
     sw6_bis_pp::init_public_params();
     pairing_test<sw6_bis_pp>();
+    affine_pairing_test<sw6_bis_pp>();
     // double_miller_loop_test<sw6_bis_pp>();
-    // affine_pairing_test<sw6_bis_pp>();
-
     /*
+
     printf("mnt4:\n");
     mnt4_pp::init_public_params();
     pairing_test<mnt4_pp>();

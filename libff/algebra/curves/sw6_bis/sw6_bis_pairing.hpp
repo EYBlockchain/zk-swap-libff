@@ -39,10 +39,11 @@ struct sw6_bis_affine_ate_G2_precomputation {
 };
 
 sw6_bis_affine_ate_G1_precomputation sw6_bis_affine_ate_precompute_G1(const sw6_bis_G1& P);
-sw6_bis_affine_ate_G2_precomputation sw6_bis_affine_ate_precompute_G2(const sw6_bis_G2& Q);
+sw6_bis_affine_ate_G2_precomputation sw6_bis_affine_ate_precompute_G2(const sw6_bis_G2& Q, const bigint<sw6_bis_Fq::num_limbs> &loop_count);
 
 sw6_bis_Fq6 sw6_bis_affine_ate_miller_loop(const sw6_bis_affine_ate_G1_precomputation &prec_P,
-                                     const sw6_bis_affine_ate_G2_precomputation &prec_Q);
+                                     const sw6_bis_affine_ate_G2_precomputation &prec_Q_1,
+                                     const sw6_bis_affine_ate_G2_precomputation &prec_Q_2);
 
 /* ate pairing */
 
