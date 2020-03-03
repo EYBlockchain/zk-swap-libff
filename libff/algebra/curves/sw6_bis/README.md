@@ -1,5 +1,5 @@
 # Curve sw6_bis
-An alternative curve to Zexe's SW6 (faster). A pairing-friendly curve (embedding degree `k=6`), constructed over BLS12_377 via *modified* Cocks-Pinch method.
+An alternative curve to Zexe's SW6 (faster). A pairing-friendly curve (embedding degree `k=6`), constructed over BLS12_377 via *modified* Brezing-Weng method.
 
 ### Progress:
 - [x] sw6_bis_g1.cpp
@@ -21,12 +21,19 @@ An alternative curve to Zexe's SW6 (faster). A pairing-friendly curve (embedding
 ## TODO:
 - [x] change curve coefficient to `b=-1`
 - [ ] use a sextic twist to sw6_bis so that elements in `G2` will be in `Fq`
+- [x] optimal ate pairing (Alg.5)
+- [ ] optimized Alg.5
+  - [ ] NAF
+  - [ ] f_{u^2-u-1,Q}
+- [x] Alg.5 in affine coordinates
 - [x] optimize FE hard part
-- [ ] Fast multiplication with GLV endomorphisms
-- [ ] Faster hash into curve with endomorphisms
-- [ ] Faster points checks with endomorphisms
+
+- [ ] Fast multiplication with GLV endomorphisms (patent until 09/20)
+- [ ] Faster hash into curve with endomorphisms (patent until 09/20)
+- [ ] Faster points checks with endomorphisms (patent until 09/20)
+
 - [ ] recompute optimal `wnaf_window_table` for G1 and G2
 - [ ] recompute optimal `fixed_base_exp_window_table` in G1 and G2
 
 ## Note
-(*) pairing works with a not too optimized miller loop
+(*) pairing works with the non-optimized miller loop versions
