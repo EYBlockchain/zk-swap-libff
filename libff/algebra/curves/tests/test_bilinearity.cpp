@@ -172,17 +172,17 @@ int main(void)
     double_miller_loop_test<bls12_377_pp>();
     pairing_batching_test<bls12_377_pp>();
 
-    */
     printf("sw6:\n");
     sw6_pp::init_public_params();
     pairing_test<sw6_pp>();
     affine_pairing_test<sw6_pp>();
-    // double_miller_loop_test<sw6_pp>();
+    double_miller_loop_test<sw6_pp>();
 
+    */
     printf("sw6_bis:\n");
     sw6_bis_pp::init_public_params();
     pairing_test<sw6_bis_pp>();
-    affine_pairing_test<sw6_bis_pp>();
+    // affine_pairing_test<sw6_bis_pp>();
     // double_miller_loop_test<sw6_bis_pp>();
     /*
 
