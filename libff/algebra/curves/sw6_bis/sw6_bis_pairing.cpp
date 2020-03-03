@@ -635,15 +635,17 @@ sw6_bis_ate_G2_precomp sw6_bis_ate_precompute_G2(const sw6_bis_G2& Q, const bigi
     R.Z = sw6_bis_Fq3::one();
     R.T = sw6_bis_Fq3::one();
 
-    bool found_one = false;
-    for (long i = loop_count.max_bits() - 1; i >= 0; --i)
+    bool found_nonzero = false;
+
+    std::vector<long> NAF = find_wnaf(1, loop_count);
+    for (long i = NAF.size() - 1; i >= 0; --i)
     {
         const bool bit = loop_count.test_bit(i);
 
-        if (!found_one)
+        if (!found_nonzero)
         {
             /* this skips the MSB itself */
-            found_one |= bit;
+            found_nonzero |= (NAF[i] != 0);
             continue;
         }
 
@@ -651,14 +653,22 @@ sw6_bis_ate_G2_precomp sw6_bis_ate_precompute_G2(const sw6_bis_G2& Q, const bigi
         doubling_step_for_flipped_miller_loop(R, dc);
         result.dbl_coeffs.push_back(dc);
 
-        if (bit)
+        if (NAF[i] != 0)
         {
             sw6_bis_ate_add_coeffs ac;
-            mixed_addition_step_for_flipped_miller_loop(result.QX, result.QY, result.QY2, R, ac);
+            if(NAF[i] > 0)
+            {
+              mixed_addition_step_for_flipped_miller_loop(result.QX, result.QY, result.QY2, R, ac);
+            }
+            else
+            {
+              mixed_addition_step_for_flipped_miller_loop(result.QX, -result.QY, result.QY2, R, ac);
+            }
             result.add_coeffs.push_back(ac);
         }
     }
 
+    /*
     if (sw6_bis_ate_is_loop_count_neg)
     {
     	sw6_bis_Fq3 RZ_inv = R.Z.inverse();
@@ -671,6 +681,7 @@ sw6_bis_ate_G2_precomp sw6_bis_ate_precompute_G2(const sw6_bis_G2& Q, const bigi
         mixed_addition_step_for_flipped_miller_loop(minus_R_affine_X, minus_R_affine_Y, minus_R_affine_Y2, R, ac);
         result.add_coeffs.push_back(ac);
     }
+    */
 
     leave_block("Call to sw6_bis_ate_precompute_G2");
     return result;
@@ -686,20 +697,18 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
 
     sw6_bis_Fq6 f_1 = sw6_bis_Fq6::one();
 
-    bool found_one_1 = false;
+    const bigint<sw6_bis_Fq::num_limbs> &loop_count_1 = sw6_bis_ate_loop_count1;
+    bool found_nonzero_1 = false;
     size_t dbl_idx_1 = 0;
     size_t add_idx_1 = 0;
 
-    const bigint<sw6_bis_Fq::num_limbs> &loop_count_1 = sw6_bis_ate_loop_count1;
-
-    for (long i = loop_count_1.max_bits() - 1; i >= 0; --i)
+    std::vector<long> NAF_1 = find_wnaf(1, loop_count_1);
+    for (long i = NAF_1.size() - 1; i >= 0; --i)
     {
-        const bool bit = loop_count_1.test_bit(i);
-
-        if (!found_one_1)
+        if (!found_nonzero_1)
         {
             /* this skips the MSB itself */
-            found_one_1 |= bit;
+            found_nonzero_1 |= (NAF_1[i] != 0);
             continue;
         }
 
@@ -712,16 +721,27 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
                                       dc.c_H * prec_P.PY_twist);
         f_1 = f_1.squared() * g_RR_at_P;
 
-        if (bit)
+        if (NAF_1[i] != 0)
         {
             sw6_bis_ate_add_coeffs ac = prec_Q_1.add_coeffs[add_idx_1++];
-            sw6_bis_Fq6 g_RQ_at_P = sw6_bis_Fq6(ac.c_RZ * prec_P.PY_twist,
+            sw6_bis_Fq6 g_RQ_at_P;
+
+            if (NAF_1[i] > 0)
+            {
+              g_RQ_at_P = sw6_bis_Fq6(ac.c_RZ * prec_P.PY_twist,
                                           -(prec_Q_1.QY_over_twist * ac.c_RZ + L1_coeff_1 * ac.c_L1));
+            }
+            else
+            {
+              g_RQ_at_P = sw6_bis_Fq6(ac.c_RZ * prec_P.PY_twist,
+                                          prec_Q_1.QY_over_twist * ac.c_RZ - L1_coeff_1 * ac.c_L1);
+            }
             f_1 = f_1 * g_RQ_at_P;
         }
 
     }
 
+    /*
     if (sw6_bis_ate_is_loop_count_neg)
     {
     	sw6_bis_ate_add_coeffs ac = prec_Q_1.add_coeffs[add_idx_1++];
@@ -729,6 +749,7 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
                                          -(prec_Q_1.QY_over_twist * ac.c_RZ + L1_coeff_1 * ac.c_L1));
     	f_1 = (f_1 * g_RnegR_at_P).inverse();
     }
+    */
 
     leave_block("Call to sw6_bis_ate_miller_loop 1");
 
@@ -739,20 +760,18 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
 
     sw6_bis_Fq6 f_2 = sw6_bis_Fq6::one();
 
-    bool found_one_2 = false;
+    const bigint<sw6_bis_Fq::num_limbs> &loop_count_2 = sw6_bis_ate_loop_count2;
+    bool found_nonzero_2 = false;
     size_t dbl_idx_2 = 0;
     size_t add_idx_2 = 0;
 
-    const bigint<sw6_bis_Fq::num_limbs> &loop_count_2 = sw6_bis_ate_loop_count2;
-
-    for (long i = loop_count_2.max_bits() - 1; i >= 0; --i)
+    std::vector<long> NAF_2 = find_wnaf(1, loop_count_2);
+    for (long i = NAF_2.size() - 1; i >= 0; --i)
     {
-        const bool bit = loop_count_2.test_bit(i);
-
-        if (!found_one_2)
+        if (!found_nonzero_2)
         {
             /* this skips the MSB itself */
-            found_one_2 |= bit;
+            found_nonzero_2 |= (NAF_2[i] != 0);
             continue;
         }
 
@@ -765,16 +784,26 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
                                       dc.c_H * prec_P.PY_twist);
         f_2 = f_2.squared() * g_RR_at_P;
 
-        if (bit)
+        if (NAF_2[i] != 0)
         {
             sw6_bis_ate_add_coeffs ac = prec_Q_2.add_coeffs[add_idx_2++];
-            sw6_bis_Fq6 g_RQ_at_P = sw6_bis_Fq6(ac.c_RZ * prec_P.PY_twist,
+            sw6_bis_Fq6 g_RQ_at_P;
+            if (NAF_2[i] > 0)
+            {
+              g_RQ_at_P = sw6_bis_Fq6(ac.c_RZ * prec_P.PY_twist,
                                           -(prec_Q_2.QY_over_twist * ac.c_RZ + L1_coeff_2 * ac.c_L1));
+            }
+            else
+            {
+              g_RQ_at_P = sw6_bis_Fq6(ac.c_RZ * prec_P.PY_twist,
+                                          prec_Q_2.QY_over_twist * ac.c_RZ - L1_coeff_2 * ac.c_L1);
+            }
             f_2 = f_2 * g_RQ_at_P;
         }
 
     }
 
+    /*
     if (sw6_bis_ate_is_loop_count_neg)
     {
     	sw6_bis_ate_add_coeffs ac = prec_Q_2.add_coeffs[add_idx_2++];
@@ -782,6 +811,8 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
                                          -(prec_Q_2.QY_over_twist * ac.c_RZ + L1_coeff_2 * ac.c_L1));
     	f_2 = (f_2 * g_RnegR_at_P).inverse();
     }
+    */
+
     f_2 = f_2.Frobenius_map(1);
 
     leave_block("Call to sw6_bis_ate_miller_loop 2");

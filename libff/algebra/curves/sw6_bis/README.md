@@ -23,7 +23,7 @@ An alternative curve to Zexe's SW6 (faster). A pairing-friendly curve (embedding
 - [ ] use a sextic twist to sw6_bis so that elements in `G2` will be in `Fq`
 - [x] optimal ate pairing (Alg.5)
 - [ ] optimized Alg.5
-  - [ ] NAF
+  - [x] NAF
   - [ ] f_{u^2-u-1,Q}
 - [x] Alg.5 in affine coordinates
 - [x] optimize FE hard part
