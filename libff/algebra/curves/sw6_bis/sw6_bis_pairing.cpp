@@ -307,7 +307,7 @@ sw6_bis_GT sw6_bis_final_exponentiation(const sw6_bis_Fq6 &elt)
     enter_block("Call to sw6_bis_final_exponentiation");
     const sw6_bis_Fq6 elt_inv = elt.inverse();
     sw6_bis_Fq6 elt_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt, elt_inv);
-    const sw6_bis_Fq6 elt_inv_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt_inv, elt);
+    // const sw6_bis_Fq6 elt_inv_to_first_chunk = sw6_bis_final_exponentiation_first_chunk(elt_inv, elt);
     // sw6_bis_GT result = old_sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk, elt_inv_to_first_chunk);
     sw6_bis_GT result = sw6_bis_final_exponentiation_last_chunk(elt_to_first_chunk);
 
@@ -640,8 +640,6 @@ sw6_bis_ate_G2_precomp sw6_bis_ate_precompute_G2(const sw6_bis_G2& Q, const bigi
     std::vector<long> NAF = find_wnaf(1, loop_count);
     for (long i = NAF.size() - 1; i >= 0; --i)
     {
-        const bool bit = loop_count.test_bit(i);
-
         if (!found_nonzero)
         {
             /* this skips the MSB itself */
@@ -820,6 +818,7 @@ sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
     return f_1 * f_2;
 }
 
+/*
 sw6_bis_Fq6 sw6_bis_ate_double_miller_loop(const sw6_bis_ate_G1_precomp &prec_P1,
                                      const sw6_bis_ate_G2_precomp &prec_Q1,
                                      const sw6_bis_ate_G1_precomp &prec_P2,
@@ -844,14 +843,14 @@ sw6_bis_Fq6 sw6_bis_ate_double_miller_loop(const sw6_bis_ate_G1_precomp &prec_P1
 
         if (!found_one)
         {
-            /* this skips the MSB itself */
+            // this skips the MSB itself
             found_one |= bit;
             continue;
         }
 
-        /* code below gets executed for all bits (EXCEPT the MSB itself) of
-           sw6_bis_param_p (skipping leading zeros) in MSB to LSB
-           order */
+        // code below gets executed for all bits (EXCEPT the MSB itself) of
+        // sw6_bis_param_p (skipping leading zeros) in MSB to LSB
+        // order
         sw6_bis_ate_dbl_coeffs dc1 = prec_Q1.dbl_coeffs[dbl_idx];
         sw6_bis_ate_dbl_coeffs dc2 = prec_Q2.dbl_coeffs[dbl_idx];
         ++dbl_idx;
@@ -896,6 +895,7 @@ sw6_bis_Fq6 sw6_bis_ate_double_miller_loop(const sw6_bis_ate_G1_precomp &prec_P1
 
     return f;
 }
+*/
 
 sw6_bis_Fq6 sw6_bis_ate_pairing(const sw6_bis_G1& P, const sw6_bis_G2 &Q)
 {
@@ -935,6 +935,7 @@ sw6_bis_Fq6 sw6_bis_miller_loop(const sw6_bis_G1_precomp &prec_P,
     return sw6_bis_ate_miller_loop(prec_P, prec_Q_1, prec_Q_2);
 }
 
+/*
 sw6_bis_Fq6 sw6_bis_double_miller_loop(const sw6_bis_G1_precomp &prec_P1,
                                  const sw6_bis_G2_precomp &prec_Q1,
                                  const sw6_bis_G1_precomp &prec_P2,
@@ -942,6 +943,7 @@ sw6_bis_Fq6 sw6_bis_double_miller_loop(const sw6_bis_G1_precomp &prec_P1,
 {
     return sw6_bis_ate_double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
 }
+*/
 
 sw6_bis_Fq6 sw6_bis_pairing(const sw6_bis_G1& P,
                       const sw6_bis_G2 &Q)

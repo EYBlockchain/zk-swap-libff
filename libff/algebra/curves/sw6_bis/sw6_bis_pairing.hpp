@@ -97,10 +97,12 @@ sw6_bis_ate_G2_precomp sw6_bis_ate_precompute_G2(const sw6_bis_G2& Q, const bigi
 
 sw6_bis_Fq6 sw6_bis_ate_miller_loop(const sw6_bis_ate_G1_precomp &prec_P,
                               const sw6_bis_ate_G2_precomp &prec_Q_1, const sw6_bis_ate_G2_precomp &prec_Q_2);
+/*
 sw6_bis_Fq6 sw6_bis_ate_double_miller_loop(const sw6_bis_ate_G1_precomp &prec_P1,
                                      const sw6_bis_ate_G2_precomp &prec_Q1,
                                      const sw6_bis_ate_G1_precomp &prec_P2,
                                      const sw6_bis_ate_G2_precomp &prec_Q2);
+*/
 
 sw6_bis_Fq6 sw6_bis_ate_pairing(const sw6_bis_G1& P,
                           const sw6_bis_G2 &Q);

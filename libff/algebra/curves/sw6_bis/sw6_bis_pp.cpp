@@ -45,6 +45,7 @@ sw6_bis_Fq6 sw6_bis_pp::affine_ate_miller_loop(const sw6_bis_affine_ate_G1_preco
     return sw6_bis_affine_ate_miller_loop(prec_P, prec_Q_1, prec_Q_2);
 }
 
+/*
 sw6_bis_Fq6 sw6_bis_pp::double_miller_loop(const sw6_bis_G1_precomp &prec_P1,
                                      const sw6_bis_G2_precomp &prec_Q1,
                                      const sw6_bis_G1_precomp &prec_P2,
@@ -53,7 +54,6 @@ sw6_bis_Fq6 sw6_bis_pp::double_miller_loop(const sw6_bis_G1_precomp &prec_P1,
     return sw6_bis_double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
 }
 
-/*
 sw6_bis_Fq6 sw6_bis_pp::affine_ate_e_over_e_miller_loop(const sw6_bis_affine_ate_G1_precomputation &prec_P1,
                                                   const sw6_bis_affine_ate_G2_precomputation &prec_Q1,
                                                   const sw6_bis_affine_ate_G1_precomputation &prec_P2,

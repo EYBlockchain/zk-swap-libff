@@ -47,11 +47,11 @@ public:
                                                             const sw6_bis_affine_ate_G2_precomputation &prec_Q2,
                                                             const sw6_bis_affine_ate_G1_precomputation &prec_P3,
                                                             const sw6_bis_affine_ate_G2_precomputation &prec_Q3);
-    */
     static sw6_bis_Fq6 double_miller_loop(const sw6_bis_G1_precomp &prec_P1,
                                        const sw6_bis_G2_precomp &prec_Q1,
                                        const sw6_bis_G1_precomp &prec_P2,
                                        const sw6_bis_G2_precomp &prec_Q2);
+    */
 
     /* the following are used in test files */
     static sw6_bis_Fq6 pairing(const sw6_bis_G1 &P,
