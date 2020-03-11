@@ -6,7 +6,7 @@
  *****************************************************************************/
 #include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
-#include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
+#include <libff/algebra/curves/hg6/hg6_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
@@ -155,9 +155,9 @@ void test_cyclotomic_squaring<Fqk<pendulum_pp> >()
 }
 
 template<>
-void test_cyclotomic_squaring<Fqk<sw6_bis_pp> >()
+void test_cyclotomic_squaring<Fqk<hg6_pp> >()
 {
-    typedef Fqk<sw6_bis_pp> FieldT;
+    typedef Fqk<hg6_pp> FieldT;
     assert(FieldT::extension_degree() % 2 == 0);
     FieldT a = FieldT::random_element();
     FieldT a_unitary = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
@@ -302,10 +302,10 @@ int main(void)
     test_all_fields<sw6_pp>();
     test_cyclotomic_squaring<Fqk<sw6_pp> >();
 
-    printf("sw6_bis:\n");
-    sw6_bis_pp::init_public_params();
-    test_all_fields<sw6_bis_pp>();
-    test_cyclotomic_squaring<Fqk<sw6_bis_pp> >();
+    printf("hg6:\n");
+    hg6_pp::init_public_params();
+    test_all_fields<hg6_pp>();
+    test_cyclotomic_squaring<Fqk<hg6_pp> >();
 
     printf("mnt4:\n");
     mnt4_pp::init_public_params();

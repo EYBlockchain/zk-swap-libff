@@ -6,7 +6,7 @@
  *****************************************************************************/
 #include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
-#include <libff/algebra/curves/sw6_bis/sw6_bis_pp.hpp>
+#include <libff/algebra/curves/hg6/hg6_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/common/profiling.hpp>
@@ -70,14 +70,6 @@ void pairing_test()
     G1<ppT> P = (Fr<ppT>::random_element()) * G1<ppT>::one();
     G2<ppT> Q = (Fr<ppT>::random_element()) * G2<ppT>::one();
 
-    printf("P:\n");
-    P.print();
-    P.print_coordinates();
-    printf("Q:\n");
-    Q.print();
-    Q.print_coordinates();
-    printf("\n\n");
-
     Fr<ppT> s = Fr<ppT>::random_element();
     G1<ppT> sP = s * P;
     G2<ppT> sQ = s * Q;
@@ -86,9 +78,6 @@ void pairing_test()
     GT<ppT> ans1 = ppT::reduced_pairing(sP, Q);
     GT<ppT> ans2 = ppT::reduced_pairing(P, sQ);
     GT<ppT> ans3 = ppT::reduced_pairing(P, Q)^s;
-    ans1.print();
-    ans2.print();
-    ans3.print();
     assert(ans1 == ans2);
     assert(ans2 == ans3);
 
@@ -125,12 +114,6 @@ void affine_pairing_test()
     G1<ppT> P = (Fr<ppT>::random_element()) * G1<ppT>::one();
     G2<ppT> Q = (Fr<ppT>::random_element()) * G2<ppT>::one();
 
-    printf("P:\n");
-    P.print();
-    printf("Q:\n");
-    Q.print();
-    printf("\n\n");
-
     Fr<ppT> s = Fr<ppT>::random_element();
     G1<ppT> sP = s * P;
     G2<ppT> sQ = s * Q;
@@ -139,9 +122,6 @@ void affine_pairing_test()
     GT<ppT> ans1 = ppT::affine_reduced_pairing(sP, Q);
     GT<ppT> ans2 = ppT::affine_reduced_pairing(P, sQ);
     GT<ppT> ans3 = ppT::affine_reduced_pairing(P, Q)^s;
-    ans1.print();
-    ans2.print();
-    ans3.print();
     assert(ans1 == ans2);
     assert(ans2 == ans3);
 
@@ -180,10 +160,9 @@ int main(void)
     pairing_test<sw6_pp>();
     double_miller_loop_test<sw6_pp>();
 
-    printf("sw6_bis:\n");
-    sw6_bis_pp::init_public_params();
-    pairing_test<sw6_bis_pp>();
-    double_miller_loop_test<sw6_bis_pp>();
+    printf("hg6:\n");
+    hg6_pp::init_public_params();
+    pairing_test<hg6_pp>();
 
     printf("mnt4:\n");
     mnt4_pp::init_public_params();
