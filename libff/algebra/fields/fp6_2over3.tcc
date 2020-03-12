@@ -97,23 +97,24 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_024(const Fp_mod
                                                                                 const Fp_model<n, modulus> &ell_VW,
                                                                                 const Fp_model<n, modulus> &ell_VV) const
 {
+  /*
        Fp6_2over3_model<n,modulus> a(my_Fp3(ell_0, my_Fp::zero(), ell_VV),
        my_Fp3(my_Fp::zero(), ell_VW, my_Fp::zero()));
 
        return (*this) * a;
-    /*
-    my_Fp2 z0 = this->c0.c0;
-    my_Fp2 z1 = this->c0.c1;
-    my_Fp2 z2 = this->c0.c2;
-    my_Fp2 z3 = this->c1.c0;
-    my_Fp2 z4 = this->c1.c1;
-    my_Fp2 z5 = this->c1.c2;
+  */
+    my_Fp z0 = this->c0.c0;
+    my_Fp z1 = this->c0.c1;
+    my_Fp z2 = this->c0.c2;
+    my_Fp z3 = this->c1.c0;
+    my_Fp z4 = this->c1.c1;
+    my_Fp z5 = this->c1.c2;
 
-    my_Fp2 x0 = ell_0;
-    my_Fp2 x2 = ell_VV;
-    my_Fp2 x4 = ell_VW;
+    my_Fp x0 = ell_0;
+    my_Fp x2 = ell_VV;
+    my_Fp x4 = ell_VW;
 
-    my_Fp2 t0, t1, t2, s0, T3, T4, D0, D2, D4, S1;
+    my_Fp t0, t1, t2, s0, T3, T4, D0, D2, D4, S1;
 
     D0 = z0 * x0;
     D2 = z2 * x2;
@@ -125,14 +126,14 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_024(const Fp_mod
     // For z.a_.a_ = z0.
     S1 = z1 * x2;
     T3 = S1 + D4;
-    T4 = my_Fp6::non_residue * T3 + D0;
+    T4 = my_Fp3::non_residue * T3 + D0;
     z0 = T4;
 
     // For z.a_.b_ = z1
     T3 = z5 * x4;
     S1 = S1 + T3;
     T3 = T3 + D2;
-    T4 = my_Fp6::non_residue * T3;
+    T4 = my_Fp3::non_residue * T3;
     T3 = z1 * x0;
     S1 = S1 + T3;
     T4 = T4 + T3;
@@ -150,7 +151,7 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_024(const Fp_mod
     z2 = T3;
     t1 = x2 + x4;
     T3 = t0 * t1 - D2 - D4;
-    T4 = my_Fp6::non_residue * T3;
+    T4 = my_Fp3::non_residue * T3;
     T3 = z3 * x0;
     S1 = S1 + T3;
     T4 = T4 + T3;
@@ -159,7 +160,7 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_024(const Fp_mod
     // For z.b_.b_ = z4
     T3 = z5 * x2;
     S1 = S1 + T3;
-    T4 = my_Fp6::non_residue * T3;
+    T4 = my_Fp3::non_residue * T3;
     t0 = x0 + x4;
     T3 = t2 * t0 - D0 - D4;
     T4 = T4 + T3;
@@ -170,10 +171,9 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_024(const Fp_mod
     T3 = s0 * t0 - S1;
     z5 = T3;
 
-    return Fp12_2over3over2_model<n,modulus>(my_Fp6(z0,z1,z2),my_Fp6(z3,z4,z5));
-    */
-
+    return Fp6_2over3_model<n,modulus>(my_Fp3(z0,z1,z2),my_Fp3(z3,z4,z5));
 }
+
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_2345(const Fp6_2over3_model<n,modulus> &other) const
 {
