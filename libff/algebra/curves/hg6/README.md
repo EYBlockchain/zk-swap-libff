@@ -21,13 +21,15 @@ Beside having a field size of 761-bit and G2 elements on Fq, parameters are expr
 
 ## TODO:
 - [x] change curve coefficient to `b=-1`
-- [x] use a sextic twist to hg6 so that elements in `G2` will be in `Fq`
+- [x] use a sextic twist to hg6 so that elements in `G2` are be in `Fq`
 - [x] optimal ate pairing (Alg.5)
 - [ ] optimized Alg.5
   - [x] NAF
   - [ ] f_{u^2-u-1,Q}
 - [x] Alg.5 in affine coordinates
 - [x] optimize FE hard part
+- [x] optimize mul_by_024 in Fq6
+- [ ] factor a square in mul pairing (double_pairing)
 
 - [ ] Fast multiplication with GLV endomorphisms (patent until 09/20)
 - [ ] Faster hash into curve with endomorphisms (patent until 09/20)
