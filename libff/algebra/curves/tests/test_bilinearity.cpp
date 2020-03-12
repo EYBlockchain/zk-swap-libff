@@ -62,6 +62,18 @@ void pairing_batching_test()
 }
 
 template<typename ppT>
+void pairing_timing()
+{
+    for (size_t i = 0; i < 1000; ++i)
+    {
+      std::cout << i << " run\n";
+      ppT::reduced_pairing((Fr<ppT>::random_element()) * G1<ppT>::one(), (Fr<ppT>::random_element()) * G2<ppT>::one());
+      // ppT::affine_reduced_pairing((Fr<ppT>::random_element()) * G1<ppT>::one(), (Fr<ppT>::random_element()) * G2<ppT>::one());
+    }
+
+}
+
+template<typename ppT>
 void pairing_test()
 {
     GT<ppT> GT_one = GT<ppT>::one();
@@ -159,6 +171,7 @@ int main(void)
     sw6_pp::init_public_params();
     pairing_test<sw6_pp>();
     double_miller_loop_test<sw6_pp>();
+    affine_pairing_test<sw6_pp>();
 
     printf("hg6:\n");
     hg6_pp::init_public_params();
@@ -203,4 +216,5 @@ int main(void)
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
 #endif
+    */
 }

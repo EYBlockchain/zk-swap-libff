@@ -359,7 +359,7 @@ hg6_Fq6 hg6_ate_miller_loop(const hg6_ate_G1_precomp &prec_P,
                                      const hg6_ate_G2_precomp &prec_Q_1,
                                      const hg6_ate_G2_precomp &prec_Q_2)
 {
-    enter_block("Call to hg6_ate_miller_loop f_{u+1,Q}(P)");
+    enter_block("Call to hg6_optimal_ate_miller_loop");
 
     // f_{u+1,Q}(P)
     hg6_Fq6 f_1 = hg6_Fq6::one();
@@ -400,10 +400,7 @@ hg6_Fq6 hg6_ate_miller_loop(const hg6_ate_G1_precomp &prec_P,
     {
     	f_1 = f_1.inverse();
     }
-    leave_block("Call to hg6_ate_miller_loop f_{u+1,Q}(P)");
-
-    enter_block("Call to hg6_ate_miller_loop f_{u^3-u^2-u,Q}(P)");
-
+    
     // f_{u^3-u^2-u,Q}(P)
     hg6_Fq6 f_2 = hg6_Fq6::one();
 
@@ -444,7 +441,7 @@ hg6_Fq6 hg6_ate_miller_loop(const hg6_ate_G1_precomp &prec_P,
     	f_2 = f_2.inverse();
     }
 
-    leave_block("Call to hg6_ate_miller_loop f_{u^3-u^2-u,Q}(P)");
+    leave_block("Call to hg6_optimal_ate_miller_loop");
 
     f_2 = f_2.Frobenius_map(1);
 
