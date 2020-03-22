@@ -1,16 +1,3 @@
-/** @file
- *****************************************************************************
-
- Implementation of interfaces for public parameters of MNT6.
-
- See pendulum_pp.hpp .
-
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 
 namespace libff {

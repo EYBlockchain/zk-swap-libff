@@ -1,10 +1,3 @@
-/** @file
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #ifndef BW12_446_INIT_HPP_
 #define BW12_446_INIT_HPP_
 #include <libff/algebra/curves/public_params.hpp>
