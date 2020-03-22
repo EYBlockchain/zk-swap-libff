@@ -217,12 +217,12 @@ void doubling_step_for_miller_loop(const bls12_381_Fq two_inv,
     const bls12_381_Fq2 J = X.squared();                           // J = X1^2
     const bls12_381_Fq2 E_squared = E.squared();                   // E_squared = E^2
 
-    current.X = A * (B-F);                                         // X3 = A * (B-F)
-    current.Y = G.squared() - (E_squared+E_squared+E_squared);     // Y3 = G^2 - 3*E^2
-    current.Z = B * H;                                             // Z3 = B * H
-    c.ell_VW = bls12_381_twist * I;                                // ell_VW = xi * I
-    c.ell_VV = J+J+J;                                              // ell_VV = 3*J (later: * xP)
-    c.ell_0 = -H;                                                  // ell_0 = - H (later: * yP)
+    current.X = A * (B-F);                                       // X3 = A * (B-F)
+    current.Y = G.squared() - (E_squared+E_squared+E_squared);   // Y3 = G^2 - 3*E^2
+    current.Z = B * H;                                           // Z3 = B * H
+    c.ell_0 = I;                               // ell_0 = xi * I
+    c.ell_VW = -bls12_381_twist * H;                                               // ell_VW = - H (later: * yP)
+    c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
 }
 
 void mixed_addition_step_for_miller_loop(const bls12_381_G2 base,
@@ -232,20 +232,20 @@ void mixed_addition_step_for_miller_loop(const bls12_381_G2 base,
     const bls12_381_Fq2 X1 = current.X, Y1 = current.Y, Z1 = current.Z;
     const bls12_381_Fq2 &x2 = base.X, &y2 = base.Y;
 
-    const bls12_381_Fq2 D = X1 - x2 * Z1;             // D = X1 - X2*Z1
-    const bls12_381_Fq2 E = Y1 - y2 * Z1;             // E = Y1 - Y2*Z1
-    const bls12_381_Fq2 F = D.squared();              // F = D^2
-    const bls12_381_Fq2 G = E.squared();              // G = E^2
-    const bls12_381_Fq2 H = D*F;                      // H = D*F
-    const bls12_381_Fq2 I = X1 * F;                   // I = X1 * F
-    const bls12_381_Fq2 J = H + Z1*G - (I+I);         // J = H + Z1*G - (I+I)
+    const bls12_381_Fq2 D = X1 - x2 * Z1;          // D = X1 - X2*Z1
+    const bls12_381_Fq2 E = Y1 - y2 * Z1;          // E = Y1 - Y2*Z1
+    const bls12_381_Fq2 F = D.squared();           // F = D^2
+    const bls12_381_Fq2 G = E.squared();           // G = E^2
+    const bls12_381_Fq2 H = D*F;                   // H = D*F
+    const bls12_381_Fq2 I = X1 * F;                // I = X1 * F
+    const bls12_381_Fq2 J = H + Z1*G - (I+I);      // J = H + Z1*G - (I+I)
 
-    current.X = D * J;                                // X3 = D*J
-    current.Y = E * (I-J)-(H * Y1);                   // Y3 = E*(I-J)-(H*Y1)
-    current.Z = Z1 * H;                               // Z3 = Z1*H
-    c.ell_VW = bls12_381_twist * (E * x2 - D * y2);   // ell_0 = xi * (E * X2 - D * Y2)
-    c.ell_VV = -E;                                   // ell_VV = - E (later: * xP)
-    c.ell_0 = D;                                      // ell_VW = D (later: * yP    )
+    current.X = D * J;                           // X3 = D*J
+    current.Y = E * (I-J)-(H * Y1);              // Y3 = E*(I-J)-(H*Y1)
+    current.Z = Z1 * H;                          // Z3 = Z1*H
+    c.ell_0 = E * x2 - D * y2;                  // ell_0 = xi * (E * X2 - D * Y2)
+    c.ell_VV = - E;                              // ell_VV = - E (later: * xP)
+    c.ell_VW = bls12_381_twist * D;                                // ell_VW = D (later: * yP    )
 }
 
 bls12_381_ate_G1_precomp bls12_381_ate_precompute_G1(const bls12_381_G1& P)
@@ -338,12 +338,12 @@ bls12_381_Fq12 bls12_381_ate_miller_loop(const bls12_381_ate_G1_precomp &prec_P,
 
         c = prec_Q.coeffs[idx++];
         f = f.squared();
-        f = f.mul_by_024(c.ell_0, prec_P.PY * c.ell_VW, prec_P.PX * c.ell_VV);
+        f = f.mul_by_045(c.ell_0, prec_P.PY * c.ell_VW, prec_P.PX * c.ell_VV);
 
         if (bit)
         {
             c = prec_Q.coeffs[idx++];
-            f = f.mul_by_024(c.ell_0, prec_P.PY * c.ell_VW, prec_P.PX * c.ell_VV);
+            f = f.mul_by_045(c.ell_0, prec_P.PY * c.ell_VW, prec_P.PX * c.ell_VV);
         }
 
     }
@@ -390,8 +390,8 @@ bls12_381_Fq12 bls12_381_ate_double_miller_loop(const bls12_381_ate_G1_precomp &
 
         f = f.squared();
 
-        f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-        f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+        f = f.mul_by_045(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
+        f = f.mul_by_045(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
 
         if (bit)
         {
@@ -399,8 +399,8 @@ bls12_381_Fq12 bls12_381_ate_double_miller_loop(const bls12_381_ate_G1_precomp &
             bls12_381_ate_ell_coeffs c2 = prec_Q2.coeffs[idx];
             ++idx;
 
-            f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-            f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+            f = f.mul_by_045(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
+            f = f.mul_by_045(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
         }
     }
 

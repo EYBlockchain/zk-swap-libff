@@ -19,6 +19,7 @@
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/bls12_377/bls12_377_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/curves/toy_curve/toy_curve_pp.hpp>
 #include <libff/algebra/fields/fp12_2over3over2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
@@ -274,6 +275,13 @@ void test_Fp4_tom_cook()
 
 int main(void)
 {
+    printf("bls12_381:\n");
+    bls12_381_pp::init_public_params();
+    test_field<bls12_381_Fq6>();
+    test_Frobenius<bls12_381_Fq6>();
+    test_all_fields<bls12_381_pp>();
+
+    /*
     printf("edwards:\n");
     edwards_pp::init_public_params();
     test_all_fields<edwards_pp>();
@@ -346,4 +354,5 @@ int main(void)
     test_field<Fr<bn128_pp> >();
     test_field<Fq<bn128_pp> >();
 #endif
+    */
 }
