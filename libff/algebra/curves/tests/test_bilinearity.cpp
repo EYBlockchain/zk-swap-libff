@@ -216,5 +216,4 @@ int main(void)
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
 #endif
-    */
 }

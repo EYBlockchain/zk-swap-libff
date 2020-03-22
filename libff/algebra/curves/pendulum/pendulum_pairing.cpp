@@ -1,16 +1,3 @@
-/** @file
- *****************************************************************************
-
- Implementation of interfaces for pairing operations on MNT6.
-
- See pendulum_pairing.hpp .
-
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #include <cassert>
 
 #include <libff/algebra/curves/pendulum/pendulum_g1.hpp>

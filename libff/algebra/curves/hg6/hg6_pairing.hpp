@@ -1,10 +1,3 @@
-/** @file
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #ifndef SW6_BIS_PAIRING_HPP_
 #define SW6_BIS_PAIRING_HPP_
 #include <vector>

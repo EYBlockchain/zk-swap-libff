@@ -1,10 +1,3 @@
-/** @file
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #include <cassert>
 
 #include <libff/algebra/curves/hg6/hg6_g1.hpp>
@@ -400,7 +393,7 @@ hg6_Fq6 hg6_ate_miller_loop(const hg6_ate_G1_precomp &prec_P,
     {
     	f_1 = f_1.inverse();
     }
-    
+
     // f_{u^3-u^2-u,Q}(P)
     hg6_Fq6 f_2 = hg6_Fq6::one();
 

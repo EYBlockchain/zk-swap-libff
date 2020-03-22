@@ -1,16 +1,3 @@
-/** @file
- *****************************************************************************
-
- Implementation of interfaces for the MNT6 G1 group.
-
- See pendulum_g1.hpp .
-
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #include <libff/algebra/curves/pendulum/pendulum_g1.hpp>
 
 namespace libff {

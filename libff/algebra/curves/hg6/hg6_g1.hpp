@@ -1,14 +1,3 @@
-/** @file
- *****************************************************************************
-
- Declaration of interfaces for the SW6_BIS G1 group.
-
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #ifndef SW6_BIS_G1_HPP_
 #define SW6_BIS_G1_HPP_
 

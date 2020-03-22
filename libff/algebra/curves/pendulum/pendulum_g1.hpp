@@ -1,14 +1,3 @@
-/** @file
- *****************************************************************************
-
- Declaration of interfaces for the PENDULUM G1 group.
-
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #ifndef PENDULUM_G1_HPP_
 #define PENDULUM_G1_HPP_
 

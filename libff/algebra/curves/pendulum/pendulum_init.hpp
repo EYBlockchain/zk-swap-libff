@@ -1,14 +1,3 @@
-/** @file
- *****************************************************************************
-
- Declaration of interfaces for initializing PENDULUM.
-
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #ifndef PENDULUM_INIT_HPP_
 #define PENDULUM_INIT_HPP_
 

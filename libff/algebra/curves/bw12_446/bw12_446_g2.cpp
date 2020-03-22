@@ -1,10 +1,3 @@
-/** @file
- *****************************************************************************
- * @author     This file is part of libff, developed by SCIPR Lab
- *             and contributors (see AUTHORS).
- * @copyright  MIT license (see LICENSE file)
- *****************************************************************************/
-
 #include <libff/algebra/curves/bw12_446/bw12_446_g2.hpp>
 
 namespace libff {
