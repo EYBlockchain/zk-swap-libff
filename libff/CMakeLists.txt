@@ -98,11 +98,11 @@ add_library(
   algebra/curves/sw6/sw6_pairing.cpp
   algebra/curves/sw6/sw6_pp.cpp
 
-  algebra/curves/sw6_bis/sw6_bis_g1.cpp
-  algebra/curves/sw6_bis/sw6_bis_g2.cpp
-  algebra/curves/sw6_bis/sw6_bis_init.cpp
-  algebra/curves/sw6_bis/sw6_bis_pairing.cpp
-  algebra/curves/sw6_bis/sw6_bis_pp.cpp
+  algebra/curves/hg6/hg6_g1.cpp
+  algebra/curves/hg6/hg6_g2.cpp
+  algebra/curves/hg6/hg6_init.cpp
+  algebra/curves/hg6/hg6_pairing.cpp
+  algebra/curves/hg6/hg6_pp.cpp
 
   ${FF_EXTRASRCS}
 )
