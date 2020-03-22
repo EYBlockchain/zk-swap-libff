@@ -86,6 +86,12 @@ add_library(
   algebra/curves/pendulum/pendulum_pairing.cpp
   algebra/curves/pendulum/pendulum_pp.cpp
 
+  algebra/curves/bls12_381/bls12_381_g1.cpp
+  algebra/curves/bls12_381/bls12_381_g2.cpp
+  algebra/curves/bls12_381/bls12_381_init.cpp
+  algebra/curves/bls12_381/bls12_381_pairing.cpp
+  algebra/curves/bls12_381/bls12_381_pp.cpp
+
   algebra/curves/bls12_377/bls12_377_g1.cpp
   algebra/curves/bls12_377/bls12_377_g2.cpp
   algebra/curves/bls12_377/bls12_377_init.cpp

@@ -237,6 +237,17 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic_
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::mul_by_045(const Fp2_model<n, modulus> &ell_0,
+                                                                                const Fp2_model<n, modulus> &ell_VW,
+                                                                                const Fp2_model<n, modulus> &ell_VV) const
+{
+    Fp12_2over3over2_model<n,modulus> a(my_Fp6(ell_VW, my_Fp2::zero(), my_Fp2::zero()),
+                                        my_Fp6(my_Fp2::zero(), ell_0, ell_VV));
+
+    return (*this) * a;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::mul_by_024(const Fp2_model<n, modulus> &ell_0,
                                                                                 const Fp2_model<n, modulus> &ell_VW,
                                                                                 const Fp2_model<n, modulus> &ell_VV) const
