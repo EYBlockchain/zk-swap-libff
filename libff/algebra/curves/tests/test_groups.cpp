@@ -156,7 +156,6 @@ int main(void)
     test_output<G2<bls12_381_pp> >();
     test_mul_by_q<G2<bls12_381_pp> >();
 
-    /*
     printf("edwards: \n");
     edwards_pp::init_public_params();
     test_group<G1<edwards_pp> >();
@@ -257,5 +256,4 @@ int main(void)
     test_group<G2<bn128_pp> >();
     test_output<G2<bn128_pp> >();
 #endif
-    */
 }

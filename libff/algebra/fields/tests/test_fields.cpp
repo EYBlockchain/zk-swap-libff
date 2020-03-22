@@ -281,7 +281,6 @@ int main(void)
     test_Frobenius<bls12_381_Fq6>();
     test_all_fields<bls12_381_pp>();
 
-    /*
     printf("edwards:\n");
     edwards_pp::init_public_params();
     test_all_fields<edwards_pp>();
@@ -354,5 +353,4 @@ int main(void)
     test_field<Fr<bn128_pp> >();
     test_field<Fq<bn128_pp> >();
 #endif
-    */
 }

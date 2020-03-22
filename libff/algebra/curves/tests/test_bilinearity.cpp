@@ -153,7 +153,6 @@ int main(void)
     double_miller_loop_test<bls12_381_pp>();
     pairing_batching_test<bls12_381_pp>();
 
-    /*
     printf("edwards:\n");
     edwards_pp::init_public_params();
     pairing_test<edwards_pp>();
