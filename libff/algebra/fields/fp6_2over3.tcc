@@ -93,6 +93,46 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator*(const Fp6_2ov
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_045(const Fp_model<n, modulus> &ell_0,
+                                                                    const Fp_model<n, modulus> &ell_VW,
+                                                                    const Fp_model<n, modulus> &ell_VV) const
+{
+  /*
+    // OLD
+    Fp6_2over3_model<n,modulus> a(my_Fp3(ell_VW, my_Fp::zero(), my_Fp::zero()),
+                                  my_Fp3(my_Fp::zero(), ell_0, ell_VV));
+
+    return (*this) * a;
+  */
+
+    my_Fp z0 = this->c0.c0;
+    my_Fp z1 = this->c0.c1;
+    my_Fp z2 = this->c0.c2;
+    my_Fp z3 = this->c1.c0;
+    my_Fp z4 = this->c1.c1;
+    my_Fp z5 = this->c1.c2;
+
+    my_Fp x0 = ell_VW;
+    my_Fp x4 = ell_0;
+    my_Fp x5 = ell_VV;
+
+    my_Fp t0, t1, t2, t3, t4, t5;
+    my_Fp tmp1, tmp2;
+
+    tmp1 = my_Fp3::non_residue * x4;
+    tmp2 = my_Fp3::non_residue * x5;
+
+    t0 = x0 * z0 + tmp1 * z4 + tmp2 * z3;
+    t1 = x0 * z1 + tmp1 * z5 + tmp2 * z4;
+    t2 = x0 * z2 + x4 * z3 + tmp2 * z5;
+    t3 = x0 * z3 + tmp1 * z2 + tmp2 * z1;
+    t4 = x0 * z4 + x4 * z0 + tmp2 * z2;
+    t5 = x0 * z5 + x4 * z1 + x5 * z0;
+
+    return Fp6_2over3_model<n,modulus>(my_Fp3(t0,t1,t2),my_Fp3(t3,t4,t5));
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_024(const Fp_model<n, modulus> &ell_0,
                                                                                 const Fp_model<n, modulus> &ell_VW,
                                                                                 const Fp_model<n, modulus> &ell_VV) const
