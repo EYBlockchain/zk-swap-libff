@@ -146,7 +146,6 @@ int main(void)
 {
     start_profiling();
 
-    /*
     printf("bls12_381:\n");
     bls12_381_pp::init_public_params();
     pairing_test<bls12_381_pp>();
@@ -179,13 +178,11 @@ int main(void)
     pairing_test<sw6_pp>();
     double_miller_loop_test<sw6_pp>();
     affine_pairing_test<sw6_pp>();
-    */
 
     printf("hg6:\n");
     hg6_pp::init_public_params();
-    pairing_timing<hg6_pp>();
+    pairing_test<hg6_pp>();
 
-    /*
     printf("mnt4:\n");
     mnt4_pp::init_public_params();
     pairing_test<mnt4_pp>();
@@ -225,5 +222,4 @@ int main(void)
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
 #endif
-    */
 }
