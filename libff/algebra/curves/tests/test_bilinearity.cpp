@@ -71,7 +71,6 @@ void pairing_timing()
       ppT::reduced_pairing((Fr<ppT>::random_element()) * G1<ppT>::one(), (Fr<ppT>::random_element()) * G2<ppT>::one());
       // ppT::affine_reduced_pairing((Fr<ppT>::random_element()) * G1<ppT>::one(), (Fr<ppT>::random_element()) * G2<ppT>::one());
     }
-
 }
 
 template<typename ppT>

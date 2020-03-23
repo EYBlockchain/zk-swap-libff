@@ -24,9 +24,11 @@ typedef Fp6_2over3_model<hg6_q_limbs, hg6_modulus_q> hg6_Fq6;
 typedef hg6_Fq6 hg6_GT;
 
 // parameters for D-twisted short Weierstrass curve E'/Fq : y^2 = x^3 + (b / xi)
+//         or for M-twisted short Weierstrass curve E''/Fq : y^2 = x^3 + b * xi
 extern hg6_Fq hg6_twist;
 extern hg6_Fq hg6_twist_coeff_a;
 extern hg6_Fq hg6_twist_coeff_b;
+extern bool hg6_D_twist;
 
 // parameters for pairing
 extern bigint<hg6_q_limbs> hg6_ate_loop_count1;

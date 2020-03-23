@@ -252,9 +252,18 @@ void doubling_step_for_miller_loop(const hg6_Fq two_inv,
     current.X_ = A * (B-F);                                       // X3 = A * (B-F)
     current.Y_ = G.squared() - (E_squared+E_squared+E_squared);   // Y3 = G^2 - 3*E^2
     current.Z_ = B * H;                                           // Z3 = B * H
-    c.ell_0 = hg6_twist * I;                               // ell_0 = xi * I
-    c.ell_VW = -H;                                               // ell_VW = - H (later: * yP)
-    c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
+    if(hg6_D_twist)
+    {
+      c.ell_0 = hg6_twist * I;                                     // ell_0 = xi * I
+      c.ell_VW = -H;                                               // ell_VW = - H (later: * yP)
+      c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
+    }
+    else
+    {
+      c.ell_0 = I;                                                 // ell_0 = I
+      c.ell_VW = -hg6_twist * H;                                   // ell_VW = -xi * H (later: * yP)
+      c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
+    }
 }
 
 void mixed_addition_step_for_miller_loop(const hg6_G2 base,
@@ -275,10 +284,18 @@ void mixed_addition_step_for_miller_loop(const hg6_G2 base,
     current.X_ = D * J;                           // X3 = D*J
     current.Y_ = E * (I-J)-(H * Y1);              // Y3 = E*(I-J)-(H*Y1)
     current.Z_ = Z1 * H;                          // Z3 = Z1*H
-    c.ell_0 = hg6_twist * (E * x2 - D * y2); // ell_0 = xi * (E * X2 - D * Y2)
-    c.ell_VV = - E;                              // ell_VV = - E (later: * xP)
-    c.ell_VW = D;                                // ell_VW = D (later: * yP    )
-
+    if(hg6_D_twist)
+    {
+      c.ell_0 = hg6_twist * (E * x2 - D * y2); // ell_0 = xi * (E * X2 - D * Y2)
+      c.ell_VV = - E;                              // ell_VV = - E (later: * xP)
+      c.ell_VW = D;                                // ell_VW = D (later: * yP)
+    }
+    else
+    {
+      c.ell_0 = E * x2 - D * y2;                   // ell_0 = E * X2 - D * Y2
+      c.ell_VV = - E;                              // ell_VV = - E (later: * xP)
+      c.ell_VW = hg6_twist * D;                    // ell_VW = xi * D (later: * yP)
+    }
 }
 
 hg6_ate_G1_precomp hg6_ate_precompute_G1(const hg6_G1& P)
@@ -379,12 +396,19 @@ hg6_Fq6 hg6_ate_miller_loop(const hg6_ate_G1_precomp &prec_P,
 
         c_1 = prec_Q_1.coeffs[idx_1++];
         f_1 = f_1.squared();
-        f_1 = f_1.mul_by_024(c_1.ell_0, prec_P.PY * c_1.ell_VW, prec_P.PX * c_1.ell_VV);
+
+        if(hg6_D_twist)
+          f_1 = f_1.mul_by_024(c_1.ell_0, prec_P.PY * c_1.ell_VW, prec_P.PX * c_1.ell_VV);
+        else
+          f_1 = f_1.mul_by_045(c_1.ell_0, prec_P.PY * c_1.ell_VW, prec_P.PX * c_1.ell_VV);
 
         if (NAF_1[i] != 0)
         {
             c_1 = prec_Q_1.coeffs[idx_1++];
-            f_1 = f_1.mul_by_024(c_1.ell_0, prec_P.PY * c_1.ell_VW, prec_P.PX * c_1.ell_VV);
+            if(hg6_D_twist)
+              f_1 = f_1.mul_by_024(c_1.ell_0, prec_P.PY * c_1.ell_VW, prec_P.PX * c_1.ell_VV);
+            else
+              f_1 = f_1.mul_by_045(c_1.ell_0, prec_P.PY * c_1.ell_VW, prec_P.PX * c_1.ell_VV);
         }
 
     }
@@ -419,12 +443,18 @@ hg6_Fq6 hg6_ate_miller_loop(const hg6_ate_G1_precomp &prec_P,
 
         c_2 = prec_Q_2.coeffs[idx_2++];
         f_2 = f_2.squared();
-        f_2 = f_2.mul_by_024(c_2.ell_0, prec_P.PY * c_2.ell_VW, prec_P.PX * c_2.ell_VV);
+        if(hg6_D_twist)
+          f_2 = f_2.mul_by_024(c_2.ell_0, prec_P.PY * c_2.ell_VW, prec_P.PX * c_2.ell_VV);
+        else
+          f_2 = f_2.mul_by_045(c_2.ell_0, prec_P.PY * c_2.ell_VW, prec_P.PX * c_2.ell_VV);
 
         if (NAF_2[i] != 0)
         {
             c_2 = prec_Q_2.coeffs[idx_2++];
-            f_2 = f_2.mul_by_024(c_2.ell_0, prec_P.PY * c_2.ell_VW, prec_P.PX * c_2.ell_VV);
+            if(hg6_D_twist)
+              f_2 = f_2.mul_by_024(c_2.ell_0, prec_P.PY * c_2.ell_VW, prec_P.PX * c_2.ell_VV);
+            else
+              f_2 = f_2.mul_by_045(c_2.ell_0, prec_P.PY * c_2.ell_VW, prec_P.PX * c_2.ell_VV);
         }
 
     }
@@ -475,8 +505,16 @@ hg6_Fq6 hg6_ate_double_miller_loop(const hg6_ate_G1_precomp &prec_P1,
 
         f = f.squared();
 
-        f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-        f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+        if(hg6_D_twist)
+        {
+          f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
+          f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+        }
+        else
+        {
+          f = f.mul_by_045(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
+          f = f.mul_by_045(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+        }
 
         if (bit)
         {
@@ -484,8 +522,16 @@ hg6_Fq6 hg6_ate_double_miller_loop(const hg6_ate_G1_precomp &prec_P1,
             hg6_ate_ell_coeffs c2 = prec_Q2.coeffs[idx];
             ++idx;
 
-            f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
-            f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+            if(hg6_D_twist)
+            {
+              f = f.mul_by_024(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
+              f = f.mul_by_024(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+            }
+            else
+            {
+              f = f.mul_by_045(c1.ell_0, prec_P1.PY * c1.ell_VW, prec_P1.PX * c1.ell_VV);
+              f = f.mul_by_045(c2.ell_0, prec_P2.PY * c2.ell_VW, prec_P2.PX * c2.ell_VV);
+            }
         }
     }
 
