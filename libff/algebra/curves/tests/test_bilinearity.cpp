@@ -6,7 +6,7 @@
  *****************************************************************************/
 #include <libff/algebra/curves/bw12_446/bw12_446_pp.hpp>
 #include <libff/algebra/curves/sw6/sw6_pp.hpp>
-#include <libff/algebra/curves/hg6/hg6_pp.hpp>
+#include <libff/algebra/curves/bw6_761/bw6_761_pp.hpp>
 #include <libff/algebra/curves/pendulum/pendulum_pp.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/common/profiling.hpp>
@@ -179,9 +179,9 @@ int main(void)
     double_miller_loop_test<sw6_pp>();
     affine_pairing_test<sw6_pp>();
 
-    printf("hg6:\n");
-    hg6_pp::init_public_params();
-    pairing_test<hg6_pp>();
+    printf("bw6_761:\n");
+    bw6_761_pp::init_public_params();
+    pairing_test<bw6_761_pp>();
 
     printf("mnt4:\n");
     mnt4_pp::init_public_params();
