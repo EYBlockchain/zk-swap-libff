@@ -21,12 +21,11 @@ Beside having a field size of 761-bit and G2 elements on Fq, parameters are expr
 
 ## TODO:
 - [x] change curve coefficient to `b=-1`
-- [x] use a sextic twist to bw6_761 so that elements in `G2` are be in `Fq`
+- [x] use a sextic twist to bw6_761 so that elements in `G2` are in `Fq`
 - [x] optimal ate pairing (Alg.5)
 - [ ] optimized Alg.5
   - [x] NAF
   - [ ] f_{u^2-u-1,Q}
-- [x] Alg.5 in affine coordinates
 - [x] optimize FE hard part
 - [x] optimize `mul_by_024` in Fq6
 - [x] implement the D-twist
