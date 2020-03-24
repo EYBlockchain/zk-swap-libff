@@ -740,13 +740,24 @@ sw6_GT sw6_reduced_pairing(const sw6_G1 &P,
     return sw6_ate_reduced_pairing(P, Q);
 }
 
+sw6_GT sw6_affine_ate_pairing(const sw6_G1 &P,
+                                    const sw6_G2 &Q)
+{
+  enter_block("Call to sw6_affine_ate_pairing");
+  const sw6_affine_ate_G1_precomputation prec_P = sw6_affine_ate_precompute_G1(P);
+  const sw6_affine_ate_G2_precomputation prec_Q = sw6_affine_ate_precompute_G2(Q);
+  const sw6_Fq6 f = sw6_affine_ate_miller_loop(prec_P, prec_Q);
+  leave_block("Call to sw6_affine_ate_pairing");
+  return f;
+}
+
 sw6_GT sw6_affine_reduced_pairing(const sw6_G1 &P,
                                     const sw6_G2 &Q)
 {
-    const sw6_affine_ate_G1_precomputation prec_P = sw6_affine_ate_precompute_G1(P);
-    const sw6_affine_ate_G2_precomputation prec_Q = sw6_affine_ate_precompute_G2(Q);
-    const sw6_Fq6 f = sw6_affine_ate_miller_loop(prec_P, prec_Q);
+    enter_block("Call to sw6_affine_reduced_pairing");
+    const sw6_GT f = sw6_affine_ate_pairing(P, Q);
     const sw6_GT result = sw6_final_exponentiation(f);
+    leave_block("Call to sw6_affine_reduced_pairing");
     return result;
 }
 

@@ -19,7 +19,7 @@ bool hg6_ate_is_loop_count_neg;
 bigint<hg6_q_limbs> hg6_final_exponent_z;
 bool hg6_final_exponent_is_z_neg;
 
-bool hg6_D_twist = true;
+bool hg6_D_twist = false; // false: use M-twist
 
 void init_hg6_params()
 {

@@ -129,6 +129,9 @@ sw6_Fq6 sw6_pairing(const sw6_G1& P,
 sw6_GT sw6_reduced_pairing(const sw6_G1 &P,
                              const sw6_G2 &Q);
 
+sw6_GT sw6_affine_ate_pairing(const sw6_G1 &P,
+                                    const sw6_G2 &Q);
+
 sw6_GT sw6_affine_reduced_pairing(const sw6_G1 &P,
                                     const sw6_G2 &Q);
 
