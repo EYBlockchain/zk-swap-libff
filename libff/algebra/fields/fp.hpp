@@ -62,6 +62,7 @@ public:
     static mp_limb_t inv; // modulus^(-1) mod W, where W = 2^(word size)
     static bigint<n> Rsquared; // R^2, where R = W^k, where k = ??
     static bigint<n> Rcubed;   // R^3
+    static Fp_model<n, modulus> two_inv; // 1/2 in Fp
 
     static bool small_subgroup_defined;
     static size_t small_subgroup_base;
@@ -182,6 +183,9 @@ bigint<n> Fp_model<n, modulus>::Rsquared;
 
 template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n, modulus>::Rcubed;
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n, modulus> Fp_model<n, modulus>::two_inv;
 
 template<mp_size_t n, const bigint<n>& modulus>
 bool Fp_model<n, modulus>::small_subgroup_defined;
