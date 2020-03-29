@@ -11,7 +11,6 @@ std::vector<size_t> bw6_761_G1::wnaf_window_table;
 std::vector<size_t> bw6_761_G1::fixed_base_exp_window_table;
 bw6_761_G1 bw6_761_G1::G1_zero;
 bw6_761_G1 bw6_761_G1::G1_one;
-bw6_761_Fq bw6_761_G1::coeff_a;
 bw6_761_Fq bw6_761_G1::coeff_b;
 
 bw6_761_G1::bw6_761_G1()
@@ -160,8 +159,7 @@ bw6_761_G1 bw6_761_G1::operator+(const bw6_761_G1 &other) const
     {
         // perform dbl case
         const bw6_761_Fq XX   = (this->X_).squared();                   // XX  = X1^2
-        const bw6_761_Fq ZZ   = (this->Z_).squared();                   // ZZ  = Z1^2
-        const bw6_761_Fq w    = bw6_761_G1::coeff_a * ZZ + (XX + XX + XX); // w   = a*ZZ + 3*XX
+        const bw6_761_Fq w    = XX + XX + XX;                           // w   = 3*XX (a=0)
         const bw6_761_Fq Y1Z1 = (this->Y_) * (this->Z_);
         const bw6_761_Fq s    = Y1Z1 + Y1Z1;                            // s   = 2*Y1*Z1
         const bw6_761_Fq ss   = s.squared();                            // ss  = s^2
@@ -314,8 +312,7 @@ bw6_761_G1 bw6_761_G1::dbl() const
         // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#doubling-dbl-2007-bl
 
         const bw6_761_Fq XX   = (this->X_).squared();                   // XX  = X1^2
-        const bw6_761_Fq ZZ   = (this->Z_).squared();                   // ZZ  = Z1^2
-        const bw6_761_Fq w    = bw6_761_G1::coeff_a * ZZ + (XX + XX + XX); // w   = a*ZZ + 3*XX
+        const bw6_761_Fq w    = XX + XX + XX;                           // w   = 3*XX (a=0)
         const bw6_761_Fq Y1Z1 = (this->Y_) * (this->Z_);
         const bw6_761_Fq s    = Y1Z1 + Y1Z1;                            // s   = 2*Y1*Z1
         const bw6_761_Fq ss   = s.squared();                            // ss  = s^2
@@ -354,7 +351,7 @@ bool bw6_761_G1::is_well_formed() const
         const bw6_761_Fq Y2 = this->Y_.squared();
         const bw6_761_Fq Z2 = this->Z_.squared();
 
-        return (this->Z_ * (Y2 - bw6_761_G1::coeff_b * Z2) == this->X_ * (X2 + bw6_761_G1::coeff_a * Z2));
+        return (this->Z_ * (Y2 - bw6_761_G1::coeff_b * Z2) == this->X_ * X2); //a=0
     }
 }
 
@@ -412,7 +409,7 @@ std::istream& operator>>(std::istream &in, bw6_761_G1 &g)
     if (is_zero)
     {
         bw6_761_Fq tX2 = tX.squared();
-        bw6_761_Fq tY2 = (tX2 + bw6_761_G1::coeff_a) * tX + bw6_761_G1::coeff_b;
+        bw6_761_Fq tY2 = tX2 * tX + bw6_761_G1::coeff_b; // a=0
         tY = tY2.sqrt();
 
         if ((tY.as_bigint().data[0] & 1) != Y_lsb)

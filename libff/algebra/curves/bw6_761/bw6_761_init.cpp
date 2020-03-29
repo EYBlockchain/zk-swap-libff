@@ -7,10 +7,8 @@ namespace libff {
 bigint<bw6_761_r_limbs> bw6_761_modulus_r;
 bigint<bw6_761_q_limbs> bw6_761_modulus_q;
 
-bw6_761_Fq bw6_761_coeff_a;
 bw6_761_Fq bw6_761_coeff_b;
 bw6_761_Fq bw6_761_twist;
-bw6_761_Fq bw6_761_twist_coeff_a;
 bw6_761_Fq bw6_761_twist_coeff_b;
 
 bigint<bw6_761_q_limbs> bw6_761_ate_loop_count1;
@@ -135,11 +133,8 @@ void init_bw6_761_params()
     bw6_761_Fq6::my_Fp2::non_residue = bw6_761_Fq3::non_residue;
 
     /* choice of short Weierstrass curve and its twist */
-    bw6_761_coeff_a = bw6_761_Fq("0");
     bw6_761_coeff_b = bw6_761_Fq("6891450384315732539396789682275657542479668912536150109513790160209623422243491736087683183289411687640864567753786613451161759120554247759349511699125301598951605099378508850372543631423596795951899700429969112842764913119068298");
-    bw6_761_G1::coeff_a = bw6_761_coeff_a;
     bw6_761_G1::coeff_b = bw6_761_coeff_b;
-    bw6_761_twist_coeff_a = bw6_761_Fq("0");
     if(bw6_761_D_twist)
     {
       bw6_761_twist = bw6_761_Fq("2");
@@ -153,7 +148,6 @@ void init_bw6_761_params()
       bw6_761_twist_coeff_b = bw6_761_Fq("4");
     }
     bw6_761_G2::twist = bw6_761_twist;
-    bw6_761_G2::coeff_a = bw6_761_twist_coeff_a;
     bw6_761_G2::coeff_b = bw6_761_twist_coeff_b;
 
     /* choice of group G1 */

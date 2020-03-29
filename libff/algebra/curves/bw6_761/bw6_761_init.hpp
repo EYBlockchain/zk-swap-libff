@@ -26,7 +26,6 @@ typedef bw6_761_Fq6 bw6_761_GT;
 // parameters for D-twisted short Weierstrass curve E'/Fq : y^2 = x^3 + (b / xi)
 //         or for M-twisted short Weierstrass curve E''/Fq : y^2 = x^3 + b * xi
 extern bw6_761_Fq bw6_761_twist;
-extern bw6_761_Fq bw6_761_twist_coeff_a;
 extern bw6_761_Fq bw6_761_twist_coeff_b;
 extern bool bw6_761_D_twist;
 
