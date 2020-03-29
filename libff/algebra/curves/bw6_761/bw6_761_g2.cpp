@@ -10,7 +10,6 @@ long long bw6_761_G2::dbl_cnt = 0;
 std::vector<size_t> bw6_761_G2::wnaf_window_table;
 std::vector<size_t> bw6_761_G2::fixed_base_exp_window_table;
 bw6_761_Fq bw6_761_G2::twist;
-bw6_761_Fq bw6_761_G2::coeff_a;
 bw6_761_Fq bw6_761_G2::coeff_b;
 bw6_761_G2 bw6_761_G2::G2_zero;
 bw6_761_G2 bw6_761_G2::G2_one;
@@ -20,12 +19,6 @@ bw6_761_G2::bw6_761_G2()
     this->X_ = G2_zero.X_;
     this->Y_ = G2_zero.Y_;
     this->Z_ = G2_zero.Z_;
-}
-
-bw6_761_Fq bw6_761_G2::mul_by_a(const bw6_761_Fq &elt)
-{
-    // return bw6_761_Fq(bw6_761_twist_mul_by_a_c0 * elt.c1, bw6_761_twist_mul_by_a_c1 * elt.c2, bw6_761_twist_mul_by_a_c2 * elt.c0);
-    return bw6_761_G2::coeff_a * elt;
 }
 
 bw6_761_Fq bw6_761_G2::mul_by_b(const bw6_761_Fq &elt)
@@ -174,8 +167,7 @@ bw6_761_G2 bw6_761_G2::operator+(const bw6_761_G2 &other) const
     {
         // perform dbl case
         const bw6_761_Fq XX   = (this->X_).squared();                   // XX  = X1^2
-        const bw6_761_Fq ZZ   = (this->Z_).squared();                   // ZZ  = Z1^2
-        const bw6_761_Fq w    = bw6_761_G2::mul_by_a(ZZ) + (XX + XX + XX); // w   = a*ZZ + 3*XX
+        const bw6_761_Fq w    = XX + XX + XX;                           // w   = a*ZZ + 3*XX (a=0)
         const bw6_761_Fq Y1Z1 = (this->Y_) * (this->Z_);
         const bw6_761_Fq s    = Y1Z1 + Y1Z1;                             // s   = 2*Y1*Z1
         const bw6_761_Fq ss   = s.squared();                             // ss  = s^2
@@ -328,8 +320,7 @@ bw6_761_G2 bw6_761_G2::dbl() const
         // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#doubling-dbl-2007-bl
 
         const bw6_761_Fq XX   = (this->X_).squared();                   // XX  = X1^2
-        const bw6_761_Fq ZZ   = (this->Z_).squared();                   // ZZ  = Z1^2
-        const bw6_761_Fq w    = bw6_761_G2::mul_by_a(ZZ) + (XX + XX + XX); // w   = a*ZZ + 3*XX
+        const bw6_761_Fq w    = XX + XX + XX;                           // w   = a*ZZ + 3*XX (a=0)
         const bw6_761_Fq Y1Z1 = (this->Y_) * (this->Z_);
         const bw6_761_Fq s    = Y1Z1 + Y1Z1;                            // s   = 2*Y1*Z1
         const bw6_761_Fq ss   = s.squared();                            // ss  = s^2
@@ -378,9 +369,8 @@ bool bw6_761_G2::is_well_formed() const
         const bw6_761_Fq X2 = this->X_.squared();
         const bw6_761_Fq Y2 = this->Y_.squared();
         const bw6_761_Fq Z2 = this->Z_.squared();
-        const bw6_761_Fq aZ2 = bw6_761_twist_coeff_a * Z2;
 
-        return (this->Z_ * (Y2 - bw6_761_twist_coeff_b * Z2) == this->X_ * (X2 + aZ2));
+        return (this->Z_ * (Y2 - bw6_761_twist_coeff_b * Z2) == this->X_ * X2); // a=0
     }
 }
 
@@ -438,7 +428,7 @@ std::istream& operator>>(std::istream &in, bw6_761_G2 &g)
     if (!is_zero)
     {
         const bw6_761_Fq tX2 = tX.squared();
-        const bw6_761_Fq tY2 = (tX2 + bw6_761_twist_coeff_a) * tX + bw6_761_twist_coeff_b;
+        const bw6_761_Fq tY2 = tX2 * tX + bw6_761_twist_coeff_b;
         tY = tY2.sqrt();
 
         if ((tY.as_bigint().data[0] & 1) != Y_lsb)

@@ -24,7 +24,6 @@ public:
     static bw6_761_G2 G2_zero;
     static bw6_761_G2 G2_one;
     static bw6_761_Fq twist;
-    static bw6_761_Fq coeff_a;
     static bw6_761_Fq coeff_b;
 
     typedef bw6_761_Fq base_field;
@@ -39,7 +38,6 @@ public:
     bw6_761_Fq Y() const { return Y_; }
     bw6_761_Fq Z() const { return Z_; }
 
-    static bw6_761_Fq mul_by_a(const bw6_761_Fq &elt);
     static bw6_761_Fq mul_by_b(const bw6_761_Fq &elt);
 
     void print() const;
