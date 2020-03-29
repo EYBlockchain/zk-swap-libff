@@ -25,6 +25,12 @@ public:
     static bw6_761_G1 G1_zero;
     static bw6_761_G1 G1_one;
     static bw6_761_Fq coeff_b;
+    static bw6_761_Fq coeff_A_mont;
+    static bw6_761_Fq coeff_B_mont;
+
+    // endomorphism
+    static bw6_761_Fq cube_root_of_unity; // w1
+    static bw6_761_Fq eigen_value; // lambda1
 
     typedef bw6_761_Fq base_field;
     typedef bw6_761_Fr scalar_field;
@@ -57,7 +63,11 @@ public:
     bw6_761_G1 add(const bw6_761_G1 &other) const;
     bw6_761_G1 mixed_add(const bw6_761_G1 &other) const;
     bw6_761_G1 dbl() const;
+    bw6_761_G1 endomorphism() const;
+    bw6_761_G1 clear_cofactor() const;
+    bw6_761_G1 mul_by_r() const;
 
+    bool is_on_subgroup() const;
     bool is_well_formed() const;
 
     static bw6_761_G1 zero();

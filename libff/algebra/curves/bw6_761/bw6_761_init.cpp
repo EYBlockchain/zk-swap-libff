@@ -7,9 +7,14 @@ namespace libff {
 bigint<bw6_761_r_limbs> bw6_761_modulus_r;
 bigint<bw6_761_q_limbs> bw6_761_modulus_q;
 
+bw6_761_Fq bw6_761_coeff_A_mont;
+bw6_761_Fq bw6_761_coeff_B_mont;
 bw6_761_Fq bw6_761_coeff_b;
 bw6_761_Fq bw6_761_twist;
 bw6_761_Fq bw6_761_twist_coeff_b;
+
+bw6_761_Fq cube_root_of_unity;
+bw6_761_Fq eigen_value;
 
 bigint<bw6_761_q_limbs> bw6_761_ate_loop_count1;
 bigint<bw6_761_q_limbs> bw6_761_ate_loop_count2;
@@ -136,6 +141,20 @@ void init_bw6_761_params()
     /* choice of short Weierstrass curve and its twist */
     bw6_761_coeff_b = bw6_761_Fq("6891450384315732539396789682275657542479668912536150109513790160209623422243491736087683183289411687640864567753786613451161759120554247759349511699125301598951605099378508850372543631423596795951899700429969112842764913119068298");
     bw6_761_G1::coeff_b = bw6_761_coeff_b;
+    // Montgomery form y^2=x^3+3x^2+3x
+    bw6_761_coeff_A_mont = bw6_761_Fq("3");
+    bw6_761_coeff_B_mont = bw6_761_Fq("3");
+    bw6_761_G1::coeff_A_mont = bw6_761_coeff_A_mont;
+    bw6_761_G1::coeff_B_mont = bw6_761_coeff_B_mont;
+
+    // endomorphism
+    // w1
+    cube_root_of_unity = bw6_761_Fq("1968985824090209297278610739700577151397666382303825728450741611566800370218827257750865013421937292370006175842381275743914023380727582819905021229583192207421122272650305267822868639090213645505120388400344940985710520836292650");
+    bw6_761_G1::cube_root_of_unity = cube_root_of_unity;
+    // lambda1
+    eigen_value = bw6_761_Fq("80949648264912719408558363140637477264845294720710499478137287262712535938301461879813459410945");
+    bw6_761_G1::eigen_value = eigen_value;
+
     if(bw6_761_D_twist)
     {
       bw6_761_twist = bw6_761_Fq("2");

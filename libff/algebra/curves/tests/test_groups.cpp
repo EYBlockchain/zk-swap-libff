@@ -62,6 +62,17 @@ void test_mixed_add()
 }
 
 template<typename GroupT>
+void test_endomorphism()
+{
+  GroupT P = GroupT::random_element();
+  assert(P.is_on_subgroup());
+
+  GroupT Q = P.endomorphism();
+  GroupT R = GroupT::eigen_value * P;
+  assert(Q == R);
+}
+
+template<typename GroupT>
 void test_group()
 {
     bigint<1> rand1 = bigint<1>("76749407");
@@ -148,6 +159,12 @@ void test_output()
 
 int main(void)
 {
+    printf("bw6_761:\n");
+    bw6_761_pp::init_public_params();
+    // tests GLV, hash-to-curve and clear_cofactor
+    test_endomorphism<G1<bw6_761_pp> >();
+
+    /*
     printf("bls12_381: \n");
     bls12_381_pp::init_public_params();
     test_group<G1<bls12_381_pp> >();
@@ -200,7 +217,6 @@ int main(void)
     test_group<G2<bw6_761_pp> >();
     test_output<G2<bw6_761_pp> >();
     test_mul_by_q<G2<bw6_761_pp> >();
-
 
     printf("mnt4: \n");
     mnt4_pp::init_public_params();
@@ -256,4 +272,5 @@ int main(void)
     test_group<G2<bn128_pp> >();
     test_output<G2<bn128_pp> >();
 #endif
+  */
 }

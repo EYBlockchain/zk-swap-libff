@@ -12,6 +12,10 @@ std::vector<size_t> bw6_761_G1::fixed_base_exp_window_table;
 bw6_761_G1 bw6_761_G1::G1_zero;
 bw6_761_G1 bw6_761_G1::G1_one;
 bw6_761_Fq bw6_761_G1::coeff_b;
+bw6_761_Fq bw6_761_G1::coeff_A_mont;
+bw6_761_Fq bw6_761_G1::coeff_B_mont;
+bw6_761_Fq bw6_761_G1::cube_root_of_unity;
+bw6_761_Fq bw6_761_G1::eigen_value;
 
 bw6_761_G1::bw6_761_G1()
 {
@@ -365,9 +369,74 @@ bw6_761_G1 bw6_761_G1::one()
     return G1_one;
 }
 
+bw6_761_G1 bw6_761_G1::endomorphism() const
+{
+    // w1
+    return bw6_761_G1(this->X_ * bw6_761_G1::cube_root_of_unity , this->Y_, this->Z_);
+}
+
+bw6_761_G1 bw6_761_G1::clear_cofactor() const
+{
+    // precompute
+    bw6_761_G1 uP = bw6_761_final_exponent_z * (*this);
+    bw6_761_G1 u2P = bw6_761_final_exponent_z * uP;
+    bw6_761_G1 u3P = bw6_761_final_exponent_z * u2P;
+
+    // todo: multi-exp
+    bw6_761_G1 Q = bw6_761_Fq("7") * u2P + bw6_761_Fq("89") * uP + bw6_761_Fq("130") * (*this);
+    bw6_761_G1 R = bw6_761_Fq("103") * u3P - bw6_761_Fq("83") * u2P - bw6_761_Fq("40") * uP + bw6_761_Fq("136") * (*this) + Q.endomorphism();
+
+    return R;
+}
+
+bw6_761_G1 bw6_761_G1::mul_by_r() const
+{
+    // precompute
+    bw6_761_G1 uP = bw6_761_final_exponent_z * (*this);
+    bw6_761_G1 u2P = bw6_761_final_exponent_z * uP;
+    bw6_761_G1 u3P = bw6_761_final_exponent_z * u2P;
+
+    // todo: multi-exp
+    bw6_761_G1 Q = u3P - u2P + (*this);
+    bw6_761_G1 R = uP + (*this) + Q.endomorphism();
+
+    return R;
+}
+
+bool bw6_761_G1::is_on_subgroup() const
+{
+    if (this->is_zero())
+    {
+        return true;
+    }
+    else
+    {
+        return (this->mul_by_r() == bw6_761_G1::zero());
+    }
+}
+
 bw6_761_G1 bw6_761_G1::random_element()
 {
-    return (scalar_field::random_element().as_bigint()) * G1_one;
+    // OLD
+    // return (scalar_field::random_element().as_bigint()) * G1_one;
+
+    /*
+     * Elligator-2
+     * Montgomery curve: y^2=g(x)=x^3+Ax^2+Bx, A=B=3
+    */
+    base_field u = base_field::random_element().as_bigint();
+    base_field v = bw6_761_G1::coeff_A_mont * (u.squared() - base_field::one());
+    base_field g_v = v * (v.squared() + bw6_761_G1::coeff_A_mont * v + bw6_761_G1::coeff_B_mont);
+    base_field e = power(g_v, bw6_761_Fq::euler);
+    base_field x = e * v - (base_field::one()-e) * bw6_761_Fq::two_inv;
+    base_field g_x = x * (x.squared() + bw6_761_G1::coeff_A_mont * x + bw6_761_G1::coeff_B_mont);
+    base_field y = -e * g_x.squared();
+
+    bw6_761_G1 R;
+    R.X_ = x;
+    R.Y_ = y;
+
+    return R.clear_cofactor();
 }
 
 std::ostream& operator<<(std::ostream &out, const bw6_761_G1 &g)
