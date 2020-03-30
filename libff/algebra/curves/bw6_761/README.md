@@ -33,9 +33,18 @@ Beside having a field size of 761-bit and G2 elements on Fq, parameters are expr
   - [x] pairing with `mul_by_045`
 - [ ] factor a square in mul pairing (double_pairing)
 
-- [ ] Fast multiplication with GLV endomorphisms (patent until 09/20)
+- [x] Fast multiplication with GLV endomorphisms (patent until 09/20)
+    - [x] G1
+    - [x] G2
 - [ ] Faster hash into curve with endomorphisms (patent until 09/20)
-- [ ] Faster points checks with endomorphisms (patent until 09/20)
+    - [ ] G1: Elligator-2
+    - [ ] G2: Shallue-Woestijn (Fouque-Tibouchi)
+- [x] Faster points checks with endomorphisms (patent until 09/20)
+    - [x] G1
+    - [x] G2
+- [x] Faster cofactor clearing (patent until 09/20)
+    - [x] G1
+    - [x] G2
 
 - [ ] recompute optimal `wnaf_window_table` for G1 and G2
 - [ ] recompute optimal `fixed_base_exp_window_table` in G1 and G2

@@ -13,6 +13,8 @@ bw6_761_Fq bw6_761_G2::twist;
 bw6_761_Fq bw6_761_G2::coeff_b;
 bw6_761_G2 bw6_761_G2::G2_zero;
 bw6_761_G2 bw6_761_G2::G2_one;
+bw6_761_Fq bw6_761_G2::cube_root_of_unity;
+bw6_761_Fr bw6_761_G2::eigen_value;
 
 bw6_761_G2::bw6_761_G2()
 {
@@ -382,6 +384,52 @@ bw6_761_G2 bw6_761_G2::zero()
 bw6_761_G2 bw6_761_G2::one()
 {
     return G2_one;
+}
+
+bw6_761_G2 bw6_761_G2::endomorphism() const
+{
+    // w1
+    return bw6_761_G2(bw6_761_G2::cube_root_of_unity * this->X_, this->Y_, this->Z_);
+}
+
+bw6_761_G2 bw6_761_G2::clear_cofactor() const
+{
+    // precompute
+    bw6_761_G2 uP = bw6_761_final_exponent_z * (*this);
+    bw6_761_G2 u2P = bw6_761_final_exponent_z * uP;
+    bw6_761_G2 u3P = bw6_761_final_exponent_z * u2P;
+
+    // todo: multi-exp
+    bw6_761_G2 Q = bw6_761_Fq("7") * u2P - bw6_761_Fq("117") * uP - bw6_761_Fq("109") * (*this);
+    bw6_761_G2 R = bw6_761_Fq("103") * u3P - bw6_761_Fq("83") * u2P - bw6_761_Fq("143") * uP + bw6_761_Fq("27") * (*this) + Q.endomorphism();
+
+    return R;
+}
+
+bw6_761_G2 bw6_761_G2::mul_by_r() const
+{
+    // precompute
+    bw6_761_G2 uP = bw6_761_final_exponent_z * (*this);
+    bw6_761_G2 u2P = bw6_761_final_exponent_z * uP;
+    bw6_761_G2 u3P = bw6_761_final_exponent_z * u2P;
+
+    // todo: multi-exp
+    bw6_761_G2 Q = u3P - u2P - uP;
+    bw6_761_G2 R = -(uP + (*this)) + Q.endomorphism();
+
+    return R;
+}
+
+bool bw6_761_G2::is_on_subgroup() const
+{
+    if (this->is_zero())
+    {
+        return true;
+    }
+    else
+    {
+        return (this->mul_by_r() == bw6_761_G2::zero());
+    }
 }
 
 bw6_761_G2 bw6_761_G2::random_element()

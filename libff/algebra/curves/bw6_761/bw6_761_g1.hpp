@@ -30,7 +30,7 @@ public:
 
     // endomorphism
     static bw6_761_Fq cube_root_of_unity; // w1
-    static bw6_761_Fq eigen_value; // lambda1
+    static bw6_761_Fr eigen_value; // lambda1
 
     typedef bw6_761_Fq base_field;
     typedef bw6_761_Fr scalar_field;

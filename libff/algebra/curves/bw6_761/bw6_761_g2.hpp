@@ -26,6 +26,10 @@ public:
     static bw6_761_Fq twist;
     static bw6_761_Fq coeff_b;
 
+    // endomorphism
+    static bw6_761_Fq cube_root_of_unity; // w1
+    static bw6_761_Fr eigen_value; // lambda1
+
     typedef bw6_761_Fq base_field;
     typedef bw6_761_Fq twist_field;
     typedef bw6_761_Fr scalar_field;
@@ -60,7 +64,11 @@ public:
     bw6_761_G2 mixed_add(const bw6_761_G2 &other) const;
     bw6_761_G2 dbl() const;
     bw6_761_G2 mul_by_q() const;
+    bw6_761_G2 endomorphism() const;
+    bw6_761_G2 clear_cofactor() const;
+    bw6_761_G2 mul_by_r() const;
 
+    bool is_on_subgroup() const;
     bool is_well_formed() const;
 
     static bw6_761_G2 zero();

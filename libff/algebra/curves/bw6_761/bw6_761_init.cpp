@@ -14,7 +14,7 @@ bw6_761_Fq bw6_761_twist;
 bw6_761_Fq bw6_761_twist_coeff_b;
 
 bw6_761_Fq cube_root_of_unity;
-bw6_761_Fq eigen_value;
+bw6_761_Fr eigen_value;
 
 bigint<bw6_761_q_limbs> bw6_761_ate_loop_count1;
 bigint<bw6_761_q_limbs> bw6_761_ate_loop_count2;
@@ -150,10 +150,12 @@ void init_bw6_761_params()
     // endomorphism
     // w1
     cube_root_of_unity = bw6_761_Fq("1968985824090209297278610739700577151397666382303825728450741611566800370218827257750865013421937292370006175842381275743914023380727582819905021229583192207421122272650305267822868639090213645505120388400344940985710520836292650");
-    bw6_761_G1::cube_root_of_unity = cube_root_of_unity;
-    // lambda1
-    eigen_value = bw6_761_Fq("80949648264912719408558363140637477264845294720710499478137287262712535938301461879813459410945");
-    bw6_761_G1::eigen_value = eigen_value;
+    bw6_761_G1::cube_root_of_unity = cube_root_of_unity; // w1
+    bw6_761_G2::cube_root_of_unity = cube_root_of_unity; // w1
+    // l1
+    eigen_value = bw6_761_Fr("80949648264912719408558363140637477264845294720710499478137287262712535938301461879813459410945");
+    bw6_761_G1::eigen_value = eigen_value; // l1
+    bw6_761_G2::eigen_value = -eigen_value -bw6_761_Fr::one(); // l2
 
     if(bw6_761_D_twist)
     {
