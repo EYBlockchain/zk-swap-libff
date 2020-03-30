@@ -418,13 +418,20 @@ bool bw6_761_G1::is_on_subgroup() const
 bw6_761_G1 bw6_761_G1::random_element()
 {
     // OLD
-    return (scalar_field::random_element().as_bigint()) * G1_one;
+    // return (scalar_field::random_element().as_bigint()) * G1_one;
 
     /*
      * Elligator-2
-     * Montgomery curve: y^2=g(x)=x^3+Ax^2+Bx, A=B=3
+     * http://elligator.cr.yp.to/elligator-20130828.pdf
+     *
+     * Montgomery curve M: y^2=g(x)=x^3+Ax^2+Bx, A=B=3
+     * Weiersrass curve W: y^2=f(x)=x^3+ax+b, a=0,b=-1
+     * M -> W: (x,y)->(x+1,y)
+     *
+     * TODO: simplify with projective coordinates
+     */
     base_field u = base_field::random_element();
-    base_field v = bw6_761_G1::coeff_A_mont * (u*u - base_field::one()).inverse();
+    base_field v = -bw6_761_G1::coeff_A_mont * (base_field::one() + bw6_761_Fq::nqr * u*u).inverse();
     base_field g_v = v * (v*v + bw6_761_G1::coeff_A_mont * v + bw6_761_G1::coeff_B_mont);
     base_field e = g_v ^ bw6_761_Fq::euler;
     if (u.is_zero())
@@ -435,16 +442,15 @@ bw6_761_G1 bw6_761_G1::random_element()
     {
       base_field x = e * v - (base_field::one()-e) * bw6_761_G1::coeff_A_mont * bw6_761_Fq::two_inv;
       base_field g_x = x * (x*x + bw6_761_G1::coeff_A_mont * x + bw6_761_G1::coeff_B_mont);
-      base_field y = -e * g_x.squared();
+      base_field y = -e * g_x.sqrt();
 
       bw6_761_G1 R;
-      R.X_ = x;
+      R.X_ = x + base_field("1"); // Montgomery to Weierstrass
       R.Y_ = y;
       R.Z_ = base_field::one();
 
       return R.clear_cofactor();
     }
-    */
 }
 
 std::ostream& operator<<(std::ostream &out, const bw6_761_G1 &g)
