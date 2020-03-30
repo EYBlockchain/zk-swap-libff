@@ -67,6 +67,7 @@ void test_endomorphism()
   GroupT P = GroupT::random_element();
   GroupT Q = P.endomorphism();
   GroupT R = GroupT::eigen_value * P;
+  assert(P.is_well_formed());
   assert(P.is_on_subgroup());
   assert(Q == R);
 }
@@ -158,13 +159,6 @@ void test_output()
 
 int main(void)
 {
-    printf("bw6_761:\n");
-    bw6_761_pp::init_public_params();
-    // tests GLV, hash-to-curve and clear_cofactor
-    test_endomorphism<G1<bw6_761_pp> >();
-    test_endomorphism<G2<bw6_761_pp> >();
-
-    /*
     printf("bls12_381: \n");
     bls12_381_pp::init_public_params();
     test_group<G1<bls12_381_pp> >();
@@ -217,6 +211,9 @@ int main(void)
     test_group<G2<bw6_761_pp> >();
     test_output<G2<bw6_761_pp> >();
     test_mul_by_q<G2<bw6_761_pp> >();
+    /* tests GLV, hash-to-curve and clear_cofactor */
+    test_endomorphism<G1<bw6_761_pp> >();
+    test_endomorphism<G2<bw6_761_pp> >();
 
     printf("mnt4: \n");
     mnt4_pp::init_public_params();
@@ -272,5 +269,4 @@ int main(void)
     test_group<G2<bn128_pp> >();
     test_output<G2<bn128_pp> >();
 #endif
-  */
 }
