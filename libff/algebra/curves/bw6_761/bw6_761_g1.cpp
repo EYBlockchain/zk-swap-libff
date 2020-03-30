@@ -431,7 +431,7 @@ bw6_761_G1 bw6_761_G1::random_element()
      * TODO: simplify with projective coordinates
      */
     base_field u = base_field::random_element();
-    base_field v = -bw6_761_G1::coeff_A_mont * (base_field::one() + bw6_761_Fq::nqr * u*u).inverse();
+    base_field v = bw6_761_G1::coeff_A_mont * (u*u - base_field::one()).inverse(); // use -1 instead of Fq::nqr
     base_field g_v = v * (v*v + bw6_761_G1::coeff_A_mont * v + bw6_761_G1::coeff_B_mont);
     base_field e = g_v ^ bw6_761_Fq::euler;
     if (u.is_zero())

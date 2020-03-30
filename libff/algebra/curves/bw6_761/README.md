@@ -37,7 +37,7 @@ Beside having a field size of 761-bit and G2 elements on Fq, parameters are expr
     - [x] G1
     - [x] G2
 - [ ] Faster hash into curve with endomorphisms (patent until 09/20)
-    - [ ] G1: Elligator-2
+    - [x] G1: Elligator-2
     - [ ] G2: Shallue-Woestijn (Fouque-Tibouchi)
 - [x] Faster points checks with endomorphisms (patent until 09/20)
     - [x] G1
