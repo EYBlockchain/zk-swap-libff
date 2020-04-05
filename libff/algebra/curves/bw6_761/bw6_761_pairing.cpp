@@ -231,30 +231,30 @@ bw6_761_GT bw6_761_final_exponentiation(const bw6_761_Fq6 &elt)
 
 /* ate pairing */
 
-void doubling_step_for_miller_loop(const bw6_761_Fq two_inv,
-                                           bw6_761_G2 &current,
-                                           bw6_761_ate_ell_coeffs &c)
+void doubling_step_for_miller_loop(bw6_761_G2 &current,
+                                   bw6_761_ate_ell_coeffs &c)
 {
     const bw6_761_Fq X = current.X_, Y = current.Y_, Z = current.Z_;
 
-    const bw6_761_Fq A = two_inv * (X * Y);                     // A = X1 * Y1 / 2
+    const bw6_761_Fq A = X * Y;                                 // A = X1 * Y1
     const bw6_761_Fq B = Y.squared();                           // B = Y1^2
+    const bw6_761_Fq B4 = B+B+B+B;                              // B = 4 * Y1^2
     const bw6_761_Fq C = Z.squared();                           // C = Z1^2
     const bw6_761_Fq D = C+C+C;                                 // D = 3 * C
-    const bw6_761_Fq E = bw6_761_twist_coeff_b * D;           // E = twist_b * D
+    const bw6_761_Fq E = bw6_761_twist_coeff_b * D;             // E = twist_b * D
     const bw6_761_Fq F = E+E+E;                                 // F = 3 * E
-    const bw6_761_Fq G = two_inv * (B+F);                       // G = (B+F)/2
+    const bw6_761_Fq G = B+F;                                   // G = B+F
     const bw6_761_Fq H = (Y+Z).squared() - (B+C);               // H = (Y1+Z1)^2-(B+C)
     const bw6_761_Fq I = E-B;                                   // I = E-B
     const bw6_761_Fq J = X.squared();                           // J = X1^2
-    const bw6_761_Fq E_squared = E.squared();                   // E_squared = E^2
+    const bw6_761_Fq E2_squared = (E+E).squared();              // E2_squared = (2E)^2
 
-    current.X_ = A * (B-F);                                       // X3 = A * (B-F)
-    current.Y_ = G.squared() - (E_squared+E_squared+E_squared);   // Y3 = G^2 - 3*E^2
-    current.Z_ = B * H;                                           // Z3 = B * H
+    current.X_ = (A+A) * (B-F);                                    // X3 = 2A * (B-F)
+    current.Y_ = G.squared() - (E2_squared+E2_squared+E2_squared); // Y3 = G^2 - 3*E2^2
+    current.Z_ = B4 * H;                                           // Z3 = 4 * B * H
     if(bw6_761_D_twist)
     {
-      c.ell_0 = bw6_761_twist * I;                                     // ell_0 = xi * I
+      c.ell_0 = bw6_761_twist * I;                                 // ell_0 = xi * I
       c.ell_VW = -H;                                               // ell_VW = - H (later: * yP)
       c.ell_VV = J+J+J;                                            // ell_VV = 3*J (later: * xP)
     }
@@ -320,8 +320,6 @@ bw6_761_ate_G2_precomp bw6_761_ate_precompute_G2(const bw6_761_G2& Q, const bigi
     bw6_761_G2 Qcopy(Q);
     Qcopy.to_affine_coordinates();
 
-    bw6_761_Fq two_inv = (bw6_761_Fq("2").inverse()); // could add to global params if needed
-
     bw6_761_ate_G2_precomp result;
     result.QX = Qcopy.X_;
     result.QY = Qcopy.Y_;
@@ -344,7 +342,7 @@ bw6_761_ate_G2_precomp bw6_761_ate_precompute_G2(const bw6_761_G2& Q, const bigi
             continue;
         }
 
-        doubling_step_for_miller_loop(two_inv, R, c);
+        doubling_step_for_miller_loop(R, c);
         result.coeffs.push_back(c);
 
         if (NAF[i] != 0)
