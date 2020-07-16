@@ -107,7 +107,7 @@ bw6_761_Fq6 bw6_761_final_exponentiation_first_chunk(const bw6_761_Fq6 &elt, con
     /* (q^3-1)*(q+1) */
 
     /* elt_q3 = elt^(q^3) */
-    const bw6_761_Fq6 elt_q3 = elt.Frobenius_map(3);
+    const bw6_761_Fq6 elt_q3 = elt.unitary_inverse();
     /* elt_q3_over_elt = elt^(q^3-1) */
     const bw6_761_Fq6 elt_q3_over_elt = elt_q3 * elt_inv;
     /* alpha = elt^((q^3-1) * q) */
@@ -167,50 +167,50 @@ bw6_761_Fq6 bw6_761_final_exponentiation_last_chunk(const bw6_761_Fq6 &elt)
     const bw6_761_Fq6 f9p = bw6_761_exp_by_z(f8p);
 
     // 5
-    const bw6_761_Fq6 result1 = f3p * f6p * f5p.Frobenius_map(3);
+    const bw6_761_Fq6 result1 = f3p * f6p * f5p.unitary_inverse();
 
     // 6
     const bw6_761_Fq6 result2 = result1.squared();
     const bw6_761_Fq6 f4_2p = f4 * f2p;
-    const bw6_761_Fq6 result3 = result2 * f5 * f0p * (f0 * f1 * f3 * f4_2p * f8p).Frobenius_map(3);
+    const bw6_761_Fq6 result3 = result2 * f5 * f0p * (f0 * f1 * f3 * f4_2p * f8p).unitary_inverse();
 
     // 7
     const bw6_761_Fq6 result4 = result3.squared();
-    const bw6_761_Fq6 result5 = result4 * f9p * f7.Frobenius_map(3);
+    const bw6_761_Fq6 result5 = result4 * f9p * f7.unitary_inverse();
 
     // 8
     const bw6_761_Fq6 result6 = result5.squared();
     const bw6_761_Fq6 f2_4p = f2 * f4p;
     const bw6_761_Fq6 f4_2p_5p = f4_2p * f5p;
-    const bw6_761_Fq6 result7 = result6 * f4_2p_5p * f6 * f7p * (f2_4p * f3 * f3p).Frobenius_map(3);
+    const bw6_761_Fq6 result7 = result6 * f4_2p_5p * f6 * f7p * (f2_4p * f3 * f3p).unitary_inverse();
 
     // 9
     const bw6_761_Fq6 result8 = result7.squared();
-    const bw6_761_Fq6 result9 = result8 * f0 * f7 * f1p * (f0p * f9p).Frobenius_map(3);
+    const bw6_761_Fq6 result9 = result8 * f0 * f7 * f1p * (f0p * f9p).unitary_inverse();
 
     // 10
     const bw6_761_Fq6 result10 = result9.squared();
     const bw6_761_Fq6 f6p_8p = f6p * f8p;
     const bw6_761_Fq6 f5_7p = f5 * f7p;
-    const bw6_761_Fq6 result11 = result10 * f5_7p * f2p * (f6p_8p).Frobenius_map(3);
+    const bw6_761_Fq6 result11 = result10 * f5_7p * f2p * (f6p_8p).unitary_inverse();
 
     // 11
     const bw6_761_Fq6 result12 = result11.squared();
     const bw6_761_Fq6 f3_6 = f3 * f6;
     const bw6_761_Fq6 f1_7 = f1 * f7;
-    const bw6_761_Fq6 result13 = result12 * f3_6 * f9p * (f1_7 * f2).Frobenius_map(3);
+    const bw6_761_Fq6 result13 = result12 * f3_6 * f9p * (f1_7 * f2).unitary_inverse();
 
     // 12
     const bw6_761_Fq6 result14 = result13.squared();
-    const bw6_761_Fq6 result15 = result14 * f0 * f0p * f3p * f5p * (f4_2p * f5_7p * f6p_8p).Frobenius_map(3);
+    const bw6_761_Fq6 result15 = result14 * f0 * f0p * f3p * f5p * (f4_2p * f5_7p * f6p_8p).unitary_inverse();
 
     // 13
     const bw6_761_Fq6 result16 = result15.squared();
-    const bw6_761_Fq6 result17 = result16 * f1p * (f3_6).Frobenius_map(3);
+    const bw6_761_Fq6 result17 = result16 * f1p * (f3_6).unitary_inverse();
 
     // 14
     const bw6_761_Fq6 result18 = result17.squared();
-    const bw6_761_Fq6 result19 = result18 * f1_7 * f5_7p * f0p * (f2_4p * f4_2p_5p * f9p).Frobenius_map(3);
+    const bw6_761_Fq6 result19 = result18 * f1_7 * f5_7p * f0p * (f2_4p * f4_2p_5p * f9p).unitary_inverse();
 
     leave_block("Call to bw6_761_final_exponentiation_last_chunk");
 
